@@ -354,6 +354,11 @@ textarea.text-in { font: 15px/1.4 ui-monospace, Menlo, Consolas, monospace; resi
 .feel button small { font-size: 12px; color: var(--muted); line-height: 1.25; }
 .feel button[aria-pressed="true"] { background: var(--accent-soft); box-shadow: inset 0 0 0 1.5px var(--accent); }
 .date-in { width: 100%; min-height: 46px; padding: 10px 12px; border: 0; border-radius: 10px; background: var(--fill); color: var(--text); font-size: 16px; }
+.pick-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sel { position: relative; display: block; min-width: 0; }
+.sel select { width: 100%; min-height: 44px; border: 0; border-radius: 10px; background: var(--fill); color: var(--text); font-size: 16px; padding: 0 30px 0 12px; -webkit-appearance: none; appearance: none; text-overflow: ellipsis; }
+.sel::after { content: ""; position: absolute; right: 13px; top: 50%; width: 7px; height: 7px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+.pick-list > li.pk-count { border-top: 0; padding: 2px 0 6px; }
 .pick-list > li { border-top: 1px solid var(--line); }
 .pick-list > li:first-child { border-top: 0; }
 .pick-list button { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; width: 100%; padding: 12px 0; }
@@ -392,9 +397,11 @@ textarea.text-in { font: 15px/1.4 ui-monospace, Menlo, Consolas, monospace; resi
 <script>
 /* Exercise library and workout templates.
    Row: [id, name, equipment, minLevel, maxLevel, mode, flags, how, why]
-   equipment: '' (bodyweight, golf club, chair, wall) | band | db | mb | bench | gym
+   equipment: '' (bodyweight, golf club, chair, wall) | band | db | mb | bench | ball (stability ball) | roller (foam roller)
+              | mach (weight machine or station) | smith (Smith machine) | cable | fbar (fixed-weight barbell) | cardio (cardio machine)
+              | gym (needs a full gym: Olympic barbell, rack, platform or pull-up bar)
    mode: r = reps, s = reps each side, t = timed hold, ts = timed hold each side
-   flags: k = loads knees, b = loads lower back, s = loads shoulders, i = impact (jumping) */
+   flags: k = loads knees, b = loads lower back, s = loads shoulders, i = impact (jumping), u = no weight to log (assisted or bodyweight station) */
 const LIB = [];
 function addPool(pool, rows) {
   rows.forEach(function (r) {
@@ -410,7 +417,8 @@ addPool('hip', [
   ['adductor_rock', 'Adductor rock-backs', '', 1, 3, 's', 'k', 'On hands and knees, straighten one leg out to the side with the foot flat. Rock your hips back toward your heel, then return.', 'Inner-thigh mobility supports a wide, stable stance and a clean weight shift.'],
   ['hip_cars', 'Standing hip circles', '', 1, 3, 's', '', 'Hold a wall. Lift one knee to hip height, open it out to the side, turn the foot behind you and lower. Make the biggest slow circle you can control, then reverse.', 'Controlled hip rotation is the engine of the swing, trained here with no floor work.'],
   ['squat_pry', 'Deep squat hold', '', 2, 3, 't', 'k', 'Sink into a deep squat with elbows inside your knees and chest up. Gently press the knees out and shift side to side. Hold a door frame if you need support.', 'Restores the hip and ankle range that keeps your posture through the swing.'],
-  ['cossack', 'Cossack shifts', '', 2, 3, 's', 'k', 'Take a wide stance. Sit down over one heel while the other leg stays straight with toes up. Push back to the middle and shift to the other side.', 'Trains side-to-side hip mobility for loading and posting up on each leg.']
+  ['cossack', 'Cossack shifts', '', 2, 3, 's', 'k', 'Take a wide stance. Sit down over one heel while the other leg stays straight with toes up. Push back to the middle and shift to the other side.', 'Trains side-to-side hip mobility for loading and posting up on each leg.'],
+  ['roll_hips', 'Foam roll glutes and hips', 'roller', 1, 3, 'ts', '', 'Sit on a foam roller with one ankle crossed over the other knee. Lean toward the crossed leg and roll slowly over the glute and outer hip, pausing on tight spots.', 'Loosens the hip muscles that limit your turn before you ask them to move.']
 ]);
 
 /* ---------- Mobility: upper back ---------- */
@@ -420,7 +428,9 @@ addPool('tsp', [
   ['quad_rot', 'Kneeling upper-back rotation', '', 1, 3, 's', '', 'On hands and knees, sit back slightly and put one hand behind your head. Bring that elbow toward the opposite wrist, then rotate it up to the ceiling.', 'Isolates upper-back turn while your hips stay still, like a good backswing.'],
   ['club_turns', 'Golf-posture turns', '', 1, 3, 's', '', 'Hold a club across your shoulders and set up in golf posture. Turn back until your lead shoulder sits over your trail foot, then turn through to a full finish.', 'Rehearses separating shoulders from hips, where stored power comes from.'],
   ['cat_cow', 'Cat-cow', '', 1, 3, 'r', '', 'On hands and knees, round your whole spine up toward the ceiling, then let your chest sink and tailbone lift. Move slowly, one breath per rep.', 'Gets every segment of the spine moving before you ask it to rotate.'],
-  ['seated_rot', 'Seated club rotation', '', 1, 3, 's', '', 'Sit tall on a chair with a club across your chest and feet planted. Rotate your shoulders as far as you can each way without your knees moving.', 'Sitting locks the hips, so the turn has to come from your upper back.']
+  ['seated_rot', 'Seated club rotation', '', 1, 3, 's', '', 'Sit tall on a chair with a club across your chest and feet planted. Rotate your shoulders as far as you can each way without your knees moving.', 'Sitting locks the hips, so the turn has to come from your upper back.'],
+  ['roll_tspine', 'Foam roller upper-back extensions', 'roller', 1, 3, 'r', '', 'Lie with a foam roller across your upper back, hands behind your head and hips on the floor. Let your upper back arch over the roller, then lift back up. Move the roller an inch and repeat.', 'Restores upper-back extension so you can keep your spine angle through the turn.'],
+  ['ball_tspine', 'Stability ball upper-back stretch', 'ball', 1, 3, 't', '', 'Lie back over a stability ball with feet planted and arms reaching overhead. Let your upper back drape over the ball and breathe slowly.', 'Opens the chest and upper back that rounded golf posture tightens.']
 ]);
 
 /* ---------- Mobility: shoulders ---------- */
@@ -459,7 +469,7 @@ addPool('lpow', [
   ['broad_jump', 'Broad jumps', '', 3, 3, 'r', 'kbi', 'Swing your arms back, then jump forward as far as you can. Land softly in a squat and walk back to the start.', 'Builds explosive hip extension for more distance off the tee.'],
   ['box_jump', 'Box jumps', 'bench', 3, 3, 'r', 'ki', 'Jump onto a sturdy box or bench, landing softly with both feet flat. Stand tall, then step down one foot at a time.', 'Develops explosive leg drive with a softer landing than jumping on flat ground.'],
   ['stepup_drive', 'Step-up with knee drive', 'bench', 1, 3, 's', 'k', 'Place one foot on a step. Drive up quickly, lifting the other knee to hip height, then lower slowly on the same leg.', 'Single-leg power with control, like posting up on your lead leg.'],
-  ['kb_swing', 'Kettlebell swing', 'db', 2, 3, 'r', 'b', 'Hinge and hike the weight back between your legs, then snap your hips forward so it floats to chest height. Arms stay loose and the hips do the work.', 'Explosive hip extension is a major source of swing speed.'],
+  ['kb_swing', 'Dumbbell or kettlebell swing', 'db', 2, 3, 'r', 'b', 'Hinge and hike the weight back between your legs, then snap your hips forward so it floats to chest height. Arms stay loose and the hips do the work.', 'Explosive hip extension is a major source of swing speed.'],
   ['mb_slam', 'Medicine ball slams', 'mb', 1, 3, 'r', '', 'Reach a medicine ball overhead, then throw it into the floor in front of you as hard as you can, hinging at the hips. Pick it up and repeat.', 'Builds full-body power and the trunk muscles that pull the club down.']
 ]);
 
@@ -470,7 +480,8 @@ addPool('rpow', [
   ['band_rot', 'Fast band rotations', 'band', 1, 3, 's', '', 'Anchor a band at chest height and stand side-on in golf posture, arms straight. Rotate away from the anchor as fast as you can, then return slowly.', 'Trains rotational speed against resistance in your actual golf posture.'],
   ['mb_scoop', 'Rotational ball toss', 'mb', 1, 3, 's', 'b', 'Stand side-on to a solid wall with a medicine ball at your back hip. Drive your hips through and throw the ball into the wall. Catch it or let it drop.', 'The closest gym move to a golf swing. Hips lead, torso and arms follow.'],
   ['mb_shot', 'Rotational shot-put throw', 'mb', 2, 3, 's', 'b', 'Stand side-on to a wall with the ball at your back shoulder. Push off the back leg, rotate and punch the ball into the wall.', 'Builds the trail-side push and rotation that deliver the club.'],
-  ['mb_rot_slam', 'Rotational ball slams', 'mb', 2, 3, 's', 'b', 'Lift a medicine ball overhead, pivot and slam it to the floor just outside one foot. Alternate sides.', 'Links upper and lower body through a fast, powerful turn.']
+  ['mb_rot_slam', 'Rotational ball slams', 'mb', 2, 3, 's', 'b', 'Lift a medicine ball overhead, pivot and slam it to the floor just outside one foot. Alternate sides.', 'Links upper and lower body through a fast, powerful turn.'],
+  ['cable_rot', 'Fast cable rotations', 'cable', 1, 3, 's', '', 'Set a cable at chest height and stand side-on in golf posture, arms straight. With a light weight, rotate away from the stack as fast as you can, then return slowly.', 'Rotational speed against resistance in your actual golf posture.']
 ]);
 
 /* ---------- Strength: squat ---------- */
@@ -481,8 +492,12 @@ addPool('squat', [
   ['tempo_squat', 'Tempo squat', '', 2, 3, 'r', 'k', 'Lower into a squat over three seconds, pause for one second at the bottom, then stand up fast.', 'Slow lowering builds strength and control with no equipment.'],
   ['skater_squat', 'Skater squat', '', 3, 3, 's', 'k', 'Stand on one leg with the other bent behind you. Lower until the back knee lightly touches a cushion, reaching your arms forward, then stand.', 'Serious single-leg strength for a powerful, stable lead side.'],
   ['bb_squat', 'Barbell squat', 'gym', 3, 3, 'r', 'kb', 'With the bar on your upper back or front shoulders, brace and squat until your thighs are at least parallel. Drive up through the whole foot.', 'More leg strength raises the ceiling on how fast you can swing.'],
-  ['leg_press', 'Leg press', 'gym', 1, 3, 'r', '', 'Set feet shoulder-width on the platform. Lower until your knees reach about 90° without your hips lifting, then press back up without locking out.', 'Builds leg strength with your back fully supported.'],
-  ['wall_sit', 'Wall sit', '', 1, 3, 't', '', 'Lean your back against a wall and slide down to a depth you can hold, up to thighs parallel. Keep feet flat and weight in your heels.', 'Builds leg endurance for holding posture late in the round.']
+  ['leg_press', 'Leg press', 'mach', 1, 3, 'r', '', 'Set feet shoulder-width on the platform. Lower until your knees reach about 90° without your hips lifting, then press back up without locking out.', 'Builds leg strength with your back fully supported.'],
+  ['wall_sit', 'Wall sit', '', 1, 3, 't', '', 'Lean your back against a wall and slide down to a depth you can hold, up to thighs parallel. Keep feet flat and weight in your heels.', 'Builds leg endurance for holding posture late in the round.'],
+  ['db_squat', 'Dumbbell squat', 'db', 1, 3, 'r', 'k', 'Hold a dumbbell in each hand at your sides. Sit back and down with your chest up, then drive up through your whole foot.', 'Loads your legs evenly while your grip and upper back hold your posture.'],
+  ['smith_squat', 'Smith machine squat', 'smith', 2, 3, 'r', 'kb', 'Set the bar on your upper back with your feet slightly in front of you. Unhook it, sit down until your thighs are about parallel, then drive up through the whole foot. Rehook at the top.', 'A guided way to load your legs heavily when there is no squat rack.'],
+  ['hack_squat', 'Hack squat machine', 'mach', 1, 3, 'r', 'k', 'Stand on the platform with your back against the pad and feet shoulder-width. Release the handles, lower until your knees reach about 90°, then press back up without locking your knees.', 'Builds leg strength with your back fully supported.'],
+  ['ball_wall_squat', 'Stability ball wall squat', 'ball', 1, 2, 'r', 'k', 'Place a stability ball between your lower back and a wall, feet a step forward. Roll down the wall into a squat until your thighs are near parallel, then stand back up.', 'The ball guides your path so you can learn a deep squat with good posture.']
 ]);
 
 /* ---------- Strength: hinge ---------- */
@@ -494,7 +509,12 @@ addPool('hinge', [
   ['db_rdl', 'Dumbbell Romanian deadlift', 'db', 1, 3, 'r', 'b', 'Hold dumbbells in front of your thighs. Push your hips back and slide the weights down your legs with a flat back, then drive your hips forward to stand.', 'Strengthens the whole back side of the body that powers your downswing.'],
   ['pull_through', 'Band pull-through', 'band', 1, 3, 'r', '', 'Anchor a band low behind you and hold it between your legs, facing away. Hinge back, then snap your hips forward to stand tall.', 'Grooves powerful hip extension with very little load on your spine.'],
   ['hip_thrust', 'Hip thrust', 'bench', 2, 3, 'r', '', 'Rest your upper back on a bench, feet flat, a weight on your hips if you have one. Drive your hips up until your body is level, pause, and lower.', 'The most direct way to strengthen the glutes for speed.'],
-  ['deadlift', 'Deadlift', 'gym', 3, 3, 'r', 'b', 'Use a trap bar or barbell. With a flat back and the weight close, push the floor away and stand tall. Lower under control.', 'Total-body strength that carries straight into force off the ground.']
+  ['deadlift', 'Deadlift', 'gym', 3, 3, 'r', 'b', 'Use a trap bar or barbell. With a flat back and the weight close, push the floor away and stand tall. Lower under control.', 'Total-body strength that carries straight into force off the ground.'],
+  ['fbar_rdl', 'Fixed barbell Romanian deadlift', 'fbar', 1, 3, 'r', 'b', 'Hold a fixed-weight barbell in front of your thighs. Push your hips back and lower the bar along your legs with a flat back until you feel your hamstrings, then stand tall.', 'Strengthens the hamstrings and glutes that power your downswing.'],
+  ['smith_rdl', 'Smith machine Romanian deadlift', 'smith', 2, 3, 'r', 'b', 'Stand close to the bar and unhook it at hip height, hands just outside your thighs. Push your hips back and slide the bar down your legs with a flat back, then drive your hips forward to stand.', 'Heavy hip-hinge strength without needing a deadlift platform.'],
+  ['cable_pull', 'Cable pull-through', 'cable', 1, 3, 'r', '', 'Attach a rope to a low cable and face away from the stack with the rope between your legs. Hinge back, then snap your hips forward to stand tall.', 'Powerful hip extension with very little load on your spine.'],
+  ['ball_ham_curl', 'Stability ball hamstring curl', 'ball', 2, 3, 'r', '', 'Lie on your back with your heels on a stability ball. Lift your hips, pull the ball toward you by bending your knees, then roll it back out without letting your hips drop.', 'Trains hamstrings and glutes together, the way they steady your swing.'],
+  ['back_ext', 'Back extension', 'mach', 1, 3, 'r', 'b', 'Set the back extension bench so the pad sits just below your hips. Cross your arms, lower your upper body with a flat back, then raise it until your body is in a straight line. Do not arch past straight.', 'Builds endurance in the back muscles that hold your spine angle for 18 holes.']
 ]);
 
 /* ---------- Strength: single leg ---------- */
@@ -506,7 +526,10 @@ addPool('lunge', [
   ['step_up', 'Step-up', 'bench', 1, 3, 's', 'k', 'Place one foot on a step or bench. Stand up using only that leg, then lower slowly for three seconds.', 'Builds the lead-leg strength you post up on through impact.'],
   ['bulgarian', 'Rear-foot-raised split squat', 'bench', 3, 3, 's', 'k', 'Rest your back foot on a bench. Lower until the front thigh is parallel to the floor, then drive up. Hold dumbbells to progress.', 'High-level single-leg strength and hip mobility in one move.'],
   ['side_leg', 'Side-lying leg raise', '', 1, 2, 's', '', 'Lie on your side with legs straight. Lift the top leg about 45° with toes pointing forward, pause, and lower slowly.', 'Side-hip strength keeps your pelvis level, with no load on the knees.'],
-  ['hip_airplane', 'Hip airplanes', '', 2, 3, 's', '', 'Stand on one leg holding a wall and hinge forward with the free leg behind you. Rotate your pelvis open toward the ceiling, then closed toward the floor, turning over the standing hip.', 'Trains loaded hip rotation on one leg, the motion of your lead hip through impact.']
+  ['hip_airplane', 'Hip airplanes', '', 2, 3, 's', '', 'Stand on one leg holding a wall and hinge forward with the free leg behind you. Rotate your pelvis open toward the ceiling, then closed toward the floor, turning over the standing hip.', 'Trains loaded hip rotation on one leg, the motion of your lead hip through impact.'],
+  ['smith_split', 'Smith machine split squat', 'smith', 2, 3, 's', 'k', 'Set the bar on your upper back in a long split stance. Lower straight down until the back knee nearly touches the floor, then drive up through the front foot.', 'Lets you load each leg heavily while the bar keeps you balanced.'],
+  ['db_walk_lunge', 'Dumbbell walking lunge', 'db', 2, 3, 's', 'k', 'Hold a dumbbell in each hand. Step forward into a lunge until both knees bend to about 90°, then bring the back foot through into the next step.', 'Single-leg strength and balance in motion, like walking a hilly course.'],
+  ['abductor', 'Hip abductor machine', 'mach', 1, 3, 'r', '', 'Sit with the pads on the outside of your knees. Press your knees apart against the resistance, pause, and return slowly.', 'Strengthens the side hips that stop your hips sliding during the swing.']
 ]);
 
 /* ---------- Strength: push ---------- */
@@ -518,7 +541,13 @@ addPool('push', [
   ['floor_press', 'Dumbbell press', 'db', 1, 3, 'r', '', 'Lie on a bench or the floor with a dumbbell in each hand. Press up until your arms are straight, then lower until your upper arms reach chest level or touch the floor.', 'Chest and triceps strength supports width and extension through the ball.'],
   ['hk_press', 'Half-kneeling overhead press', 'db', 2, 3, 's', 's', 'Kneel on one knee and hold a dumbbell at the shoulder on that same side. Press overhead without leaning back, then lower.', 'Builds shoulder strength while your core and hips keep you square.'],
   ['band_press', 'Split-stance band press', 'band', 1, 3, 's', '', 'Anchor a band behind you at chest height and stand in a split stance. Press one hand straight forward without letting your torso twist.', 'Your core has to resist rotation while you push, like holding posture at impact.'],
-  ['landmine', 'Landmine press', 'gym', 2, 3, 's', '', 'Stand in a split stance holding the end of a barbell at your shoulder. Press it up and forward, reaching at the top.', 'A shoulder-friendly press that ties your arm to your trunk and hips.']
+  ['landmine', 'Landmine press', 'gym', 2, 3, 's', '', 'Stand in a split stance holding the end of a barbell at your shoulder. Press it up and forward, reaching at the top.', 'A shoulder-friendly press that ties your arm to your trunk and hips.'],
+  ['mach_chest', 'Chest press machine', 'mach', 1, 3, 'r', '', 'Adjust the seat so the handles line up with the middle of your chest. Press forward until your arms are straight but not locked, then return slowly.', 'Builds chest and arm strength on a guided path that is easy on the shoulders.'],
+  ['mach_shoulder', 'Shoulder press machine', 'mach', 1, 3, 'r', 's', 'Set the seat so the handles start at shoulder height. Press overhead without arching your lower back, then lower under control.', 'Shoulder strength supports a stable lead arm at the top of your swing.'],
+  ['db_incline', 'Incline dumbbell press', 'db', 1, 3, 'r', '', 'Set a bench to a low incline. With a dumbbell in each hand, press up over your upper chest, then lower until your elbows are just below the bench.', 'Builds the upper chest and shoulders that keep your arms connected through the swing.'],
+  ['smith_bench', 'Smith machine bench press', 'smith', 2, 3, 'r', 's', 'Lie on a flat bench under the bar so it lines up with your mid-chest. Unhook it, lower the bar to your chest, then press up and rehook.', 'Heavy pressing strength with the bar guided for safety.'],
+  ['cable_press', 'Single-arm cable press', 'cable', 1, 3, 's', '', 'Set a cable at chest height and stand in a split stance facing away from the stack. Press one handle forward without letting your torso twist, then return slowly.', 'Pushing while resisting rotation, like holding your posture through impact.'],
+  ['assisted_dip', 'Assisted dip machine', 'mach', 2, 3, 'r', 'su', 'Kneel on the pad of the assisted dip machine and hold the dip bars. Lower until your upper arms are about level with the floor, then press back up. More counterweight makes it easier.', 'Builds triceps and chest strength with as much help as you need.']
 ]);
 
 /* ---------- Strength: pull ---------- */
@@ -529,10 +558,15 @@ addPool('pull', [
   ['band_row', 'Band row', 'band', 1, 3, 'r', '', 'Anchor a band at chest height. With a tall chest, pull your elbows back past your ribs, squeeze your shoulder blades, and return slowly.', 'Pulling strength balances your shoulders and supports your posture.'],
   ['band_pulldown', 'Kneeling band pull-down', 'band', 1, 3, 'r', '', 'Anchor a band overhead and kneel facing it. Pull your elbows down to your sides, pause, and return with control.', 'Strong lats add speed on the way down and stabilize your shoulders.'],
   ['db_row', 'Single-arm dumbbell row', 'db', 1, 3, 's', '', 'Support one hand on a bench or chair with a flat back. Pull the dumbbell to your hip, pause, and lower fully.', 'Builds the lats and mid-back while your core resists twisting.'],
-  ['pulldown', 'Lat pull-down', 'gym', 1, 3, 'r', '', 'Grip the bar just wider than your shoulders. Pull it to your upper chest, leading with your elbows, and return until your arms are straight.', 'The lats help accelerate your arms in the downswing.'],
-  ['cable_row', 'Seated cable row', 'gym', 1, 3, 'r', '', 'Sit tall with knees soft. Pull the handle to your lower ribs, squeeze your shoulder blades together, and return with control.', 'Mid-back strength holds your spine angle from address to impact.'],
-  ['inv_row', 'Inverted row', 'gym', 2, 3, 'r', '', 'Hang under a bar or straps with your body straight and heels on the floor. Pull your chest to the bar and lower slowly.', 'Builds pulling strength along with a rigid, braced trunk.'],
-  ['pullup', 'Pull-up', 'gym', 3, 3, 'r', 's', 'Hang from a bar with arms straight. Pull until your chin clears the bar, then lower all the way down under control.', 'Top-level lat and grip strength for speed and club control.']
+  ['pulldown', 'Lat pull-down', 'mach', 1, 3, 'r', '', 'Grip the bar just wider than your shoulders. Pull it to your upper chest, leading with your elbows, and return until your arms are straight.', 'The lats help accelerate your arms in the downswing.'],
+  ['cable_row', 'Seated cable row', 'cable', 1, 3, 'r', '', 'Sit tall with knees soft. Pull the handle to your lower ribs, squeeze your shoulder blades together, and return with control.', 'Mid-back strength holds your spine angle from address to impact.'],
+  ['inv_row', 'Inverted row', 'smith', 2, 3, 'r', '', 'Hang under a bar or straps with your body straight and heels on the floor. Pull your chest to the bar and lower slowly.', 'Builds pulling strength along with a rigid, braced trunk.'],
+  ['pullup', 'Pull-up', 'gym', 3, 3, 'r', 's', 'Hang from a bar with arms straight. Pull until your chin clears the bar, then lower all the way down under control.', 'Top-level lat and grip strength for speed and club control.'],
+  ['mach_row', 'Seated row machine', 'mach', 1, 3, 'r', '', 'Sit with your chest against the pad. Pull the handles toward your ribs, squeezing your shoulder blades together, then return until your arms are straight.', 'Mid-back strength that holds your spine angle from address to impact.'],
+  ['assisted_pullup', 'Assisted pull-up machine', 'mach', 1, 3, 'r', 'u', 'Kneel on the pad of the assisted pull-up machine and grip the handles. Pull your chin up toward the handles, then lower slowly. More counterweight makes it easier.', 'Builds the lats that pull the club down, with as much help as you need.'],
+  ['cable_1arm_row', 'Single-arm cable row with turn', 'cable', 1, 3, 's', '', 'Set a cable at chest height and stand in a split stance holding one handle. Pull it to your ribs while letting your shoulders turn slightly, then reach back out.', 'Combines pulling with a controlled turn, the way your trail side works in the swing.'],
+  ['straight_pd', 'Straight-arm cable pulldown', 'cable', 1, 3, 'r', '', 'Face a high cable holding a bar or rope, arms straight and hips back slightly. Sweep your hands down to your thighs keeping your arms straight, then let them rise slowly.', 'Trains the lats to pull your arms down from the top, a big source of speed.'],
+  ['fbar_row', 'Bent-over barbell row', 'fbar', 2, 3, 'r', 'b', 'Hold a fixed-weight barbell and hinge forward with a flat back and soft knees. Pull the bar to your lower ribs, pause, and lower it under control.', 'Builds the upper back while your hips and core hold a hinge, like golf posture.']
 ]);
 
 /* ---------- Shoulder care ---------- */
@@ -541,7 +575,10 @@ addPool('scap', [
   ['face_pull', 'Face pull', 'band', 1, 3, 'r', '', 'Anchor a band or cable at face height. Pull toward your forehead with elbows high, finishing with your knuckles pointing back.', 'Offsets rounded golf posture and protects the rotator cuff.'],
   ['band_er', 'Band external rotation', 'band', 1, 3, 's', '', 'Pin your elbow to your side, bent 90°, holding a band anchored across your body. Rotate your forearm outward, pause, and return slowly.', 'The rotator cuff slows your arm after impact. Keep it strong.'],
   ['rev_fly', 'Bent-over reverse fly', 'db', 1, 3, 'r', '', 'Hinge forward with a flat back and light dumbbells hanging. Raise your arms out to the sides, squeeze, and lower slowly.', 'Rear-shoulder strength balances all the forward pull of the swing.'],
-  ['side_er', 'Side-lying external rotation', 'db', 1, 3, 's', '', 'Lie on your side with a light dumbbell in the top hand, elbow on your ribs and bent 90°. Rotate the weight up, pause, and lower slowly.', 'Direct rotator cuff work to keep your shoulders durable.']
+  ['side_er', 'Side-lying external rotation', 'db', 1, 3, 's', '', 'Lie on your side with a light dumbbell in the top hand, elbow on your ribs and bent 90°. Rotate the weight up, pause, and lower slowly.', 'Direct rotator cuff work to keep your shoulders durable.'],
+  ['cable_face_pull', 'Cable face pull', 'cable', 1, 3, 'r', '', 'Set a rope at face height. Pull toward your forehead with your elbows high, finishing with your knuckles pointing back.', 'Offsets rounded golf posture and protects the rotator cuff.'],
+  ['rear_delt_mach', 'Rear delt machine', 'mach', 1, 3, 'r', '', 'Sit facing the pec fly machine with the handles set for rear delts. With arms nearly straight, sweep the handles back until they line up with your shoulders, then return slowly.', 'Strengthens the back of the shoulders to balance all the forward pull of the swing.'],
+  ['cable_er', 'Cable external rotation', 'cable', 1, 3, 's', '', 'Set a cable at elbow height and stand side-on. With your elbow pinned to your side and bent 90°, rotate your forearm out away from your body, then return slowly.', 'Keeps the rotator cuff strong for slowing your arm after impact.']
 ]);
 
 /* ---------- Grip and carry ---------- */
@@ -550,7 +587,8 @@ addPool('carry', [
   ['towel_wring', 'Towel wringing', '', 1, 3, 'r', '', 'Roll up a towel and grip it with both hands. Wring it out as hard as you can one way, then the other.', 'Grip strength is linked to clubhead speed and club control.'],
   ['suitcase', 'Suitcase carry', 'db', 1, 3, 'ts', '', 'Hold a heavy dumbbell in one hand like a suitcase. Walk slowly and stay perfectly upright, without leaning toward or away from the weight.', 'Resisting the side-bend builds the obliques that hold your spine angle.'],
   ['farmer', 'Farmer carry', 'db', 1, 3, 't', '', 'Hold a heavy dumbbell in each hand. Walk with tall posture, shoulders back and short, steady steps.', 'Builds grip, posture and whole-body stiffness in one move.'],
-  ['dead_hang', 'Dead hang', 'gym', 2, 3, 't', 's', 'Hang from a pull-up bar with straight arms and shoulders slightly pulled down. Breathe and hold.', 'Builds grip endurance and opens up your shoulders and lats.']
+  ['dead_hang', 'Dead hang', 'gym', 2, 3, 't', 's', 'Hang from a pull-up bar with straight arms and shoulders slightly pulled down. Breathe and hold.', 'Builds grip endurance and opens up your shoulders and lats.'],
+  ['db_wrist', 'Dumbbell wrist curls', 'db', 1, 3, 'r', '', 'Sit with your forearms on your thighs and a light dumbbell in each hand, palms up. Curl the weights up using only your wrists, then lower slowly. Do a set palms down too.', 'Forearm strength steadies the club face through impact and rough.']
 ]);
 
 /* ---------- Core: anti-rotation ---------- */
@@ -562,7 +600,8 @@ addPool('arot', [
   ['pallof', 'Pallof press', 'band', 1, 3, 's', '', 'Anchor a band at chest height and stand side-on with hands at your chest. Press straight out and hold two seconds without letting the band turn you.', 'Keeps your trunk stable so more speed does not cost you your back.'],
   ['shoulder_taps', 'Plank shoulder taps', '', 2, 3, 'r', 's', 'In a push-up position with feet wide, tap one hand to the opposite shoulder without your hips rocking. Alternate.', 'Trains your core to resist rotation under load.'],
   ['bear_hold', 'Bear hold', '', 2, 3, 't', '', 'On hands and toes with knees bent under your hips, lift your knees an inch off the floor. Keep your back flat and breathe.', 'Builds a braced trunk and shoulders with very little spine stress.'],
-  ['plank_thread', 'Side plank reach-through', '', 3, 3, 's', 's', 'From a side plank, reach your top arm under your body, rotating your chest toward the floor, then open back up to the ceiling.', 'Adds controlled rotation to side-plank strength.']
+  ['plank_thread', 'Side plank reach-through', '', 3, 3, 's', 's', 'From a side plank, reach your top arm under your body, rotating your chest toward the floor, then open back up to the ceiling.', 'Adds controlled rotation to side-plank strength.'],
+  ['cable_pallof', 'Cable Pallof press', 'cable', 1, 3, 's', '', 'Set a cable at chest height and stand side-on with the handle at your chest. Press straight out and hold for two seconds without letting the cable turn you.', 'Keeps your trunk stable so more speed does not cost you your back.']
 ]);
 
 /* ---------- Core: rotation ---------- */
@@ -573,7 +612,10 @@ addPool('rot', [
   ['band_chop', 'Band chop', 'band', 1, 3, 's', '', 'Anchor a band high and stand or half-kneel side-on. Pull it diagonally down across your body to the opposite hip, turning your shoulders, and return slowly.', 'Mirrors the downswing path from high on the trail side to low on the lead side.'],
   ['band_lift', 'Band lift', 'band', 1, 3, 's', '', 'Anchor a band low and stand side-on. Pull it diagonally up across your body to above the opposite shoulder, pivoting your back foot.', 'Trains the upward rotation of your follow-through.'],
   ['wood_chop', 'Dumbbell wood chop', 'db', 2, 3, 's', 'b', 'Hold one dumbbell in both hands by one hip. Sweep it diagonally up across your body to above the opposite shoulder, pivoting your feet, and return.', 'Loaded rotation through the whole body, feet to hands.'],
-  ['wipers', 'Bent-knee wipers', '', 1, 3, 's', 'b', 'Lie on your back with knees bent over your hips and arms out wide. Lower both knees to one side under control, keeping shoulders down, and return.', 'Builds control of rotation between hips and ribcage.']
+  ['wipers', 'Bent-knee wipers', '', 1, 3, 's', 'b', 'Lie on your back with knees bent over your hips and arms out wide. Lower both knees to one side under control, keeping shoulders down, and return.', 'Builds control of rotation between hips and ribcage.'],
+  ['cable_chop', 'Cable woodchop', 'cable', 1, 3, 's', '', 'Set a cable high and stand side-on. Pull the handle diagonally down across your body to the opposite hip, turning your shoulders and pivoting your back foot, then return slowly.', 'Mirrors the downswing path from high on the trail side to low on the lead side.'],
+  ['cable_lift', 'Cable low-to-high lift', 'cable', 1, 3, 's', '', 'Set a cable low and stand side-on. Pull the handle diagonally up across your body to above the opposite shoulder, pivoting your back foot, then return slowly.', 'Trains the upward rotation of your follow-through.'],
+  ['rotary_torso', 'Rotary torso machine', 'mach', 1, 3, 's', 'b', 'Sit in the machine with your chest against the pad. Turn your torso to one side against the resistance with control, then return slowly. Switch sides.', 'Strengthens the obliques that drive your turn while your hips stay still.']
 ]);
 
 /* ---------- Core: anti-extension ---------- */
@@ -582,7 +624,10 @@ addPool('aext', [
   ['leg_lower', 'Alternating leg lowers', '', 1, 3, 's', '', 'Lie on your back with both legs straight up. Keep your lower back pressed down and slowly lower one leg to just above the floor, then switch.', 'Builds lower-ab control that keeps your pelvis neutral at address.'],
   ['plank_reach', 'Plank with reach', '', 2, 3, 's', 's', 'From a forearm plank, slowly reach one arm forward without your hips shifting. Set it down and switch.', 'Makes your core resist both sagging and twisting.'],
   ['hollow', 'Hollow hold', '', 3, 3, 't', 'b', 'Lie on your back, press your lower back down, and lift your shoulders and straight legs a few inches. Reach your arms overhead and hold.', 'High-level trunk stiffness for transferring force at speed.'],
-  ['rollout', 'Ab rollout', 'gym', 2, 3, 'r', 'bs', 'Kneel with an ab wheel or stability ball. Roll forward as far as you can without your lower back arching, then pull back.', 'Trains your abs to control extension, which protects your back.']
+  ['rollout', 'Ab rollout', 'ball', 2, 3, 'r', 'bs', 'Kneel with an ab wheel or stability ball. Roll forward as far as you can without your lower back arching, then pull back.', 'Trains your abs to control extension, which protects your back.'],
+  ['captain_raise', 'Captain’s chair knee raise', 'mach', 1, 3, 'r', 'u', 'Stand in the captain’s chair with your back against the pad and forearms on the rests. Raise your knees toward your chest without swinging, then lower slowly.', 'Builds the lower abs that keep your pelvis steady at address.'],
+  ['ball_plank', 'Stability ball plank', 'ball', 2, 3, 't', '', 'Rest your forearms on a stability ball with your legs straight behind you. Hold a straight line from head to heels without letting your hips sag.', 'The unstable ball makes your core work harder to stay still.'],
+  ['ball_stir', 'Stir the pot', 'ball', 3, 3, 's', 's', 'From a stability ball plank, draw small circles with your forearms while your hips stay still. Circle one way, then the other.', 'High-level control of your trunk against twisting and sagging.']
 ]);
 
 /* ---------- Stretch: hips ---------- */
@@ -611,6 +656,50 @@ addPool('stup', [
   ['wrist_stretch', 'Forearm stretch', '', 1, 3, 'ts', '', 'Straighten one arm in front with the palm up and use the other hand to draw the fingers back. Then turn the palm down and repeat.', 'Helps head off golfer’s elbow and keeps your wrists supple.']
 ]);
 
+/* ---------- Abs (custom workouts) ---------- */
+addPool('abs', [
+  ['ab_crunch_mach', 'Ab crunch machine', 'mach', 1, 3, 'r', '', 'Set the seat so the pads sit on your upper chest or the handles at your shoulders. Curl your ribs toward your hips against the resistance, then return slowly.', 'Builds the front of your core that braces you at impact.'],
+  ['ball_crunch', 'Stability ball crunch', 'ball', 1, 3, 'r', '', 'Lie back on a stability ball with it under your mid-back and feet planted. Curl your ribs up toward your hips, then lower back over the ball.', 'Works your abs through a bigger range than a floor crunch.']
+]);
+
+/* ---------- Leg machines (custom workouts) ---------- */
+addPool('loiso', [
+  ['leg_ext', 'Leg extension machine', 'mach', 1, 3, 'r', 'k', 'Sit with the pad on the front of your lower shins and your knees in line with the machine’s pivot. Straighten your legs, pause, and lower slowly.', 'Strong quads protect your knees on downhill walks and sidehill lies.'],
+  ['seated_curl', 'Seated leg curl machine', 'mach', 1, 3, 'r', '', 'Sit with the pad behind your lower calves and the thigh pad snug. Curl your heels down and back, pause, and return slowly.', 'Hamstring strength balances your quads and supports your knees.'],
+  ['lying_curl', 'Lying leg curl machine', 'mach', 1, 3, 'r', '', 'Lie face down with the pad just above your heels. Curl your heels toward your glutes without lifting your hips, then lower slowly.', 'Hamstring strength balances your quads and supports your knees.'],
+  ['calf_mach', 'Calf raise machine', 'mach', 1, 3, 'r', '', 'Stand or sit with the balls of your feet on the platform edge. Rise onto your toes as high as you can, pause, then lower until you feel a stretch.', 'Strong calves help you push off the ground and stay steady on uneven lies.'],
+  ['smith_calf', 'Smith machine calf raise', 'smith', 2, 3, 'r', '', 'Set the bar on your upper back and stand with the balls of your feet on a low step. Rise onto your toes, pause, then lower until your heels drop below the step.', 'Heavy calf work for push-off and balance.'],
+  ['adductor', 'Hip adductor machine', 'mach', 1, 3, 'r', '', 'Sit with the pads on the inside of your knees, legs apart. Squeeze your knees together against the resistance, pause, and return slowly.', 'Inner-thigh strength supports a stable stance and a clean weight shift.'],
+  ['glute_kick', 'Glute kickback machine', 'mach', 1, 3, 's', '', 'Set up on the glute machine with one foot on the pad or platform. Drive the leg back until your hip is straight, squeeze, and return slowly without arching your back.', 'Targets the glutes, a main power source in the swing.']
+]);
+
+/* ---------- Arms and shoulders (custom workouts) ---------- */
+addPool('upiso', [
+  ['pec_fly', 'Pec fly machine', 'mach', 1, 3, 'r', 's', 'Sit with the handles at chest height and a slight bend in your elbows. Bring the handles together in front of you, then open slowly until you feel a stretch.', 'Chest strength for keeping your arms connected to your body through the swing.'],
+  ['cable_cross', 'Cable crossover', 'cable', 1, 3, 'r', 's', 'Set both cables high and step forward in a split stance. Sweep the handles down and together in front of your hips, then let them return slowly.', 'Chest strength with your core and legs working to stay balanced.'],
+  ['lat_raise_mach', 'Lateral raise machine', 'mach', 1, 3, 'r', 's', 'Sit with the pads on the outside of your upper arms. Raise your arms out to the side until they reach shoulder height, then lower slowly.', 'Builds the side of the shoulders for a stable top of the backswing.'],
+  ['db_lat_raise', 'Dumbbell lateral raise', 'db', 1, 3, 'r', 's', 'Stand with a light dumbbell in each hand. Raise your arms out to the side to shoulder height with a slight bend in your elbows, then lower slowly.', 'Builds the side of the shoulders for a stable top of the backswing.'],
+  ['mach_curl', 'Bicep curl machine', 'mach', 1, 3, 'r', '', 'Sit with your upper arms flat on the pad. Curl the handles toward your shoulders, then lower slowly until your arms are nearly straight.', 'Arm strength for club control, mostly general fitness.'],
+  ['db_curl', 'Dumbbell curl', 'db', 1, 3, 'r', '', 'Stand with a dumbbell in each hand, palms forward. Curl the weights up without swinging, then lower slowly.', 'Arm strength for club control, mostly general fitness.'],
+  ['hammer_curl', 'Hammer curl', 'db', 1, 3, 'r', '', 'Stand with a dumbbell in each hand, palms facing each other. Curl the weights up without swinging, then lower slowly.', 'Builds the forearms and grip that hold the club steady.'],
+  ['cable_curl', 'Cable curl', 'cable', 1, 3, 'r', '', 'Face a low cable holding a bar or rope. Curl it toward your shoulders with your elbows by your sides, then lower slowly.', 'Arm strength for club control, mostly general fitness.'],
+  ['fbar_curl', 'Barbell curl', 'fbar', 1, 3, 'r', '', 'Hold a fixed-weight barbell with palms forward. Curl it toward your shoulders without swinging, then lower slowly.', 'Arm strength for club control, mostly general fitness.'],
+  ['mach_tri', 'Tricep extension machine', 'mach', 1, 3, 'r', '', 'Sit with your upper arms on the pad and hands on the handles. Straighten your arms against the resistance, then return slowly.', 'Triceps strength helps extend the arms through impact.'],
+  ['cable_pushdown', 'Cable rope pushdown', 'cable', 1, 3, 'r', '', 'Face a high cable holding a rope, elbows by your sides. Push the rope down until your arms are straight, spreading the ends apart, then return slowly.', 'Triceps strength helps extend the arms through impact.'],
+  ['db_oh_tri', 'Overhead dumbbell tricep extension', 'db', 1, 3, 'r', 's', 'Hold one dumbbell overhead with both hands. Lower it behind your head by bending your elbows, then straighten your arms again.', 'Triceps strength and shoulder mobility in one move.']
+]);
+
+/* ---------- Cardio machines (custom workouts) ---------- */
+addPool('cardio', [
+  ['treadmill', 'Treadmill incline walk', 'cardio', 1, 3, 't', '', 'Walk briskly at a 3 to 8 percent incline. Swing your arms and avoid holding the rails.', 'Builds the walking stamina for 18 holes, hills included.'],
+  ['bike', 'Upright bike', 'cardio', 1, 3, 't', '', 'Set the seat so your knee stays slightly bent at the bottom of the pedal stroke. Ride at a pace where you can still talk.', 'Low-impact conditioning that warms up hips and knees.'],
+  ['recumbent', 'Recumbent bike', 'cardio', 1, 3, 't', '', 'Sit back in the seat with your knees slightly bent at full reach. Pedal at a steady, comfortable pace.', 'Conditioning with your back supported and almost no load on your joints.'],
+  ['elliptical', 'Elliptical', 'cardio', 1, 3, 't', '', 'Stand tall and push and pull the handles as you stride. Keep a pace where you can still talk.', 'Whole-body conditioning without impact.'],
+  ['arc', 'Arc trainer', 'cardio', 1, 3, 't', '', 'Stand tall and stride smoothly, using the handles lightly. Raise the incline for more leg work.', 'Leg-focused conditioning that is easy on the knees.'],
+  ['stairs', 'Stair climber', 'cardio', 2, 3, 't', 'k', 'Step at a steady pace with your whole foot on each step. Hold the rails lightly for balance only.', 'Builds leg stamina for uphill lies and long days on the course.'],
+  ['rower', 'Rowing machine', 'cardio', 1, 3, 't', 'b', 'Push with your legs first, then lean back slightly and pull the handle to your ribs. Return in reverse order: arms, body, legs.', 'Full-body conditioning that also works the posture muscles.']
+]);
+
 /* Pool categories drive sets, reps and rest. */
 const CAT = {
   hip: 'mob', tsp: 'mob', shd: 'mob', act: 'act', bal: 'bal',
@@ -618,7 +707,8 @@ const CAT = {
   squat: 'str', hinge: 'str', lunge: 'str', push: 'str', pull: 'str',
   scap: 'acc', carry: 'carry',
   arot: 'core', rot: 'core', aext: 'core',
-  sthip: 'stretch', stpost: 'stretch', stup: 'stretch'
+  sthip: 'stretch', stpost: 'stretch', stup: 'stretch',
+  abs: 'core', loiso: 'acc', upiso: 'acc', cardio: 'cardio'
 };
 
 /* Workout templates. Slot: [pool, minimum session length that includes it, condition].
@@ -699,10 +789,17 @@ const Engine = (function () {
   }
 
   /* ---- what the golfer can do ---- */
+  /* What each equipment choice makes available. A full gym has everything; Planet Fitness and similar gyms have
+     machines, a Smith machine, cables, fixed-weight barbells, dumbbells up to about 75 lb, benches, stability balls,
+     foam rollers and cardio machines, but no Olympic barbells, racks, platforms, kettlebells or medicine balls. */
+  const PROVIDES = {
+    gym: ['band', 'db', 'mb', 'bench', 'ball', 'roller', 'mach', 'smith', 'cable', 'fbar', 'cardio', 'gym'],
+    pf: ['db', 'bench', 'ball', 'roller', 'mach', 'smith', 'cable', 'fbar', 'cardio']
+  };
   function has(P, eq) {
     if (!eq) return true;
     const e = P.equip || {};
-    return !!e[eq] || (eq !== 'gym' && !!e.gym);
+    return !!e[eq] || (!!e.gym && PROVIDES.gym.indexOf(eq) >= 0) || (!!e.pf && PROVIDES.pf.indexOf(eq) >= 0);
   }
   function lowImpact(P) {
     const l = P.limits || {};
@@ -731,7 +828,8 @@ const Engine = (function () {
     log.forEach(function (e, i) { (e.ex || []).forEach(function (id) { m[id] = i; }); });
     return m;
   }
-  const fit = function (e) { return e.lo + (e.eq ? 1 : 0); };
+  /* Harder and loaded versions rank first; free weights and cables a little ahead of fixed-path machines. */
+  const fit = function (e) { return e.lo + (e.eq ? (e.eq === 'mach' ? 0.5 : 1) : 0); };
   const byFit = function (a, b) { return fit(b) - fit(a) || (b.eq ? 1 : 0) - (a.eq ? 1 : 0) || a.idx - b.idx; };
   function ranked(pool, P, lu, used, o) {
     let c = candidates(pool, P, o).filter(function (e) { return !used.has(e.id); });
@@ -806,6 +904,8 @@ const Engine = (function () {
     } else if (cat === 'core') {
       sets = pick([2, 2, 3]); if (P.mins <= 20) sets = 2; if (o.type === 'M') sets = 2; rest = 30;
       if (m === 't') hold = pick([20, 30, 45]); else if (m === 'ts') hold = pick([15, 25, 35]); else if (m === 's') amt = pick(['6', '8', '10']); else amt = pick(['10', '16', '20']);
+    } else if (cat === 'cardio') {
+      sets = 1; hold = 600;
     } else { /* stretch */
       sets = 1;
       hold = m === 't' ? (P.mob === 0 ? 60 : 45) : (P.mob === 0 ? 45 : 30);
@@ -813,12 +913,15 @@ const Engine = (function () {
     if (o.ease && (cat === 'str' || cat === 'pow')) sets = Math.max(1, sets - 1);
     return { sets: sets, amt: amt, hold: hold, rest: rest, side: m === 's' || m === 'ts', cat: cat };
   }
+  const dur = function (s) { return s >= 120 && s % 60 === 0 ? s / 60 + '\u00a0min' : s + '\u00a0s'; };
   function rxLabel(r) {
-    const what = r.hold ? r.hold + '\u00a0s' : r.amt;
+    const what = r.hold ? dur(r.hold) : r.amt;
     return r.sets + ' × ' + what + (r.side ? ' each side' : '');
   }
   function effort(ex, P) {
     const cat = CAT[ex.pool];
+    if (ex.pool === 'upiso' || ex.pool === 'loiso') return 'Pick a weight you can move with control on every rep, finishing each set one or two reps short of failure.';
+    if (cat === 'cardio') return 'Easy to moderate pace: you can still talk in full sentences.';
     if (cat === 'str') {
       const left = [3, 2, 1][P.level - 1] + (P.age >= 65 ? 1 : 0);
       return 'Pick a load or pace that leaves about ' + left + (left === 1 ? ' rep' : ' reps') + ' in the tank on each set.';
@@ -940,7 +1043,8 @@ const Engine = (function () {
     if (ex.custom) return { w: !!ex.w, sec: sec };
     const cat = CAT[ex.pool];
     if (cat !== 'pow' && cat !== 'str' && cat !== 'acc' && cat !== 'carry' && cat !== 'core') return null;
-    const w = ex.eq === 'db' || ex.eq === 'mb' || (ex.eq === 'gym' && !sec) || (!sec && /dumbbell|weight/i.test(ex.how));
+    const loaded = { db: 1, mb: 1, mach: 1, smith: 1, cable: 1, fbar: 1 };
+    const w = ex.fl.indexOf('u') < 0 && (!!loaded[ex.eq] || (ex.eq === 'gym' && !sec) || (!sec && /dumbbell|weight/i.test(ex.how)));
     return { w: w, sec: sec };
   }
   const nums = function (amt) { return String(amt || '').match(/\d+(\.\d+)?/g) || []; };
@@ -979,7 +1083,7 @@ const Engine = (function () {
     D: D, BY: BY, LEVELS: LEVELS, TYPES: TYPES, CAT: CAT, LIB: LIB,
     assess: assess, has: has, lowImpact: lowImpact, candidates: candidates,
     nextType: nextType, upcoming: upcoming, dueInfo: dueInfo,
-    rx: rx, rxLabel: rxLabel, effort: effort, buildPlan: buildPlan, swapFor: swapFor,
+    rx: rx, rxLabel: rxLabel, dur: dur, PROVIDES: PROVIDES, effort: effort, buildPlan: buildPlan, swapFor: swapFor,
     previousInPool: previousInPool, weekCount: weekCount, weekStreak: weekStreak
   };
 })();
@@ -993,14 +1097,19 @@ const esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { r
 const clamp = function (n, a, b) { return Math.min(b, Math.max(a, n)); };
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const ID_RE = /^[A-Za-z0-9_]{1,40}$/;
-const EQUIP = [['band', 'Resistance bands'], ['db', 'Dumbbells or kettlebells'], ['mb', 'Medicine ball'], ['bench', 'Bench, box or sturdy step'], ['gym', 'Full gym with machines and barbells']];
-const EQ_NAME = { '': 'No equipment', band: 'Bands', db: 'Dumbbells', mb: 'Medicine ball', bench: 'Bench or step', gym: 'Gym' };
+const EQUIP = [['band', 'Resistance bands'], ['db', 'Dumbbells or kettlebells'], ['mb', 'Medicine ball'], ['bench', 'Bench, box or sturdy step'], ['ball', 'Stability ball'], ['roller', 'Foam roller'], ['pf', 'Planet Fitness or a similar gym'], ['gym', 'Full gym with barbells and racks']];
+const EQ_NAME = { '': 'No equipment', band: 'Bands', db: 'Dumbbells', mb: 'Medicine ball', bench: 'Bench or step', ball: 'Stability ball', roller: 'Foam roller', mach: 'Machine', smith: 'Smith machine', cable: 'Cable', fbar: 'Fixed barbell', cardio: 'Cardio machine', gym: 'Full gym' };
 const LIMITS = [['back', 'Lower back'], ['knee', 'Knees'], ['shoulder', 'Shoulders']];
 const FEEL = ['', 'Easy', 'Right', 'Hard'];
 /* [key, chip label, days, phrase] */
 const RANGES = [['1m', '1M', 30, 'the last month'], ['3m', '3M', 91, 'the last 3 months'], ['6m', '6M', 182, 'the last 6 months'], ['1y', '1Y', 365, 'the last year'], ['all', 'All', 0, 'all time']];
-const PCATS = [['all', 'All'], ['str', 'Strength'], ['pow', 'Power'], ['core', 'Core'], ['mob', 'Mobility'], ['warm', 'Warm-up'], ['stretch', 'Stretch'], ['mine', 'Mine']];
-const CAT_NAME = { mob: 'Mobility', act: 'Warm-up', bal: 'Balance', pow: 'Power', str: 'Strength', acc: 'Shoulder care', carry: 'Grip and carry', core: 'Core', stretch: 'Stretch', custom: 'Your exercise' };
+const PCATS = [['all', 'All types'], ['str', 'Strength'], ['iso', 'Arms, shoulders and leg machines'], ['pow', 'Power'], ['core', 'Core'], ['cardio', 'Cardio'], ['mob', 'Mobility'], ['warm', 'Warm-up and balance'], ['stretch', 'Stretches'], ['mine', 'My exercises']];
+/* [key, label, test on the exercise's equipment] for the exercise picker */
+const PEQ = [['any', 'Any equipment'], ['have', 'Equipment I have'], ['mach', 'Machines'], ['cable', 'Cables'], ['smith', 'Smith machine'], ['free', 'Dumbbells and barbells'], ['small', 'Bands, balls, rollers, benches'], ['none', 'No equipment'], ['cardio', 'Cardio machines']];
+const PEQ_SET = { mach: ['mach'], cable: ['cable'], smith: ['smith'], free: ['db', 'fbar', 'gym'], small: ['band', 'ball', 'roller', 'bench', 'mb'], none: [''], cardio: ['cardio'] };
+const CAT_NAME = { mob: 'Mobility', act: 'Warm-up', bal: 'Balance', pow: 'Power', str: 'Strength', acc: 'Shoulder care', carry: 'Grip and carry', core: 'Core', stretch: 'Stretch', cardio: 'Cardio', custom: 'Your exercise' };
+const POOL_NAME = { upiso: 'Arms and shoulders', loiso: 'Leg machines', abs: 'Abs' };
+const kindOf = function (ex) { return ex.custom ? 'Your exercise' : POOL_NAME[ex.pool] || CAT_NAME[E.CAT[ex.pool]] || ''; };
 const ICON_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
 /* Where the page runs: inside Claude's viewer, as a Home Screen app, or in a browser tab. */
@@ -1020,7 +1129,7 @@ let S = blank();
 const UI = {
   tab: 'today', inSession: false, sum: null, edit: null, ob: null, sheet: null, open: -1, how: -1,
   month: null, entryOpen: null, daySel: null, booting: false, armed: null, feel: 0, timer: null,
-  lastView: '', skipInstall: false, pick: { q: '', cat: 'all' }
+  lastView: '', skipInstall: false, pick: { q: '', cat: 'all', eq: 'any' }
 };
 
 /* Custom exercises, shaped like library ones so the engine can use them. */
@@ -1044,7 +1153,7 @@ function trackOf(ex) {
   if (!t) return null;
   if (t.w && !ex.custom && !ex.eq) {
     const q = (S.profile && S.profile.equip) || {};
-    if (!q.db && !q.gym) return { w: false, sec: t.sec };
+    if (!q.db && !q.gym && !q.pf) return { w: false, sec: t.sec };
   }
   return t;
 }
@@ -1103,7 +1212,7 @@ function cleanWorkout(w) {
   const items = w.del ? [] : (Array.isArray(w.items) ? w.items : []).slice(0, 40).filter(function (it) {
     return it && typeof it.id === 'string' && ID_RE.test(it.id);
   }).map(function (it) {
-    return { id: it.id, sets: clamp(Math.round(+it.sets) || 3, 1, 10), n: clamp(Math.round(+it.n) || 10, 1, 600), rest: clamp(Math.round(+it.rest) || 0, 0, 600) };
+    return { id: it.id, sets: clamp(Math.round(+it.sets) || 3, 1, 10), n: clamp(Math.round(+it.n) || 10, 1, 3600), rest: clamp(Math.round(+it.rest) || 0, 0, 600) };
   });
   return { id: w.id, name: String(w.name || '').trim().slice(0, 40) || 'My workout', rot: w.rot !== false, ord: +w.ord || 0, del: !!w.del, at: +w.at || 0, items: items };
 }
@@ -1610,7 +1719,7 @@ const Q = [
   { k: 'bal', t: 'How long can you balance on one leg?', d: 'Stand near a wall, cross your arms and lift one foot. Count until the foot touches down or you reach for the wall.', o: ['Under 10 seconds', '10 to 30 seconds', 'More than 30 seconds'] },
   { k: 'flex', t: 'How far can you reach toward your toes?', d: 'Stand with your legs straight and reach down slowly, without bouncing.', o: ['My knees or shins', 'My ankles', 'My toes or the floor'] },
   { k: 'limits', t: 'Any areas you need to protect?', d: 'Exercises that load these areas are swapped for gentler ones.', m: LIMITS, none: 'None of these' },
-  { k: 'equip', t: 'What equipment can you use?', d: 'Every workout also works with only a golf club, a chair and a wall.', m: EQUIP, none: 'None, bodyweight only' },
+  { k: 'equip', t: 'What equipment can you use?', d: 'Every workout also works with only a golf club, a chair and a wall. Choose Planet Fitness if you train there or at a gym like it.', m: EQUIP, none: 'None, bodyweight only' },
   { k: 'sched', t: 'How often, and for how long?', d: 'You can change this later. Two or three days a week is plenty to see your game change.' }
 ];
 function newOb(from) {
@@ -1839,8 +1948,9 @@ function inputVal(it, k, f, v) {
   if (k >= it.done && it.dr && it.dr[k] && it.dr[k][f] !== undefined) return it.dr[k][f];
   return v == null ? '' : String(v);
 }
-function setTable(it, i, d, name) {
-  const tr = d.tr, u = units();
+const bodyweightOk = function (ex) { return ex.custom || !ex.eq || ex.eq === 'bench' || ex.eq === 'ball'; };
+function setTable(it, i, d, name, ex) {
+  const tr = d.tr, u = units(), bw = bodyweightOk(ex);
   let h = '<div class="sets' + (tr.w ? '' : ' nw') + '" role="table" aria-label="' + esc('Sets for ' + name) + '">' +
     '<div class="set-row set-h" role="row"><span role="columnheader">Set</span><span role="columnheader">Last time</span>' + (tr.w ? '<span role="columnheader">' + u + '</span>' : '') +
     '<span role="columnheader">' + (tr.sec ? 'Sec' : 'Reps') + '</span><span role="columnheader"><span class="sr">Done</span></span></div>';
@@ -1848,7 +1958,7 @@ function setTable(it, i, d, name) {
     const v = cur(it, k, d.vals), logged = k < it.done;
     const prev = d.last && d.last.sets[k] ? fmtShort(d.last.sets[k], tr.sec) : '–';
     h += '<div class="set-row' + (logged ? ' done' : '') + '" role="row"><span class="k" role="cell">' + (k + 1) + '</span><span class="prev" role="cell">' + esc(prev) + '</span>' +
-      (tr.w ? '<span role="cell"><input class="num-in" id="w-' + i + '-' + k + '" data-i="' + i + '" data-k="' + k + '" data-f="w" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" maxlength="6" value="' + esc(inputVal(it, k, 'w', v[0])) + '" placeholder="BW" aria-label="' + esc('Set ' + (k + 1) + ' weight in ' + u + ', blank for bodyweight') + '"></span>' : '') +
+      (tr.w ? '<span role="cell"><input class="num-in" id="w-' + i + '-' + k + '" data-i="' + i + '" data-k="' + k + '" data-f="w" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" maxlength="6" value="' + esc(inputVal(it, k, 'w', v[0])) + '" placeholder="' + (bw ? 'BW' : '\u2013') + '" aria-label="' + esc('Set ' + (k + 1) + ' weight in ' + u + (bw ? ', blank for bodyweight' : '')) + '"></span>' : '') +
       '<span role="cell"><input class="num-in" id="x-' + i + '-' + k + '" data-i="' + i + '" data-k="' + k + '" data-f="x" type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" maxlength="4" value="' + esc(inputVal(it, k, 'x', v[1])) + '" placeholder="0" aria-label="' + esc('Set ' + (k + 1) + (tr.sec ? ' seconds' : ' reps')) + '"></span>' +
       '<span role="cell"><button type="button" class="tick' + (logged ? ' on' : k === it.done ? ' next' : '') + '" data-act="log" data-i="' + i + '" data-k="' + k + '" aria-pressed="' + logged + '" aria-label="' +
       esc((logged ? 'Undo set ' : 'Log set ') + (k + 1)) + '">' + ICON_CHECK + '</button></span></div>';
@@ -1876,8 +1986,8 @@ function itemHtml(it, i, n) {
       if (d.last) {
         h += '<p class="hint">Last time, ' + esc(fmtS(d.last.date)) + ': <b>' + esc(fmtSets(d.last.sets, tr.sec)) + '</b>' +
           (d.sug && d.sug.up ? '. You reached ' + d.sug.top + ' reps on every set, so try <b>' + fmtN(d.sug.w) + ' ' + units() + '</b>.' : '.') + '</p>';
-      } else if (tr.w) h += '<p class="hint">First time logging this one. Enter the weight you use, or leave it blank for bodyweight.</p>';
-      h += setTable(it, i, d, ex.name);
+      } else if (tr.w) h += '<p class="hint">First time logging this one. Enter the weight you use' + (bodyweightOk(ex) ? ', or leave it blank for bodyweight.' : ' for each set.') + '</p>';
+      h += setTable(it, i, d, ex.name, ex);
     }
     if (UI.how === i) {
       h += '<div class="how">' + (ex.how ? '<p><b>How</b>' + esc(ex.how) + '</p>' : '') + (ex.why ? '<p><b>Why it helps your golf</b>' + esc(ex.why) + '</p>' : '') +
@@ -1886,7 +1996,7 @@ function itemHtml(it, i, n) {
     const swappable = !ex.custom && E.candidates(it.pool, S.profile, {}).length > 1;
     h += '<div class="acts">' +
       (ex.custom ? '' : '<button type="button" class="pill-btn" data-act="how" data-i="' + i + '" aria-expanded="' + (UI.how === i) + '">' + (UI.how === i ? 'Hide how-to' : 'How to do it') + '</button>') +
-      (it.rx.hold ? '<button type="button" class="pill-btn" data-act="hold" data-i="' + i + '">Start ' + it.rx.hold + ' s timer</button>' : '') +
+      (it.rx.hold ? '<button type="button" class="pill-btn" data-act="hold" data-i="' + i + '">Start ' + E.dur(it.rx.hold).replace('\u00a0', ' ') + ' timer</button>' : '') +
       '<a class="pill-btn" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=' + encodeURIComponent(ex.name + ' exercise how to') + '">Demo video ↗</a>' +
       (swappable ? '<button type="button" class="pill-btn" data-act="swap" data-i="' + i + '">Swap</button>' : '') + '</div></div>';
   }
@@ -2121,12 +2231,12 @@ function vEdit() {
     const ex = exOf(it.id);
     const sec = !!ex && (ex.mode === 't' || ex.mode === 'ts'), side = !!ex && (ex.mode === 's' || ex.mode === 'ts');
     const nm = ex ? ex.name : 'Removed exercise';
-    items += '<li><div class="ed-head"><span class="n">' + (i + 1) + '</span><span class="nm">' + esc(nm) + '<small>' + esc(ex ? (CAT_NAME[ex.custom ? 'custom' : E.CAT[ex.pool]] || '') + (side ? ', each side' : '') : '') + '</small></span>' +
+    items += '<li><div class="ed-head"><span class="n">' + (i + 1) + '</span><span class="nm">' + esc(nm) + '<small>' + esc(ex ? kindOf(ex) + (ex.custom ? '' : ' \u00b7 ' + EQ_NAME[ex.eq]) + (side ? ', each side' : '') : '') + '</small></span>' +
       '<span class="ed-tools"><button type="button" data-act="ed-move" data-i="' + i + '" data-d="-1" aria-label="' + esc('Move ' + nm + ' up') + '"' + (i ? '' : ' disabled') + '>↑</button>' +
       '<button type="button" data-act="ed-move" data-i="' + i + '" data-d="1" aria-label="' + esc('Move ' + nm + ' down') + '"' + (i < w.items.length - 1 ? '' : ' disabled') + '>↓</button>' +
       '<button type="button" data-act="ed-del" data-i="' + i + '" aria-label="' + esc('Remove ' + nm) + '">✕</button></span></div>' +
       '<div class="ed-ctl"><div><span class="lab">Sets</span>' + stepper('ed-step', i, 'sets', it.sets, 'sets') + '</div>' +
-      '<div><span class="lab">' + (sec ? 'Seconds' : 'Reps') + '</span>' + stepper('ed-step', i, 'n', it.n, sec ? 'seconds' : 'reps') + '</div>' +
+      '<div><span class="lab">' + (sec ? 'Time' : 'Reps') + '</span>' + stepper('ed-step', i, 'n', it.n, sec ? 'time' : 'reps', sec ? E.dur(it.n).replace('\u00a0', ' ') : null) + '</div>' +
       '<div><span class="lab">Rest</span>' + stepper('ed-step', i, 'rest', it.rest, 'rest', it.rest + ' s') + '</div></div></li>';
   });
   return '<div class="between"><button class="link muted" data-act="ed-cancel">Cancel</button><button class="link" data-act="ed-save">Save</button></div>' +
@@ -2145,20 +2255,26 @@ function vEdit() {
 /* ================= sheets ================= */
 function pickCat(ex) {
   if (ex.custom) return 'mine';
+  if (ex.pool === 'upiso' || ex.pool === 'loiso') return 'iso';
   const c = E.CAT[ex.pool];
   return c === 'act' || c === 'bal' ? 'warm' : c === 'acc' || c === 'carry' ? 'str' : c;
 }
+function pickEq(ex, key) {
+  if (key === 'any') return true;
+  if (key === 'have') return ex.custom || E.has(S.profile || {}, ex.eq);
+  return !ex.custom && (PEQ_SET[key] || []).indexOf(ex.eq) >= 0;
+}
 function pickList() {
-  const q = UI.pick.q.trim().toLowerCase(), cat = UI.pick.cat;
+  const q = UI.pick.q.trim().toLowerCase(), cat = UI.pick.cat, eq = UI.pick.eq;
   const inW = new Set(UI.edit ? UI.edit.w.items.map(function (it) { return it.id; }) : []);
   const mine = S.exercises.filter(function (x) { return !x.del; }).map(function (x) { return CUS[x.id]; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
   const list = mine.concat(E.LIB).filter(function (ex) {
-    return (cat === 'all' || pickCat(ex) === cat) && (!q || ex.name.toLowerCase().indexOf(q) >= 0);
+    return (cat === 'all' || pickCat(ex) === cat) && pickEq(ex, eq) && (!q || ex.name.toLowerCase().indexOf(q) >= 0);
   });
-  if (!list.length) return '<li><p class="empty" style="padding:12px 0">No exercises match. Create your own below.</p></li>';
-  return list.map(function (ex) {
-    const sub = ex.custom ? 'Your exercise' + (ex.w ? ', with weight' : '') : (CAT_NAME[E.CAT[ex.pool]] || '') + ' · ' + EQ_NAME[ex.eq];
-    return '<li><button type="button" data-act="pk-add" data-id="' + ex.id + '"><span><b>' + esc(ex.name) + '</b><small>' + esc(sub + (inW.has(ex.id) ? ' · In this workout' : '')) + '</small></span><span class="plus" aria-hidden="true">+</span></button></li>';
+  if (!list.length) return '<li><p class="empty" style="padding:12px 0">No exercises match. Try another filter, or create your own.</p></li>';
+  return '<li class="pk-count tiny muted">' + list.length + (list.length === 1 ? ' exercise' : ' exercises') + '</li>' + list.map(function (ex) {
+    const sub = ex.custom ? 'Your exercise' + (ex.w ? ', with weight' : '') : kindOf(ex) + ' \u00b7 ' + EQ_NAME[ex.eq];
+    return '<li><button type="button" data-act="pk-add" data-id="' + ex.id + '"><span><b>' + esc(ex.name) + '</b><small>' + esc(sub + (inW.has(ex.id) ? ' \u00b7 In this workout' : '')) + '</small></span><span class="plus" aria-hidden="true">+</span></button></li>';
   }).join('');
 }
 const SHEET_NAME = { finish: 'Finish workout', pick: 'Pick a workout', reset: 'Erase everything', discard: 'Discard workout', level: 'Change level', backup: 'Backup', expick: 'Add exercise', exnew: 'New exercise' };
@@ -2213,9 +2329,11 @@ function renderSheet() {
   } else if (sh.kind === 'expick') {
     h = '<h2>Add exercise</h2>' +
       '<input class="text-in" id="pk-q" type="search" placeholder="Search exercises" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Search exercises" value="' + esc(UI.pick.q) + '">' +
-      '<div class="chips" role="group" aria-label="Category">' + PCATS.map(function (c) {
-        return '<button type="button" class="chip" data-act="pk-cat" data-v="' + c[0] + '" aria-pressed="' + (UI.pick.cat === c[0]) + '">' + c[1] + '</button>';
-      }).join('') + '</div>' +
+      '<div class="pick-filters"><label class="sel"><span class="sr">Type of exercise</span><select id="pk-cat">' + PCATS.map(function (c) {
+        return '<option value="' + c[0] + '"' + (UI.pick.cat === c[0] ? ' selected' : '') + '>' + esc(c[1]) + '</option>';
+      }).join('') + '</select></label><label class="sel"><span class="sr">Equipment</span><select id="pk-eq">' + PEQ.map(function (c) {
+        return '<option value="' + c[0] + '"' + (UI.pick.eq === c[0] ? ' selected' : '') + '>' + esc(c[1]) + '</option>';
+      }).join('') + '</select></label></div>' +
       '<button class="btn secondary" data-act="exnew">Create your own exercise</button>' +
       '<ul class="pick-list" id="pk-list">' + pickList() + '</ul>' +
       '<button class="link muted center" data-act="close">Done</button>';
@@ -2517,7 +2635,7 @@ function onClick(ev) {
     }
     case 'ed-cancel': UI.edit = null; UI.armed = null; UI.tab = 'plan'; reset = true; break;
     case 'ed-rot': UI.edit.w.rot = v === '1'; break;
-    case 'ed-add': UI.pick = { q: '', cat: 'all' }; UI.sheet = { kind: 'expick' }; break;
+    case 'ed-add': UI.pick.q = ''; UI.pick.cat = 'all'; UI.sheet = { kind: 'expick' }; break;
     case 'ed-move': {
       const its = UI.edit.w.items, i = +el.dataset.i, j = i + (+el.dataset.d);
       if (j >= 0 && j < its.length) { const t = its[i]; its[i] = its[j]; its[j] = t; }
@@ -2528,7 +2646,10 @@ function onClick(ev) {
       const it = UI.edit.w.items[+el.dataset.i], f = el.dataset.f, dd = +el.dataset.d, ex = exOf(it.id);
       const sec = !!ex && (ex.mode === 't' || ex.mode === 'ts');
       if (f === 'sets') it.sets = clamp(it.sets + dd, 1, 10);
-      else if (f === 'n') it.n = sec ? clamp(it.n + dd * 5, 5, 600) : clamp(it.n + dd, 1, 100);
+      else if (f === 'n') {
+        const step = sec ? (it.n + (dd < 0 ? -1 : 0) >= 600 ? 60 : it.n + (dd < 0 ? -1 : 0) >= 120 ? 15 : 5) : 1;
+        it.n = sec ? clamp(it.n + dd * step, 5, 3600) : clamp(it.n + dd, 1, 100);
+      }
       else it.rest = clamp(it.rest + dd * 15, 0, 600);
       break;
     }
@@ -2548,7 +2669,6 @@ function onClick(ev) {
       S.workouts = S.workouts.map(function (x) { return x.id === id ? Object.assign({}, x, { del: true, items: [], at: Date.now() }) : x; });
       UI.edit = null; UI.armed = null; UI.tab = 'plan'; commit(); reset = true; break;
     }
-    case 'pk-cat': UI.pick.cat = v; break;
     case 'pk-add': { const ex = exOf(el.dataset.id); if (ex && UI.edit) { UI.edit.w.items.push(defaultItem(ex)); UI.edit.err = ''; } closeSheet(); break; }
     case 'exnew': UI.sheet = { kind: 'exnew', form: { name: UI.pick.q.trim(), mode: 'r', w: true, side: false, err: '' } }; break;
     case 'exnew-back': UI.sheet = { kind: 'expick' }; break;
@@ -2590,6 +2710,10 @@ function onInput(ev) {
 function onChange(ev) {
   const t = ev.target;
   if (t.id === 'set-age') { setAge('set-age', +t.value); setTimeout(render, 350); }
+  else if ((t.id === 'pk-cat' || t.id === 'pk-eq') && UI.sheet) {
+    UI.pick[t.id === 'pk-cat' ? 'cat' : 'eq'] = t.value;
+    const l = $('#pk-list'); if (l) l.innerHTML = pickList();
+  }
 }
 function onKey(ev) {
   const t = ev.target;
