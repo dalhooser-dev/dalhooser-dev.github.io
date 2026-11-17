@@ -279,6 +279,11 @@ textarea.text-in { font: 15px/1.4 ui-monospace, Menlo, Consolas, monospace; resi
 .tbl th:nth-child(2), .tbl td:nth-child(2) { text-align: right; padding-right: 14px; }
 .tbl td:nth-child(3) { color: var(--muted); }
 .tbl tr.cur td { font-weight: 600; }
+.tbl.bw td:nth-child(3) { text-align: right; padding-right: 6px; }
+.tbl.bw th:nth-child(3) { text-align: right; padding-right: 6px; }
+.tbl td.x { width: 1%; text-align: right; padding: 2px 0; }
+.del-x { min-width: 36px; min-height: 32px; padding: 4px 8px; border-radius: 8px; color: var(--muted); font-size: 14px; text-align: center; }
+.del-x.armed { color: var(--danger); background: var(--fill); font-weight: 600; }
 
 /* ---------- record ---------- */
 .cal-nav { display: flex; align-items: center; justify-content: space-between; }
@@ -1122,14 +1127,14 @@ const IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform 
 function blank() {
   return {
     v: 1, profile: null, log: [], removed: [], resetAt: 0, prefs: { sound: true, at: 0, promptAt: 0 },
-    workouts: [], exercises: [], session: null, view: { range: '3m', metric: 'best', table: false }
+    workouts: [], exercises: [], body: [], session: null, view: { range: '3m', metric: 'best', table: false }
   };
 }
 let S = blank();
 const UI = {
   tab: 'today', inSession: false, sum: null, edit: null, ob: null, sheet: null, open: -1, how: -1,
   month: null, entryOpen: null, daySel: null, booting: false, armed: null, feel: 0, timer: null,
-  lastView: '', skipInstall: false, pick: { q: '', cat: 'all', eq: 'any' }
+  lastView: '', skipInstall: false, bwList: false, pick: { q: '', cat: 'all', eq: 'any' }
 };
 
 /* Custom exercises, shaped like library ones so the engine can use them. */
@@ -1220,6 +1225,22 @@ function cleanExercise(x) {
   if (!x || typeof x.id !== 'string' || !/^c_[A-Za-z0-9_]{1,30}$/.test(x.id)) return null;
   return { id: x.id, name: String(x.name || '').trim().slice(0, 40) || 'My exercise', mode: x.mode === 't' ? 't' : 'r', side: !!x.side, w: !!x.w, del: !!x.del, at: +x.at || 0 };
 }
+/* Body weight: one entry per date. A deleted day keeps a marker with w: null so the deletion syncs. */
+function cleanBody(x) {
+  if (!x || typeof x !== 'object' || !DATE_RE.test(x.d || '')) return null;
+  const w = x.w == null ? null : numOrNull(x.w, 20, 1500);
+  if (x.w != null && w == null) return null;
+  return { d: x.d, w: w, u: x.u === 'kg' ? 'kg' : 'lb', at: +x.at || 0 };
+}
+function mergeBody(a, b, resetAt) {
+  const m = new Map();
+  b.concat(a).forEach(function (x) {
+    if (resetAt && x.at <= resetAt) return;
+    const o = m.get(x.d);
+    if (!o || x.at > o.at) m.set(x.d, x);
+  });
+  return Array.from(m.values()).sort(function (x, y) { return x.d < y.d ? -1 : x.d > y.d ? 1 : 0; });
+}
 function byId(list, fn) {
   const m = new Map();
   (Array.isArray(list) ? list : []).map(fn).filter(Boolean).forEach(function (x) { const o = m.get(x.id); if (!o || x.at > o.at) m.set(x.id, x); });
@@ -1236,7 +1257,8 @@ function norm(o) {
     removed: (Array.isArray(o.removed) ? o.removed : []).filter(function (n) { return typeof n === 'number'; }).sort(function (a, b) { return a - b; }),
     resetAt: +o.resetAt || 0, prefs: cleanPrefs(o.prefs),
     workouts: sortWorkouts(byId(o.workouts, cleanWorkout)),
-    exercises: sortById(byId(o.exercises, cleanExercise))
+    exercises: sortById(byId(o.exercises, cleanExercise)),
+    body: mergeBody((Array.isArray(o.body) ? o.body : []).map(cleanBody).filter(Boolean), [], 0)
   };
 }
 function stable(o) {
@@ -1305,6 +1327,7 @@ function merge(remote) {
   S.resetAt = resetAt; S.removed = removed; S.log = sortLog(Array.from(map.values())); S.profile = prof;
   S.workouts = sortWorkouts(mergeList(R.workouts, S.workouts, resetAt));
   S.exercises = sortById(mergeList(R.exercises, S.exercises, resetAt));
+  S.body = mergeBody(R.body, S.body || [], resetAt);
   if (S.session && S.session.startedAt <= resetAt) S.session = null;
   rebuildCus(); HIST = null;
 }
@@ -1516,6 +1539,13 @@ function entrySets(e) {
     if (rec) { seen[id] = 1; out.push({ id: id, sets: rec.sets }); }
   });
   return out;
+}
+/* Body weight entries in the current unit, oldest first, without deleted days. */
+function bodyEntries() {
+  const u = units();
+  return (S.body || []).filter(function (x) { return x.w != null; }).map(function (x) {
+    return { d: x.d, w: x.u === u ? x.w : Math.round((x.u === 'kg' ? x.w * 2.20462 : x.w / 2.20462) * 10) / 10 };
+  });
 }
 function entryVolume(e) {
   let v = 0;
@@ -2025,10 +2055,10 @@ function vSession() {
 }
 
 /* ================= summaries and progress ================= */
-function filterBar() {
+function filterBar(noMetric) {
   return '<div class="filters"><div class="chips" role="group" aria-label="Time range">' + RANGES.map(function (r) {
     return '<button type="button" class="chip" data-act="range" data-v="' + r[0] + '" aria-pressed="' + (S.view.range === r[0]) + '">' + r[1] + '</button>';
-  }).join('') + '</div><div class="row2">' + seg('metric', [['best', 'Best set'], ['total', 'Session total']], S.view.metric, 'What to chart') +
+  }).join('') + '</div><div class="row2">' + (noMetric ? '<span class="tiny muted" style="flex:1">Time range for every chart below</span>' : seg('metric', [['best', 'Best set'], ['total', 'Session total']], S.view.metric, 'What to chart for exercises')) +
     '<button type="button" class="pill-btn" data-act="table" aria-pressed="' + S.view.table + '">' + (S.view.table ? 'Show charts' : 'Show table') + '</button></div></div>';
 }
 /* One exercise: its numbers, how they compare, and its chart. entry: the workout being reviewed, if any. */
@@ -2118,14 +2148,46 @@ function vProgress() {
     const inR = h[id].filter(function (s) { return s.date >= rg.start; });
     return { id: id, last: inR.length ? inR[inR.length - 1] : null };
   }).filter(function (x) { return x.last; }).sort(function (a, b) { return a.last.date < b.last.date ? 1 : a.last.date > b.last.date ? -1 : b.last.id - a.last.id; });
-  let html = '<header class="stack tight"><h1 class="title">Progress</h1><p class="small muted">Weight and reps you logged, by exercise.</p></header>';
-  if (!Object.keys(h).length) {
-    return html + '<p class="prose">Nothing logged yet. During a workout, tap an exercise and log the weight and reps for each set. Your charts show up here, and a summary appears when you finish.</p>';
+  const any = Object.keys(h).length > 0;
+  let html = '<header class="stack tight"><h1 class="title">Progress</h1><p class="small muted">Your body weight, and the weight and reps you logged by exercise.</p></header>';
+  html += filterBar(!any) + bodySection(rg);
+  if (!any) {
+    return html + '<section class="stack"><h2 class="h2">Exercises</h2><p class="prose">Nothing logged yet. During a workout, tap an exercise and log the weight and reps for each set. Your charts show up here, and a summary appears when you finish.</p></section>';
   }
-  html += filterBar() + volumeSection(rg, null);
+  html += volumeSection(rg, null);
   html += '<section class="stack" style="gap:22px"><h2 class="h2">Exercises</h2>' +
     (ids.length ? ids.map(function (x) { return exBlock(x.id, rg, null); }).join('') : '<p class="note">No exercises logged in ' + esc(rg.phrase) + '. Try a longer range.</p>') + '</section>';
   return html;
+}
+
+/* Body weight: latest, change over the range, chart, and the entries with a way to delete one. */
+function bodySection(rg) {
+  const u = units(), all = bodyEntries();
+  const pts = all.filter(function (x) { return x.d >= rg.start && x.d <= rg.end; }).map(function (x) { return { date: x.d, v: x.w }; });
+  let h = '<section class="stack" id="body-weight"><div class="between"><h2 class="h2">Body weight</h2><button type="button" class="link" data-act="bw-log">Log weight</button></div>';
+  if (!all.length) return h + '<p class="prose">Log your weight now and then, ideally at the same time of day, and the trend shows up here.</p></section>';
+  const last = all[all.length - 1], cmp = ['Latest <b>' + esc(fmtVal(last.w, u)) + '</b> on ' + esc(fmtS(last.d))];
+  if (pts.length > 1) {
+    const dv = Math.round((pts[pts.length - 1].v - pts[0].v) * 10) / 10;
+    cmp.push(dv === 0 ? 'No change in ' + esc(rg.phrase) : '<b>' + (dv > 0 ? '+' : '\u2212') + esc(fmtVal(Math.abs(dv), u)) + '</b> in ' + esc(rg.phrase));
+  }
+  h += '<p class="cmp">' + cmp.map(function (c) { return '<span>' + c + '</span>'; }).join('') + '</p>';
+  if (!S.view.table) {
+    if (pts.length > 1) h += lineChart(pts, { unit: u, sec: false, start: rg.start, end: rg.end, label: 'Body weight' });
+    else h += '<p class="note">' + (pts.length ? 'One entry in ' + esc(rg.phrase) + '. The chart starts with your second entry.' : 'No entries in ' + esc(rg.phrase) + '. Choose a longer range.') + '</p>';
+  }
+  const inR = all.filter(function (x) { return x.d >= rg.start && x.d <= rg.end; });
+  if (inR.length && (S.view.table || UI.bwList)) {
+    h += '<table class="tbl bw"><thead><tr><th scope="col">Date</th><th scope="col">Weight</th><th scope="col">Change</th><th scope="col"><span class="sr">Delete</span></th></tr></thead><tbody>' +
+      inR.slice().reverse().map(function (x) {
+        const i = all.indexOf(x), prev = i > 0 ? all[i - 1] : null, dv = prev ? Math.round((x.w - prev.w) * 10) / 10 : null;
+        const armed = UI.armed === 'bw' + x.d;
+        return '<tr><td>' + esc(fmtS(x.d)) + '</td><td>' + esc(fmtVal(x.w, u)) + '</td><td>' + (dv == null ? '\u2013' : dv === 0 ? '0' : (dv > 0 ? '+' : '\u2212') + fmtN(Math.abs(dv))) + '</td>' +
+          '<td class="x"><button type="button" class="del-x' + (armed ? ' armed' : '') + '" data-act="bw-del" data-d="' + x.d + '" aria-label="' + esc((armed ? 'Confirm delete ' : 'Delete ') + fmtS(x.d) + ' entry') + '">' + (armed ? 'Delete' : '\u2715') + '</button></td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+  if (!S.view.table && inR.length) h += '<button type="button" class="link muted" style="align-self:flex-start;padding:4px 0" data-act="bw-list" aria-expanded="' + !!UI.bwList + '">' + (UI.bwList ? 'Hide entries' : 'Show entries') + '</button>';
+  return h + '</section>';
 }
 
 /* ================= Record ================= */
@@ -2277,12 +2339,21 @@ function pickList() {
     return '<li><button type="button" data-act="pk-add" data-id="' + ex.id + '"><span><b>' + esc(ex.name) + '</b><small>' + esc(sub + (inW.has(ex.id) ? ' \u00b7 In this workout' : '')) + '</small></span><span class="plus" aria-hidden="true">+</span></button></li>';
   }).join('');
 }
-const SHEET_NAME = { finish: 'Finish workout', pick: 'Pick a workout', reset: 'Erase everything', discard: 'Discard workout', level: 'Change level', backup: 'Backup', expick: 'Add exercise', exnew: 'New exercise' };
+const SHEET_NAME = { bw: 'Log weight', finish: 'Finish workout', pick: 'Pick a workout', reset: 'Erase everything', discard: 'Discard workout', level: 'Change level', backup: 'Backup', expick: 'Add exercise', exnew: 'New exercise' };
 function renderSheet() {
   const el = $('#sheet'), sh = UI.sheet;
   if (!sh) { el.classList.remove('on'); el.innerHTML = ''; el.dataset.kind = ''; return; }
   let h = '';
-  if (sh.kind === 'finish') {
+  if (sh.kind === 'bw') {
+    const u = units(), today = D.today(), all = bodyEntries(), last = all[all.length - 1], d = sh.d || today;
+    const same = all.find(function (x) { return x.d === d; });
+    h = '<h2>Log weight</h2>' +
+      '<div class="stack tight"><label class="label" for="bw-w">Weight in ' + u + '</label><input class="text-in" id="bw-w" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" maxlength="6" placeholder="' + (last ? esc(String(last.w)) : (u === 'kg' ? '80' : '180')) + '" value="' + esc(sh.w || '') + '"></div>' +
+      '<div class="stack tight"><label class="label" for="bw-d">Date</label><input class="date-in" type="date" id="bw-d" value="' + d + '" max="' + today + '"></div>' +
+      (same ? '<p class="tiny muted">Replaces the ' + esc(fmtVal(same.w, u)) + ' already logged for ' + esc(fmt(d)) + '.</p>' : '') +
+      (sh.err ? '<p class="err" role="alert">' + esc(sh.err) + '</p>' : '') +
+      '<button class="btn primary" data-act="bw-save">Save</button><button class="link muted center" data-act="close">Cancel</button>';
+  } else if (sh.kind === 'finish') {
     const st = sesStats(S.session), today = D.today();
     h = '<h2>Finish workout</h2><p class="muted">' + (st.done ? st.done + ' of ' + st.total + ' sets logged.' : 'No sets logged, so the whole workout will be saved as done, without numbers.') + '</p>' +
       '<div class="stack"><span class="label">How did it feel?</span><div class="feel" role="group" aria-label="How did it feel?">' +
@@ -2351,10 +2422,10 @@ function renderSheet() {
   const keep = !fresh && el.firstChild ? el.firstChild.scrollTop : 0;
   el.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-label="' + esc(SHEET_NAME[sh.kind] || 'Dialog') + '" tabindex="-1">' + h + '</div>';
   el.classList.add('on'); el.dataset.kind = sh.kind;
-  if (fresh) { try { el.firstChild.focus({ preventScroll: true }); } catch (e) { /* ignore */ } } else el.firstChild.scrollTop = keep;
+  if (fresh) { try { const f = sh.kind === 'bw' ? $('#bw-w') : el.firstChild; f.focus({ preventScroll: true }); } catch (e) { /* ignore */ } } else el.firstChild.scrollTop = keep;
 }
 function closeSheet() { UI.sheet = null; UI.armed = null; }
-function backupText() { return JSON.stringify({ app: 'fairway-strength', v: 1, savedAt: Date.now(), profile: S.profile, log: S.log, workouts: S.workouts, exercises: S.exercises }); }
+function backupText() { return JSON.stringify({ app: 'fairway-strength', v: 1, savedAt: Date.now(), profile: S.profile, log: S.log, workouts: S.workouts, exercises: S.exercises, body: S.body }); }
 /* Add a backup to what is here. Returns counts, or null if the text is not a backup. */
 function restoreBackup(text) {
   let o;
@@ -2372,10 +2443,16 @@ function restoreBackup(text) {
   sortLog(S.log);
   R.exercises.forEach(function (x) { if (!S.exercises.some(function (y) { return y.id === x.id; })) { x.at = now; S.exercises.push(x); } });
   R.workouts.forEach(function (w) { if (!w.del && !S.workouts.some(function (y) { return y.id === w.id; })) { w.at = now; S.workouts.push(w); wk++; } });
+  let bw = 0;
+  R.body.forEach(function (x) {
+    if (x.w == null || S.body.some(function (y) { return y.d === x.d && y.w != null; })) return;
+    S.body = S.body.filter(function (y) { return y.d !== x.d; }).concat([Object.assign({}, x, { at: now })]); bw++;
+  });
+  S.body.sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
   sortWorkouts(S.workouts); sortById(S.exercises); rebuildCus();
   if (R.profile && !S.profile) { S.profile = R.profile; S.profile.at = now; }
   commit();
-  return { log: added, workouts: wk };
+  return { log: added, workouts: wk, body: bw };
 }
 
 /* ================= workout actions ================= */
@@ -2561,6 +2638,26 @@ function onClick(ev) {
     case 'range': S.view.range = v; saveLocal(); break;
     case 'metric': S.view.metric = v === 'total' ? 'total' : 'best'; saveLocal(); break;
     case 'table': S.view.table = !S.view.table; saveLocal(); break;
+    /* ----- body weight ----- */
+    case 'bw-log': UI.sheet = { kind: 'bw', w: '', d: D.today(), err: '' }; break;
+    case 'bw-list': UI.bwList = !UI.bwList; UI.armed = null; break;
+    case 'bw-save': {
+      const sh = UI.sheet, inp = $('#bw-w'), dIn = $('#bw-d'), u = units();
+      const txt = String(inp ? inp.value : sh.w || '').replace(',', '.').trim(), w = +txt, today = D.today();
+      let d = dIn && DATE_RE.test(dIn.value) ? dIn.value : today;
+      if (d > today) d = today;
+      const lo = u === 'kg' ? 25 : 55, hi = u === 'kg' ? 320 : 700;
+      if (!txt || !isFinite(w) || w < lo || w > hi) { sh.w = txt; sh.d = d; sh.err = 'Enter your weight in ' + u + ', for example ' + (u === 'kg' ? '82.5' : '185.4') + '.'; break; }
+      S.body = S.body.filter(function (x) { return x.d !== d; }).concat([{ d: d, w: Math.round(w * 10) / 10, u: u, at: Date.now() }]);
+      S.body.sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
+      closeSheet(); commit(); break;
+    }
+    case 'bw-del': {
+      const d = el.dataset.d;
+      if (UI.armed !== 'bw' + d) { UI.armed = 'bw' + d; break; }
+      S.body = S.body.map(function (x) { return x.d === d ? { d: d, w: null, u: x.u, at: Date.now() } : x; });
+      UI.armed = null; commit(); break;
+    }
     case 'level-yes': case 'level-no': {
       if (a === 'level-yes') { P.level = clamp(P.level + UI.sheet.dir, 1, 3); P.at = Date.now(); }
       S.prefs.promptAt = S.log.reduce(function (m, e) { return Math.max(m, e.id); }, 0); S.prefs.at = Date.now();
@@ -2614,7 +2711,12 @@ function onClick(ev) {
       const hadProfile = !!S.profile, n = restoreBackup(text);
       if (!n) { sh.inp = text; sh.msg = ''; sh.err = 'That is not a Fairway Strength backup. Paste the whole text, from the first { to the last }.'; break; }
       sh.inp = ''; sh.err = ''; sh.out = '';
-      sh.msg = 'Restored ' + n.log + (n.log === 1 ? ' workout' : ' workouts') + (n.workouts ? ', ' + n.workouts + (n.workouts === 1 ? ' custom workout' : ' custom workouts') : '') + (!hadProfile && S.profile ? ' and your plan.' : '.');
+      const parts = [];
+      if (n.log) parts.push(n.log + (n.log === 1 ? ' workout' : ' workouts'));
+      if (n.workouts) parts.push(n.workouts + (n.workouts === 1 ? ' custom workout' : ' custom workouts'));
+      if (n.body) parts.push(n.body + (n.body === 1 ? ' weigh-in' : ' weigh-ins'));
+      if (!hadProfile && S.profile) parts.push('your plan');
+      sh.msg = parts.length ? 'Restored ' + listText(parts) + '.' : 'Everything in that backup is already here.';
       if (S.profile && UI.ob && !UI.ob.retake) { UI.ob = null; UI.tab = 'today'; reset = true; }
       break;
     }
@@ -2706,10 +2808,12 @@ function onInput(ev) {
   else if (t.id === 'pk-q') { UI.pick.q = t.value; const l = $('#pk-list'); if (l) l.innerHTML = pickList(); }
   else if (t.id === 'xn-name' && UI.sheet && UI.sheet.form) UI.sheet.form.name = t.value;
   else if (t.id === 'bk-in' && UI.sheet) UI.sheet.inp = t.value;
+  else if (t.id === 'bw-w' && UI.sheet) { const c = t.value.replace(',', '.').replace(/[^0-9.]/g, ''); if (c !== t.value) t.value = c; UI.sheet.w = c; }
 }
 function onChange(ev) {
   const t = ev.target;
   if (t.id === 'set-age') { setAge('set-age', +t.value); setTimeout(render, 350); }
+  else if (t.id === 'bw-d' && UI.sheet && UI.sheet.kind === 'bw') { UI.sheet.d = t.value; renderSheet(); }
   else if ((t.id === 'pk-cat' || t.id === 'pk-eq') && UI.sheet) {
     UI.pick[t.id === 'pk-cat' ? 'cat' : 'eq'] = t.value;
     const l = $('#pk-list'); if (l) l.innerHTML = pickList();
@@ -2718,6 +2822,7 @@ function onChange(ev) {
 function onKey(ev) {
   const t = ev.target;
   if (ev.key === 'Escape' && UI.sheet) { closeSheet(); render(); return; }
+  if (ev.key === 'Enter' && t.id === 'bw-w') { ev.preventDefault(); const b = document.querySelector('[data-act="bw-save"]'); if (b) b.click(); return; }
   if (ev.key === 'Enter' && t.classList && t.classList.contains('num-in')) {
     ev.preventDefault();
     const b = document.querySelector('[data-act="log"][data-i="' + t.dataset.i + '"][data-k="' + t.dataset.k + '"]');
