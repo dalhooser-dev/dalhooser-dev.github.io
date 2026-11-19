@@ -183,6 +183,40 @@ a { color: var(--accent); text-decoration: none; }
 .pill-btn { background: var(--fill); color: var(--text); font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; }
 .how { display: flex; flex-direction: column; gap: 10px; font-size: 14.5px; color: var(--muted); }
 .how b { display: block; color: var(--text); font-weight: 600; font-size: 13px; margin-bottom: 1px; }
+/* Exercise drawings: a line figure; near limbs in text color, far limbs softer, equipment in green. */
+.fig { background: var(--fill); border-radius: 14px; padding: 6px 6px 4px; }
+.fig svg { display: block; width: 100%; height: auto; overflow: visible; }
+.fig-one svg { max-height: 190px; }
+.fig-two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fig-two > div { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.fig svg * { vector-effect: non-scaling-stroke; }
+.fig .fg-b, .fig .fg-f, .fig .fg-t { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.fig .fg-b, .fig .fg-t { stroke: var(--text); stroke-width: 3.2; }
+.fig .fg-f { stroke: var(--faint); stroke-width: 3; }
+.fig .fg-h { fill: var(--fill); stroke: var(--text); stroke-width: 2.6; }
+.fig .fg-g { stroke: var(--fill-2); stroke-width: 2; }
+.fig .fg-s { stroke: var(--bar); stroke-width: 1.6; fill: none; stroke-linecap: round; }
+.fig .fg-wide { stroke-width: 2.4; }
+.fig .fg-sf { fill: var(--fill-2); stroke: var(--bar); stroke-width: 1.2; }
+.fig .fg-wall { stroke: var(--fill-2); stroke-width: 3; }
+.fig .fg-pad { stroke: var(--bar); stroke-width: 5; stroke-linecap: round; }
+.fig .fg-ball { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6; }
+.fig .fg-e { fill: var(--accent); stroke: none; }
+.fig .fg-ep { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.8; }
+.fig .fg-el { stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; fill: none; }
+.fig .fg-thick { stroke-width: 3.4; }
+.fig .fg-c { stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 3 2.4; fill: none; }
+.fig .fg-sp { fill: var(--fill); stroke: var(--accent); stroke-width: 1.4; }
+/* Your own photo, under the how-to text */
+.photo { display: flex; flex-direction: column; gap: 8px; }
+.photo:empty { display: none; }
+.photo .acts { align-items: center; }
+.photo-img { display: block; width: 100%; max-height: 320px; object-fit: contain; background: var(--fill); border-radius: 14px; }
+.photo-pick { position: relative; cursor: pointer; }
+.photo-pick input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; font-size: 0; }
+.photo-pick:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pill-btn.warn { background: var(--danger); color: var(--bg); }
+.warn-text { color: var(--danger); }
 
 /* timer */
 #timer { display: none; background: var(--raise); border-top: 1px solid var(--line); padding: 10px 20px 12px; }
@@ -377,6 +411,35 @@ textarea.text-in { font: 15px/1.4 ui-monospace, Menlo, Consolas, monospace; resi
   .btn:active { opacity: 1; }
 }
 
+/* ---------- counter ---------- */
+.k-list { display: flex; flex-direction: column; }
+.k-card { display: flex; flex-direction: column; gap: 12px; padding: 18px 0 20px; border-top: 1px solid var(--line); }
+.k-card:first-child { border-top: 0; padding-top: 0; }
+.k-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.k-top .link { padding: 4px 0; }
+.k-name { font-size: 17px; font-weight: 600; line-height: 1.25; min-width: 0; overflow-wrap: anywhere; }
+.k-main { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+.k-num { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; padding: 2px 0; }
+.k-num .v { font-size: 52px; line-height: 1; font-weight: 700; letter-spacing: -.03em; }
+.k-num small, .k-pad small { font-size: 14px; color: var(--muted); font-weight: 500; }
+.k-plus { width: 84px; height: 84px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; display: grid; place-items: center; }
+.k-plus:active, .k-pad:active { transform: scale(.97); }
+.k-card.done .k-num .v, .k-focus.done .k-pad .v { color: var(--accent); }
+.k-card.done .k-num small, .k-focus.done .k-pad small { color: var(--accent); font-weight: 600; }
+.k-bar { height: 4px; }
+.k-acts .pill-btn[disabled] { opacity: .4; cursor: default; }
+.k-empty .btn { margin-top: 6px; }
+#view:has(.k-focus) { padding-top: 10px; }
+.k-focus { flex: 1; display: flex; flex-direction: column; gap: 16px; min-height: 100%; }
+.k-ftop { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; }
+.k-fname { text-align: center; font-weight: 600; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.k-pad { flex: 1; min-height: 300px; border-radius: 24px; background: var(--fill); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: transform .08s ease; }
+.k-pad .v { font-size: clamp(88px, 30vw, 150px); line-height: 1; font-weight: 700; letter-spacing: -.04em; }
+.k-hint { margin-top: 18px; font-size: 13px; color: var(--muted); }
+.k-frow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.k-frow .btn { min-height: 54px; }
+
+
 </style>
 </head>
 <body>
@@ -395,6 +458,7 @@ textarea.text-in { font: 15px/1.4 ui-monospace, Menlo, Consolas, monospace; resi
     <button type="button" data-tab="today"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21V4"/><path d="M7 4.5l11 3.5-11 4"/><path d="M4 21h6"/></svg>Today</button>
     <button type="button" data-tab="progress"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16"/><path d="M5 15l4.5-4.5 3.5 3 6-6.5"/><path d="M15 7h4v4"/></svg>Progress</button>
     <button type="button" data-tab="record"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="15" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>Record</button>
+    <button type="button" data-tab="counter"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5.5v13M10 5.5v13M14 5.5v13M18 5.5v13"/><path d="M3.5 15.5l17-7"/></svg>Counter</button>
     <button type="button" data-tab="plan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>Plan</button>
   </nav>
   <div id="sheet"></div>
@@ -1127,14 +1191,15 @@ const IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform 
 function blank() {
   return {
     v: 1, profile: null, log: [], removed: [], resetAt: 0, prefs: { sound: true, at: 0, promptAt: 0 },
-    workouts: [], exercises: [], body: [], session: null, view: { range: '3m', metric: 'best', table: false }
+    workouts: [], exercises: [], body: [], counters: [], session: null, view: { range: '3m', metric: 'best', table: false }
   };
 }
 let S = blank();
 const UI = {
   tab: 'today', inSession: false, sum: null, edit: null, ob: null, sheet: null, open: -1, how: -1,
   month: null, entryOpen: null, daySel: null, booting: false, armed: null, feel: 0, timer: null,
-  lastView: '', skipInstall: false, bwList: false, pick: { q: '', cat: 'all', eq: 'any' }
+  lastView: '', skipInstall: false, bwList: false, pick: { q: '', cat: 'all', eq: 'any' },
+  kUndo: {}, kFocus: null, kArm: null, kArmT: 0
 };
 
 /* Custom exercises, shaped like library ones so the engine can use them. */
@@ -1258,7 +1323,8 @@ function norm(o) {
     resetAt: +o.resetAt || 0, prefs: cleanPrefs(o.prefs),
     workouts: sortWorkouts(byId(o.workouts, cleanWorkout)),
     exercises: sortById(byId(o.exercises, cleanExercise)),
-    body: mergeBody((Array.isArray(o.body) ? o.body : []).map(cleanBody).filter(Boolean), [], 0)
+    body: mergeBody((Array.isArray(o.body) ? o.body : []).map(cleanBody).filter(Boolean), [], 0),
+    counters: sortCounters(byId(o.counters, cleanCounter))
   };
 }
 function stable(o) {
@@ -1328,6 +1394,7 @@ function merge(remote) {
   S.workouts = sortWorkouts(mergeList(R.workouts, S.workouts, resetAt));
   S.exercises = sortById(mergeList(R.exercises, S.exercises, resetAt));
   S.body = mergeBody(R.body, S.body || [], resetAt);
+  S.counters = sortCounters(mergeList(R.counters, S.counters || [], resetAt));
   if (S.session && S.session.startedAt <= resetAt) S.session = null;
   rebuildCus(); HIST = null;
 }
@@ -1740,6 +1807,728 @@ function tipAt(fig, clientX) {
   hideTips(fig); showTip(fig, k);
 }
 
+/* ================= exercise drawings: engine ================= */
+/* Kept in its own scope (closed at the end of 02c-figspecs.js); the app sees only FIG. */
+const FIG = (function () {
+/* A line figure drawn from joint angles. Angles are in degrees: limbs measured from straight down, trunk from straight up,
+   positive toward screen right. Side view ('s'): the figure faces right; L and A are the near leg and arm, R and B the far ones.
+   Front view ('f'): L and A are the screen-left limbs. Each exercise has a start pose (a) and a finish pose (b); the figure
+   moves between them by blending angles. A limb can also be given as a target {x, y, b} (ankle relative to the hip, or hand
+   relative to the shoulder) and is solved with two-link inverse kinematics; b = +1 bends the knee or elbow toward screen right. */
+const FIGV = { W: 120, H: 90, G: 84 };
+const SEGL = { trunk: 26, neck: 3.5, head: 5.6, thigh: 20, shin: 19, ua: 14, fa: 14, foot: 7, ffoot: 4.5, hipW: 9, shW: 17 };
+const D2R = Math.PI / 180;
+const vDown = function (a, l) { return [Math.sin(a * D2R) * l, Math.cos(a * D2R) * l]; };
+const vUp = function (a, l) { return [Math.sin(a * D2R) * l, -Math.cos(a * D2R) * l]; };
+const vAdd = function (p, v) { return [p[0] + v[0], p[1] + v[1]]; };
+const vMid = function (p, q, k) { k = k == null ? 0.5 : k; return [p[0] + (q[0] - p[0]) * k, p[1] + (q[1] - p[1]) * k]; };
+function ik2(dx, dy, l1, l2, bend) {
+  let d = Math.hypot(dx, dy);
+  const max = l1 + l2 - 0.01, min = Math.abs(l1 - l2) + 0.01;
+  if (d > max) { dx *= max / d; dy *= max / d; d = max; }
+  if (d < min) { const k = min / (d || 1); dx *= k; dy = d ? dy * k : min; d = min; }
+  const th = Math.atan2(dx, dy) / D2R;
+  const al = Math.acos(Math.max(-1, Math.min(1, (l1 * l1 + d * d - l2 * l2) / (2 * l1 * d)))) / D2R;
+  const a1 = th + (bend || 1) * al;
+  const k = vDown(a1, l1);
+  return [a1, Math.atan2(dx - k[0], dy - k[1]) / D2R];
+}
+const FIG_BASE = { v: 's', t: 0, hd: 0, sp: 0, ts: 1, sw: 1, hw: 1, lift: 0, mx: 0, x: 0, L: [0, 0], R: [0, 0], A: [0, 0], B: [0, 0] };
+/* Complete a pose: fill defaults and turn limb targets into angles. */
+function figPose(o) {
+  const p = Object.assign({}, FIG_BASE, o), f = p.v === 'f';
+  const px = [Math.cos(p.t * D2R), Math.sin(p.t * D2R)];
+  const sh = vUp(p.t, SEGL.trunk * p.ts);
+  const hw = SEGL.hipW * p.hw / 2;
+  const base = { L: f ? [-px[0] * hw, -px[1] * hw] : [0, 0], R: f ? [px[0] * hw, px[1] * hw] : [0, 0],
+    A: f ? vAdd(sh, [-px[0] * SEGL.shW * p.sw / 2, -px[1] * SEGL.shW * p.sw / 2]) : sh, B: f ? vAdd(sh, [px[0] * SEGL.shW * p.sw / 2, px[1] * SEGL.shW * p.sw / 2]) : sh };
+  ['L', 'R', 'A', 'B'].forEach(function (k) {
+    let a = p[k];
+    const leg = k === 'L' || k === 'R';
+    if (a && !Array.isArray(a)) {
+      const l1 = leg ? SEGL.thigh : SEGL.ua, l2 = leg ? SEGL.shin : SEGL.fa;
+      const r = ik2(a.x - (leg ? base[k][0] : 0), a.y - (leg ? base[k][1] : 0), l1, l2, a.b == null ? (leg ? 1 : -1) : a.b);
+      a = [r[0], r[1], a.f];
+    }
+    a = (a || [0, 0]).slice();
+    if (leg && a[2] == null) a[2] = f ? a[1] + (k === 'L' ? -75 : 75) : 90;
+    if (!leg && a[2] == null) a[2] = 0;
+    if (a[3] == null) a[3] = 1;
+    if (a[4] == null) a[4] = 1;
+    p[k] = a;
+  });
+  return p;
+}
+function figLerp(a, b, u) {
+  const o = { v: a.v };
+  ['t', 'hd', 'sp', 'ts', 'sw', 'hw', 'lift', 'mx', 'x'].forEach(function (k) { o[k] = a[k] + (b[k] - a[k]) * u; });
+  ['L', 'R', 'A', 'B'].forEach(function (k) { o[k] = a[k].map(function (v, i) { return v + (b[k][i] - v) * u; }); });
+  return o;
+}
+function figSolve(p) {
+  const S = SEGL, f = p.v === 'f', J = {};
+  J.hip = [0, 0];
+  J.sh = vUp(p.t, S.trunk * p.ts);
+  J.neck = vAdd(J.sh, vUp(p.t, S.neck));
+  J.head = vAdd(J.neck, vUp(p.t + p.hd, S.head));
+  const px = [Math.cos(p.t * D2R), Math.sin(p.t * D2R)];
+  if (f) {
+    J.hL = [-px[0] * S.hipW * p.hw / 2, -px[1] * S.hipW * p.hw / 2]; J.hR = [px[0] * S.hipW * p.hw / 2, px[1] * S.hipW * p.hw / 2];
+    J.sL = vAdd(J.sh, [-px[0] * S.shW * p.sw / 2, -px[1] * S.shW * p.sw / 2]); J.sR = vAdd(J.sh, [px[0] * S.shW * p.sw / 2, px[1] * S.shW * p.sw / 2]);
+  } else { J.hL = J.hR = J.hip; J.sL = J.sR = J.sh; }
+  [['L', 'hL', 'kL', 'aL', 'tL'], ['R', 'hR', 'kR', 'aR', 'tR']].forEach(function (q) {
+    const a = p[q[0]];
+    J[q[2]] = vAdd(J[q[1]], vDown(a[0], S.thigh * a[3]));
+    J[q[3]] = vAdd(J[q[2]], vDown(a[1], S.shin * a[4]));
+    J[q[4]] = vAdd(J[q[3]], vDown(a[2], f ? S.ffoot : S.foot));
+  });
+  [['A', 'sL', 'eA', 'wA'], ['B', 'sR', 'eB', 'wB']].forEach(function (q) {
+    const a = p[q[0]];
+    J[q[2]] = vAdd(J[q[1]], vDown(a[0], S.ua * a[3]));
+    J[q[3]] = vAdd(J[q[2]], vDown(a[1], S.fa * a[4]));
+  });
+  J.back = vAdd(J.sh, vUp(p.t - 90, 3.2));
+  return J;
+}
+const FIG_KEYS = ['hip', 'sh', 'neck', 'head', 'hL', 'hR', 'sL', 'sR', 'kL', 'aL', 'tL', 'kR', 'aR', 'tR', 'eA', 'wA', 'eB', 'wB', 'back'];
+/* World joints for one moment u (0 start, 1 finish). */
+function figFrame(spec, u) {
+  /* an optional middle pose (m) the movement passes through */
+  const P = spec.m ? (u < .5 ? figLerp(spec.a, spec.m, u * 2) : figLerp(spec.m, spec.b, u * 2 - 1)) : figLerp(spec.a, spec.b, u), J = figSolve(P);
+  let dy;
+  if (spec.ay) dy = (FIGV.G - spec.ay[1]) - J[spec.ay[0]][1];
+  else {
+    const keys = spec.low || FIG_KEYS;
+    dy = FIGV.G - Math.max.apply(null, keys.map(function (k) { return J[k][1] + (k === 'head' ? SEGL.head : 0); }));
+  }
+  const ax = spec.ax || 'aL';
+  const dx = -J[ax][0] + P.mx + (spec._cx || 0);
+  const W = {};
+  FIG_KEYS.forEach(function (k) { W[k] = [J[k][0] + dx, J[k][1] + dy - P.lift]; });
+  W.P = P;
+  return W;
+}
+function figCenter(spec) {
+  if (spec._cx != null) return;
+  spec._cx = 0;
+  let lo = Infinity, hi = -Infinity;
+  [0, 0.5, 1].forEach(function (u) {
+    const W = figFrame(spec, u);
+    FIG_KEYS.forEach(function (k) { lo = Math.min(lo, W[k][0]); hi = Math.max(hi, W[k][0]); });
+  });
+  spec._cx = FIGV.W / 2 - (lo + hi) / 2 + (spec.nudge || 0);
+}
+/* ---------- drawing ---------- */
+const r1 = function (n) { return Math.round(n * 10) / 10; };
+const pt = function (p) { return r1(p[0]) + ',' + r1(p[1]); };
+const fLine = function (p, q, c) { return '<line class="' + c + '" x1="' + r1(p[0]) + '" y1="' + r1(p[1]) + '" x2="' + r1(q[0]) + '" y2="' + r1(q[1]) + '"/>'; };
+const fPoly = function (ps, c) { return '<polyline class="' + c + '" points="' + ps.map(pt).join(' ') + '"/>'; };
+const fCirc = function (p, r, c) { return '<circle class="' + c + '" cx="' + r1(p[0]) + '" cy="' + r1(p[1]) + '" r="' + r + '"/>'; };
+const fRect = function (x, y, w, h, c, rx) { return '<rect class="' + c + '" x="' + r1(x) + '" y="' + r1(y) + '" width="' + r1(Math.max(0, w)) + '" height="' + r1(Math.max(0, h)) + '" rx="' + (rx == null ? 1.5 : rx) + '"/>'; };
+/* equipment and scenery */
+const EQ = {
+  db: function (p, ang) { const d = vDown((ang == null ? 90 : ang), 3.6); return fLine([p[0] - d[0], p[1] - d[1]], [p[0] + d[0], p[1] + d[1]], 'fg-el') + fCirc([p[0] - d[0], p[1] - d[1]], 2.2, 'fg-e') + fCirc([p[0] + d[0], p[1] + d[1]], 2.2, 'fg-e'); },
+  mb: function (p, r) { return fCirc(p, r || 4.6, 'fg-e'); },
+  plate: function (p, r) { return fCirc(p, r || 5.6, 'fg-ep') + fCirc(p, 1, 'fg-e'); },
+  barF: function (p, q, ext) { const e = ext == null ? 7 : ext, dx = q[0] - p[0], dy = q[1] - p[1], l = Math.hypot(dx, dy) || 1, ux = dx / l * e, uy = dy / l * e;
+    const a = [p[0] - ux, p[1] - uy], b = [q[0] + ux, q[1] + uy];
+    return fLine(a, b, 'fg-el') + fLine(vAdd(a, [-uy * .5, ux * .5]), vAdd(a, [uy * .5, -ux * .5]), 'fg-el fg-thick') + fLine(vAdd(b, [-uy * .5, ux * .5]), vAdd(b, [uy * .5, -ux * .5]), 'fg-el fg-thick'); },
+  club: function (p, ang, len) { const e = vAdd(p, vDown(ang, len || 28)); return fLine(p, e, 'fg-el') + fCirc(e, 1.8, 'fg-e'); },
+  stick: function (p, q) { return fLine(p, q, 'fg-el'); },
+  cable: function (p, q) { return fLine(p, q, 'fg-c') + fCirc(q, 2.2, 'fg-sp'); },
+  band: function (p, q) { return fLine(p, q, 'fg-c'); },
+  ball: function (c, r) { return fCirc(c, r, 'fg-ball'); },
+  roller: function (c) { return fCirc(c, 3.8, 'fg-ball'); },
+  /* a ball resting on the floor whose top touches point p */
+  ballAt: function (p, dx) { const r = Math.max(4, (FIGV.G - p[1]) / 2); return fCirc([p[0] + (dx || 0), FIGV.G - r], r, 'fg-ball'); },
+  bench: function (x1, x2, top) { return fRect(x1, top, x2 - x1, 3.4, 'fg-sf') + fLine([x1 + 3, top + 3], [x1 + 3, FIGV.G], 'fg-s') + fLine([x2 - 3, top + 3], [x2 - 3, FIGV.G], 'fg-s'); },
+  box: function (x1, x2, top) { return fRect(x1, top, x2 - x1, FIGV.G - top, 'fg-sf', 1); },
+  wall: function (x) { return fLine([x, 6], [x, FIGV.G], 'fg-wall'); },
+  chair: function (x1, x2, seat, back) { return fRect(x1, seat, x2 - x1, 3, 'fg-sf') + fLine([x1 + 2, seat + 3], [x1 + 2, FIGV.G], 'fg-s') + fLine([x2 - 2, seat + 3], [x2 - 2, FIGV.G], 'fg-s') + (back === 'r' ? fLine([x2 - 1, seat], [x2 - 1, seat - 20], 'fg-s fg-wide') : back === 'none' ? '' : fLine([x1 + 1, seat], [x1 + 1, seat - 20], 'fg-s fg-wide')); },
+  pad: function (p, q) { return fLine(p, q, 'fg-pad'); },
+  post: function (x, y1, y2) { return fLine([x, y1 == null ? 8 : y1], [x, y2 == null ? FIGV.G : y2], 'fg-s fg-wide'); },
+  rail: function (x, y1) { return fLine([x, y1 == null ? 6 : y1], [x, FIGV.G], 'fg-s'); },
+  pulley: function (p) { return fCirc(p, 2.2, 'fg-sp'); },
+  bar: function (y, x1, x2) { return fLine([x1, y], [x2, y], 'fg-s fg-wide'); }
+};
+function figSvgInner(spec, u) {
+  figCenter(spec);
+  const W = figFrame(spec, u), W0 = figFrame(spec, 0), P = W.P, f = P.v === 'f';
+  let s = spec.top ? '' : fLine([4, FIGV.G], [FIGV.W - 4, FIGV.G], 'fg-g');
+  if (spec.sc) s += spec.sc(W, W0, P);
+  const legPts = function (h, k, a, t) { return [W[h], W[k], W[a], W[t]]; };
+  const armPts = function (s0, e, w) { return [W[s0], W[e], W[w]]; };
+  const far = f ? 'fg-b' : 'fg-f';
+  if (spec.mid) s += spec.mid(W, W0, P);
+  s += fPoly(legPts('hR', 'kR', 'aR', 'tR'), far) + fPoly(armPts('sR', 'eB', 'wB'), far);
+  if (spec.behind) s += spec.behind(W, W0, P);
+  /* trunk: a gentle curve when the spine rounds or arches */
+  if (P.sp) {
+    const m = vMid(W.hip, W.neck), dx = W.neck[0] - W.hip[0], dy = W.neck[1] - W.hip[1], l = Math.hypot(dx, dy) || 1;
+    const n = [-dy / l, dx / l], c = [m[0] - n[0] * P.sp * 2, m[1] - n[1] * P.sp * 2];
+    s += '<path class="fg-t" d="M' + pt(W.hip) + 'Q' + pt(c) + ' ' + pt(W.neck) + '"/>';
+  } else s += fLine(W.hip, W.neck, 'fg-t');
+  if (f) s += fLine(W.sL, W.sR, 'fg-t') + fLine(W.hL, W.hR, 'fg-t');
+  s += fCirc(W.head, SEGL.head, 'fg-h');
+  s += fPoly(legPts('hL', 'kL', 'aL', 'tL'), 'fg-b') + fPoly(armPts('sL', 'eA', 'wA'), 'fg-b');
+  if (spec.fx) s += spec.fx(W, W0, P);
+  return s;
+}
+/* Each drawing gets its own frame: measured once across the movement, so lying moves are short and jumps keep their headroom. */
+let figMeasure = null;
+function figBox(spec) {
+  if (spec._vb) return spec._vb;
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  try {
+    if (!figMeasure) {
+      figMeasure = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      figMeasure.setAttribute('viewBox', '0 0 ' + FIGV.W + ' ' + FIGV.H);
+      figMeasure.setAttribute('aria-hidden', 'true');
+      figMeasure.style.cssText = 'position:absolute;left:-9999px;top:0;width:120px;height:90px;visibility:hidden;pointer-events:none';
+      document.body.appendChild(figMeasure);
+    }
+    [0, .25, .5, .75, 1].forEach(function (u) {
+      figMeasure.innerHTML = figSvgInner(spec, u);
+      const b = figMeasure.getBBox();
+      x0 = Math.min(x0, b.x); x1 = Math.max(x1, b.x + b.width); y0 = Math.min(y0, b.y); y1 = Math.max(y1, b.y + b.height);
+    });
+    figMeasure.innerHTML = '';
+  } catch (e) { x0 = 0; x1 = FIGV.W; y0 = 0; y1 = FIGV.H; }
+  if (!isFinite(y0)) { x0 = 0; x1 = FIGV.W; y0 = 0; y1 = FIGV.H; }
+  const top = Math.floor(Math.min(y0 - 5, (spec.top ? y1 : FIGV.G) - 36)), bot = Math.ceil(Math.max(y1 + 4, spec.top ? 0 : FIGV.G + 4));
+  const left = Math.min(0, Math.floor(x0 - 3)), right = Math.max(FIGV.W, Math.ceil(x1 + 3));
+  spec._vb = left + ' ' + top + ' ' + (right - left) + ' ' + (bot - top);
+  return spec._vb;
+}
+function figSvg(spec, u, label) {
+  return '<svg viewBox="' + figBox(spec) + '" role="img" aria-label="' + esc(label) + '">' + figSvgInner(spec, u) + '</svg>';
+}
+
+/* ---------- animation: start, hold, finish, hold, back ---------- */
+const FIG_CYCLE = 4400;
+const figReduce = function () { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+const ease = function (x) { return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; };
+function figPhase(ms) {
+  const q = (ms % FIG_CYCLE) / FIG_CYCLE;
+  if (q < .14) return 0;
+  if (q < .5) return ease((q - .14) / .36);
+  if (q < .64) return 1;
+  return 1 - ease((q - .64) / .36);
+}
+let figRaf = 0, figT0 = 0, figLast = 0;
+function figAnimate() {
+  if (figRaf) return;
+  const step = function (ts) {
+    const els = document.querySelectorAll('.fig[data-anim] g.fgm');
+    if (!els.length) { figRaf = 0; return; }
+    if (!figT0) figT0 = ts;
+    /* about 30 frames a second is smooth for a line drawing and easier on the battery */
+    if (ts - figLast >= 30) {
+      figLast = ts;
+      const u = figPhase(ts - figT0);
+      els.forEach(function (g) { const sp = FIGS[g.dataset.ex]; if (sp) g.innerHTML = figSvgInner(sp, u); });
+    }
+    figRaf = requestAnimationFrame(step);
+  };
+  figRaf = requestAnimationFrame(step);
+}
+/* The drawing for an exercise: a looping figure, or start and finish side by side when Reduce Motion is on. */
+function figHtml(id) {
+  const sp = FIGS[id], ex = exOf(id);
+  if (!sp || !ex) return '';
+  const still = sp.hold || figReduce();
+  const name = ex.name;
+  if (still) {
+    if (sp.hold) return '<figure class="fig"><div class="fig-one">' + figSvg(sp, 0, name + ': the position to hold') + '</div></figure>';
+    return '<figure class="fig"><div class="fig-two"><div>' + figSvg(sp, 0, name + ': start') + '<span class="tiny muted">Start</span></div>' +
+      '<div>' + figSvg(sp, 1, name + ': finish') + '<span class="tiny muted">Finish</span></div></div></figure>';
+  }
+  return '<figure class="fig" data-anim="1"><div class="fig-one"><svg viewBox="' + figBox(sp) + '" role="img" aria-label="' + esc(name + ', moving from start to finish') + '"><g class="fgm" data-ex="' + id + '">' + figSvgInner(sp, 0) + '</g></svg></div></figure>';
+}
+
+/* ================= exercise drawings: the 195 exercises ================= */
+/* Shorthand poses. Side view faces right; heights are relative to the hip (y grows downward, a straight leg reaches y 39). */
+const P_ = function (base, o) { return Object.assign({}, base, o || {}); };
+const rel = function (t, a) { return [a[0] + t, a[1] + t]; };
+const AR = { down: [3, 0], fwd: [88, 88], up: [178, 178], chest: [22, 160], cross: [16, 128], hips: [-28, 72], shld: [12, 172], back: [-35, -35], head: [150, -68] };
+const ST = { t: 0, L: { x: 1, y: 38.7 }, R: { x: -1, y: 38.7 }, A: AR.down, B: [-4, -4] };
+const SQT = function (a, b) { return { t: 3, L: { x: 1, y: 38.6 }, R: { x: -1, y: 38.6 }, A: a || AR.down, B: b || a || [-4, -4] }; };
+const SQB = function (a, b, t) { return { t: t == null ? 40 : t, L: { x: 11, y: 19 }, R: { x: 9, y: 19.4 }, A: a || AR.fwd, B: b || a || AR.fwd }; };
+const HALF = function (a, b, t) { return { t: t == null ? 25 : t, L: { x: 8, y: 29 }, R: { x: 6, y: 29.3 }, A: a || AR.fwd, B: b || a || AR.fwd }; };
+const HNG = function (a, b, t) { return { t: t == null ? 72 : t, L: { x: 4, y: 37 }, R: { x: 3, y: 37.2 }, A: a || [0, 0], B: b || a || [2, 2] }; };
+const GOLF = function (a, b) { return { t: 35, L: { x: 4, y: 36.5 }, R: { x: 2, y: 36.7 }, A: a || [20, 20], B: b || a || [22, 22] }; };
+const LTOP = function (a, b) { return { t: 0, L: { x: 20, y: 33 }, R: { x: -21, y: 26.5, f: 9 }, A: a || AR.down, B: b || a || [-4, -4] }; };
+const LBOT = function (a, b) { return { t: 0, L: { x: 20, y: 19.7 }, R: { x: -21.4, y: 13.2, f: 9 }, A: a || AR.down, B: b || a || [-4, -4] }; };
+const PUSHT = { t: 71, L: [-71, -71, 12], R: [-71, -71, 12], A: [0, 0], B: [0, 0] };
+const PUSHB = { t: 88, L: [-88, -88, 12], R: [-88, -88, 12], A: [-70, 72], B: [-70, 72] };
+const PLANK = { t: 83, L: [-83, -83, 12], R: [-83, -83, 12], A: [0, 90], B: [0, 90] };
+const QUAD = { t: 72, L: [0, -90, -90], R: [0, -90, -90], A: [0, 0], B: [0, 0] };
+const SUP = { t: -90, L: [90, 90, 180], R: [90, 90, 180], A: [90, 90], B: [90, 90] };
+const SUPK = { t: -90, L: { x: 24, y: 0.5 }, R: { x: 23, y: 0.6 }, A: [90, 90], B: [90, 90] };
+const BRIDGE = { t: -117, hd: 27, L: { x: 17, y: 11.5 }, R: { x: 16.5, y: 11.6 }, A: [88, 88], B: [88, 88] };
+const PRONE = { t: 90, L: [-90, -90, -90], R: [-90, -90, -90], A: [90, 90], B: [90, 90] };
+const SITF = { t: 0, L: [90, 90, 180], R: [90, 90, 180], A: [-20, -20], B: [-20, -20] };
+const CHAIR = function (a, b, t) { return { t: t || 0, L: { x: 20, y: 19 }, R: { x: 19, y: 19.3 }, A: a || AR.down, B: b || a || [-4, -4] }; };
+const KNEEL = { t: 0, L: [0, -90, -90], R: [0, -90, -90], A: AR.down, B: [-4, -4] };
+const HKNEEL = function (a, b) { return { t: 0, L: { x: 19, y: 19.6 }, R: [0, -90, -90], A: a || AR.down, B: b || a || [-4, -4] }; };
+const FSEAT = { L: [-90, 0, null, .35, 1], R: [90, 0, null, .35, 1] };
+const seatF = function (W, W0) { return fRect(W0.hip[0] - 12, W0.hip[1] + 2.5, 24, 3, 'fg-sf') + EQ.post(W0.hip[0], W0.hip[1] + 5.5); };
+const FST = { v: 'f', t: 0, L: [-4, -4], R: [4, 4], A: [-8, -3], B: [8, 3] };
+const FW = function (w, o) { return P_({ v: 'f', t: 0, L: [-w, -w], R: [w, w], A: [-10, -4], B: [10, 4] }, o); };
+const FGOLF = function (o) { return P_({ v: 'f', t: 0, ts: .86, L: [-11, -6, null, .92, 1], R: [11, 6, null, .92, 1], A: [-6, 10], B: [6, -10] }, o); };
+const FS = function (a, b, o) { const sp = Object.assign({ a: figPose(a), b: figPose(b || a) }, o || {}); if (sp.m) sp.m = figPose(sp.m); if (!b) sp.hold = true; return sp; };
+
+/* scenery helpers that read the start frame W0 */
+const seatUnder = function (W0, x1, x2) { const top = W0.hip[1] + 2.6; return EQ.chair(W0.hip[0] + x1, W0.hip[0] + x2, top, 'none'); };
+const chairUnder = function (W0) { const top = W0.hip[1] + 2.6; return EQ.chair(W0.hip[0] - 12, W0.hip[0] + 6, top, 'l'); };
+const benchUnder = function (W0, x1, x2, dy) { return EQ.bench(W0.hip[0] + x1, W0.hip[0] + x2, W0.hip[1] + (dy == null ? 2.6 : dy)); };
+const dbs = function (W) { return EQ.db(W.wA) + EQ.db(vAdd(W.wB, [0, 0])); };
+const mid = function (W) { return vMid(W.wA, W.wB); };
+const plateOnBack = function (W) { return EQ.plate(W.back); };
+const smithRails = function (W0, W) { const x = W0.back[0]; return EQ.rail(x - 1.5, 4) + EQ.rail(x + 1.5, 4); };
+const cableHigh = function (W0, dx) { return [W0.sh[0] + (dx == null ? 38 : dx), 8]; };
+const cableLow = function (W0, dx) { return [W0.hip[0] + (dx == null ? 38 : dx), FIGV.G - 4]; };
+const cableMid = function (W0, dx) { return [W0.sh[0] + (dx == null ? 40 : dx), W0.sh[1] + 2]; };
+const stack = function (x) { return EQ.post(x, 6) + fRect(x - 4, 50, 8, 26, 'fg-sf', 1); };
+const pedal = function (c, r) { return fCirc(c, r, 'fg-s'); };
+
+const FIGS = {
+  /* ----- hips ----- */
+  hip9090: FS({ v: 'f', t: 4, L: [10, 92, null, .45, .85], R: [72, 175, null, 1, .5], A: [-14, -10], B: [14, 10] },
+    { v: 'f', t: -4, L: [-72, -175, null, 1, .5], R: [-10, -92, null, .45, .85], A: [-14, -10], B: [14, 10] },
+    { m: { v: 'f', t: 0, L: [-160, -15, null, .6, .8], R: [160, 15, null, .6, .8], A: [-14, -10], B: [14, 10] }, ay: ['hip', 10], ax: 'hip' }),
+  wgs: FS({ t: 72, L: { x: 20, y: 19.7 }, R: { x: -21.4, y: 13.2, f: 9 }, A: [0, 0], B: [3, 3] },
+    { t: 68, L: { x: 20, y: 19.7 }, R: { x: -21.4, y: 13.2, f: 9 }, A: [178, 178], B: [3, 3] }),
+  leg_swings: FS(P_(ST, { L: [-38, -38], A: [72, 88], B: [72, 88] }), P_(ST, { L: [62, 62], A: [72, 88], B: [72, 88] }),
+    { ax: 'aR', sc: function (W, W0) { return EQ.wall(W0.wA[0] + 2); } }),
+  adductor_rock: FS(QUAD, { t: 55, L: [55, -90, -90], R: [55, -90, -90], A: [26, 26], B: [26, 26] }, { ax: 'kL' }),
+  hip_cars: FS(P_(ST, { L: [96, 2], A: [70, 88], B: [70, 88] }), P_(ST, { L: [-28, -80], A: [70, 88], B: [70, 88] }),
+    { ax: 'aR', sc: function (W, W0) { return EQ.wall(W0.wA[0] + 2); } }),
+  squat_pry: FS(P_(SQB([52, 140], [52, 140], 32), {}), P_(SQB([48, 136], [48, 136], 36), {})),
+  cossack: FS(FW(35, { A: [-28, 160], B: [28, -160] }), { v: 'f', t: -6, L: [-70, 5], R: [49, 49], A: [-20, 150], B: [36, -150] }),
+  roll_hips: FS({ t: -40, L: { x: 22, y: 9 }, R: { x: 17.6, y: -11.5, b: -1 }, A: { x: -5, y: 28 }, B: { x: -6, y: 28 } },
+    { t: -33, mx: 4, L: { x: 21, y: 9 }, R: { x: 16.6, y: -12, b: -1 }, A: { x: -6, y: 28 }, B: { x: -7, y: 28 } },
+    { ay: ['hip', 9.5], ax: 'hip', behind: function (W, W0) { return EQ.roller([W0.hip[0] - 1, FIGV.G - 3.8]); } }),
+  /* ----- upper back ----- */
+  open_book: FS({ v: 'f', hw: .35, t: -90, L: [60, 92, null, .45, .95], R: [60, 92, null, .45, .95], A: [80, 80, 0, .5, .5], B: [80, 80, 0, .5, .5] },
+    { v: 'f', hw: .35, t: -90, sw: .5, hd: -15, L: [60, 92, null, .45, .95], R: [60, 92, null, .45, .95], A: [80, 80, 0, .5, .5], B: [178, 178, 0, .55, .55] },
+    { m: { v: 'f', hw: .35, t: -90, sw: .85, L: [60, 92, null, .45, .95], R: [60, 92, null, .45, .95], A: [80, 80, 0, .5, .5], B: [178, 178, 0, 1, 1] }, ax: 'hip' }),
+  thread_needle: FS(P_(QUAD, { t: 76, A: [-50, -70], B: [0, 0] }), P_(QUAD, { t: 70, A: [175, 175], B: [0, 0] }), { ax: 'kL', low: ['kL', 'aL', 'tL', 'wB'] }),
+  quad_rot: FS(P_(QUAD, { A: [10, 150], B: [0, 0] }), P_(QUAD, { A: [165, -40], B: [0, 0] }), { ax: 'kL', low: ['kL', 'aL', 'tL', 'wB'] }),
+  club_turns: FS(FGOLF({ t: -5, sw: .38, A: [12, 172, 0, .75, .75], B: [-12, -172, 0, .75, .75] }),
+    FGOLF({ t: 6, sw: .38, mx: 3, L: { x: 9, y: 34, b: 1, f: 60 }, A: [12, 172, 0, .75, .75], B: [-12, -172, 0, .75, .75] }),
+    { m: FGOLF({ A: [12, 172, 0, .75, .75], B: [-12, -172, 0, .75, .75] }), ax: 'hip', fx: function (W) { return EQ.barF(W.sL, W.sR, 6); } }),
+  cat_cow: FS(P_(QUAD, { sp: 4, hd: 45 }), P_(QUAD, { sp: -3.5, hd: -25 }), { ax: 'kL' }),
+  seated_rot: FS({ v: 'f', t: 0, sw: .4, L: FSEAT.L, R: FSEAT.R, A: { x: 6.8, y: 6 }, B: { x: -6.8, y: 6 } },
+    { v: 'f', t: 0, sw: .4, L: FSEAT.L, R: FSEAT.R, A: { x: 6.8, y: 6 }, B: { x: -6.8, y: 6 } },
+    { m: { v: 'f', t: 0, L: FSEAT.L, R: FSEAT.R, A: { x: 17, y: 6 }, B: { x: -17, y: 6 } }, ay: ['hip', 21], ax: 'hip',
+      sc: function (W, W0) { return EQ.chair(W0.hip[0] - 11, W0.hip[0] + 11, W0.hip[1] + 2.5, 'none'); },
+      fx: function (W) { return EQ.barF(vAdd(W.sL, [0, 6]), vAdd(W.sR, [0, 6]), 6); } }),
+  roll_tspine: FS({ t: -75, L: { x: 22, y: 3 }, R: { x: 21, y: 3.3 }, A: rel(-75, AR.head), B: rel(-75, AR.head) },
+    { t: -92, sp: -2, hd: 18, L: { x: 22.5, y: 0 }, R: { x: 21.5, y: 0.3 }, A: rel(-92, AR.head), B: rel(-92, AR.head) },
+    { low: ['hip', 'aL', 'tL'], ax: 'hip', behind: function (W, W0) { const p = vMid(W0.hip, W0.sh, .72); return EQ.roller([p[0], FIGV.G - 3.8]); } }),
+  ball_tspine: FS({ t: -105, sp: -3, hd: 20, L: { x: 20, y: 18 }, R: { x: 19, y: 18.3 }, A: [-160, -160], B: [-155, -155] }, null,
+    { behind: function (W) { return EQ.ball([W.hip[0] - 9, FIGV.G - 13], 13); } }),
+  /* ----- shoulders ----- */
+  wall_angels: FS(P_(FST, { A: [-98, -172], B: [98, 172] }), P_(FST, { A: [-155, -165], B: [155, 165] })),
+  band_apart: FS(P_(FST, { A: [85, 90, 0, .3, .3], B: [-85, -90, 0, .3, .3] }), P_(FST, { A: [-90, -90], B: [90, 90] }),
+    { fx: function (W) { return EQ.band(W.wA, W.wB); } }),
+  shoulder_cars: FS(P_(ST, { A: [2, 2] }), P_(ST, { A: [178, 178] })),
+  pass_through: FS(P_(FST, { A: [-22, -22], B: [22, 22] }), P_(FST, { A: [-162, -162], B: [162, 162] }), { fx: function (W) { return EQ.barF(W.wA, W.wB, 5); } }),
+  scap_pushup: FS(P_(PUSHT, { sp: -1.5 }), P_(PUSHT, { sp: 2.5, t: 70 }), { ax: 'tL' }),
+  /* ----- activation ----- */
+  glute_bridge: FS(SUPK, BRIDGE),
+  bridge_march: FS(BRIDGE, P_(BRIDGE, { L: [150, 75] })),
+  band_walk: FS(FW(12, { L: [-12, -8, null, .9, 1], R: [12, 8, null, .9, 1], ts: .92, A: [-25, 30], B: [25, -30] }), FW(18, { L: [-26, -16, null, .9, 1], R: [8, 4, null, .9, 1], ts: .92, A: [-25, 30], B: [25, -30] }),
+    { ax: 'aR', fx: function (W) { return EQ.band(W.aL, W.aR); } }),
+  clamshell: FS({ v: 'f', hw: .35, t: -90, L: [70, 92, null, .45, .95], R: [70, 92, null, .45, .95], A: [-95, -95, 0, .8, .8], B: [92, 92, 0, .75, .75] },
+    { v: 'f', hw: .35, t: -90, L: [70, 92, null, .45, .95], R: { x: 26.5, y: 2.5 }, A: [-95, -95, 0, .8, .8], B: [92, 92, 0, .75, .75] },
+    { ax: 'hip', fx: function (W) { return EQ.band(vMid(W.hL, W.kL, .8), vMid(W.hR, W.kR, .8)); } }),
+  hip_abd: FS(FST, P_(FST, { R: [32, 32] }), { ax: 'aL' }),
+  /* ----- balance ----- */
+  sl_stand: FS(P_(ST, { L: [85, 0], A: [10, 10], B: [-10, -10] }), null, { ax: 'aR' }),
+  sl_turns: FS(FGOLF({ t: -4, sw: .4, A: [30, 120], B: [-30, -120], L: [8, -40, null, .95, .55] }), FGOLF({ t: 4, sw: .4, A: [30, 120], B: [-30, -120], L: [8, -40, null, .95, .55] }),
+    { m: FGOLF({ A: [30, 120], B: [-30, -120], L: [8, -40, null, .95, .55] }), ax: 'aR', low: ['aR', 'tR'] }),
+  tandem: FS(P_(ST, { L: { x: 9, y: 38 }, R: { x: -9, y: 38 }, A: [-12, -12], B: [12, 12] }), P_(ST, { L: { x: -9, y: 38 }, R: { x: 9, y: 38 }, A: [12, 12], B: [-12, -12] }), { ax: 'hip' }),
+  clock_reach: FS({ t: 8, L: { x: 22, y: 34 }, R: { x: 1, y: 37 }, A: [40, 40], B: [36, 36] }, { t: 28, L: { x: -24, y: 31 }, R: { x: 3, y: 36 }, A: [75, 75], B: [70, 70] },
+    { m: { t: 12, L: { x: 3, y: 30 }, R: { x: 1, y: 37 }, A: [50, 50], B: [46, 46] }, ax: 'aR', low: ['aR', 'tR'] }),
+  /* ----- lower-body power ----- */
+  speed_squat: FS(HALF([-30, -30], [-25, -25]), P_(ST, { L: { x: 0, y: 40, f: 55 }, R: { x: -2, y: 40, f: 55 }, A: [70, 70], B: [64, 64] }), { ax: 'tL' }),
+  fast_sts: FS(CHAIR(AR.cross), P_(ST, { A: AR.cross, B: AR.cross }), { sc: function (W, W0) { return chairUnder(W0); } }),
+  calf_pop: FS(P_(ST, { A: [60, 85], B: [60, 85] }), P_(ST, { L: { x: 0, y: 38.7, f: 50 }, R: { x: -2, y: 38.7, f: 50 }, A: [60, 85], B: [60, 85] }),
+    { ax: 'tL', sc: function (W, W0) { return EQ.wall(W0.wA[0] + 2); } }),
+  squat_jump: FS(HALF([-35, -35]), P_(ST, { lift: 14, L: { x: 0, y: 39, f: 35 }, R: { x: -2, y: 39, f: 35 }, A: [170, 170], B: [165, 165] }), { ax: 'hip' }),
+  lat_bound: FS({ v: 'f', t: 8, mx: -16, L: [-18, -40, null, .85, .8], R: [10, -6], A: [-40, -20], B: [30, 40] }, { v: 'f', t: -8, mx: 16, L: [-10, 6], R: [18, 40, null, .85, .8], A: [-30, -40], B: [40, 20] }, { ax: 'hip' }),
+  broad_jump: FS(P_(HALF([-40, -40], [-45, -45], 40), { mx: -14 }), P_(HALF(AR.fwd, AR.fwd, 30), { mx: 16 }), { ax: 'hip' }),
+  box_jump: FS(P_(HALF([-40, -40], [-45, -45], 35), { mx: -14 }), P_(ST, { mx: 14, lift: 17, A: [70, 70], B: [64, 64] }),
+    { ax: 'hip', sc: function (W, W0) { return EQ.box(W0.hip[0] + 15, W0.hip[0] + 47, FIGV.G - 17); } }),
+  stepup_drive: FS({ t: 12, L: { x: 13, y: 22 }, R: { x: -3, y: 38.7 }, A: [-20, -20], B: [25, 25] }, { t: 0, mx: 10, lift: 17, L: { x: 1, y: 38.7 }, R: [95, 0], A: [30, 30], B: [-30, -30] },
+    { ax: 'hip', low: ['aR', 'tR'], sc: function (W, W0) { return EQ.box(W0.aL[0] - 6, W0.aL[0] + 24, FIGV.G - 17); } }),
+  kb_swing: FS(P_(HNG([-18, -18], [-20, -20], 65), { L: { x: 6, y: 34 }, R: { x: 5, y: 34.2 } }), P_(ST, { A: [88, 88], B: [86, 86] }),
+    { fx: function (W) { return EQ.db(mid(W), 0); } }),
+  mb_slam: FS(P_(ST, { L: { x: 0, y: 38.7, f: 40 }, R: { x: -2, y: 38.7, f: 40 }, A: [176, 176], B: [172, 172] }), P_(HNG([40, 40], [38, 38], 68), { L: { x: 9, y: 31 }, R: { x: 8, y: 31.2 } }),
+    { ax: 'tL', fx: function (W) { return EQ.mb(vAdd(mid(W), [2, -2])); } }),
+  /* ----- rotational power ----- */
+  speed_swing: FS(FGOLF({ t: -5, sw: .45, x: 100, A: { x: -6, y: -15, b: 1 }, B: { x: -13, y: -15, b: 1 } }),
+    FGOLF({ t: 6, sw: .45, mx: 3, x: -100, L: { x: 9, y: 34, b: 1, f: 60 }, A: { x: 13, y: -15, b: -1 }, B: { x: 6, y: -15, b: -1 } }),
+    { m: FGOLF({ x: 0, A: [20, 14], B: [-20, -14] }), ax: 'hip', fx: function (W, W0, P) { return EQ.club(mid(W), P.x, 24); } }),
+  step_swing: FS(FGOLF({ t: -5, sw: .45, x: 100, L: [-3, -3], R: [3, 3], A: { x: -6, y: -15, b: 1 }, B: { x: -13, y: -15, b: 1 } }),
+    FGOLF({ t: 8, sw: .45, mx: 6, x: -100, L: { x: 3, y: 34, b: 1, f: 60 }, R: [18, 10], A: { x: 13, y: -15, b: -1 }, B: { x: 6, y: -15, b: -1 } }),
+    { m: FGOLF({ x: 0, mx: 3, L: [-6, -4], R: [16, 9], A: [20, 14], B: [-20, -14] }), ax: 'hip', fx: function (W, W0, P) { return EQ.club(mid(W), P.x, 24); } }),
+  band_rot: FS(FGOLF({ A: [95, 95], B: [82, 82] }), FGOLF({ A: [-82, -82], B: [-95, -95] }),
+    { fx: function (W) { return EQ.band(mid(W), [FIGV.W - 6, W.sh[1] + 2]); } }),
+  mb_scoop: FS(FGOLF({ t: -4, sw: .5, x: 0, A: { x: -4, y: 24, b: 1 }, B: { x: -12, y: 24, b: 1 } }),
+    FGOLF({ t: 6, sw: .55, mx: 3, x: 16, L: { x: 9, y: 34, b: 1, f: 60 }, A: { x: 22, y: 4, b: -1 }, B: { x: 16, y: 4, b: -1 } }),
+    { ax: 'hip', sc: function (W, W0) { return EQ.wall(W0.hip[0] + 44); }, fx: function (W, W0, P) { return EQ.mb(vAdd(mid(W), [P.x, -P.x * .25])); } }),
+  mb_shot: FS(FGOLF({ t: 4, A: [30, 150], B: [20, 170] }), FGOLF({ t: -8, A: [-60, -90], B: [-90, -95] }), { fx: function (W) { return EQ.mb(W.wB); } }),
+  mb_rot_slam: FS(FW(12, { A: [-170, -175], B: [170, 175] }), FW(12, { t: -10, ts: .8, L: [-20, -6, null, .8, 1], R: [8, 4], A: [-40, -35], B: [-60, -40] }), { fx: function (W) { return EQ.mb(mid(W)); } }),
+  cable_rot: FS(FGOLF({ A: [95, 95], B: [82, 82] }), FGOLF({ A: [-82, -82], B: [-95, -95] }),
+    { fx: function (W) { return EQ.cable(mid(W), [FIGV.W - 6, W.sh[1] + 2]); } }),
+  /* ----- squat ----- */
+  sts: FS(P_(ST, { A: AR.fwd, B: AR.fwd }), CHAIR(AR.fwd), { sc: function (W, W0) { const W1 = figFrame(FIGS.sts, 1); return EQ.chair(W1.hip[0] - 12, W1.hip[0] + 6, W1.hip[1] + 2.6, 'l'); } }),
+  bw_squat: FS(SQT([6, 6]), SQB(AR.fwd)),
+  goblet: FS(SQT(AR.chest), SQB([30, 158]), { fx: function (W) { return EQ.db(vAdd(W.wA, [2, -2]), 0); } }),
+  tempo_squat: FS(SQT(AR.cross), SQB(AR.cross)),
+  skater_squat: FS({ t: 4, L: { x: 1, y: 38.7 }, R: [-8, -85, -90], A: [8, 8], B: [-8, -8] }, { t: 42, L: { x: 12, y: 20 }, R: [-30, -95, -95], A: [88, 88], B: [84, 84] }),
+  bb_squat: FS(SQT([-40, 168]), SQB([-10, 170], null, 42), { fx: plateOnBack }),
+  leg_press: FS({ t: -55, L: [150, 70], R: [148, 68], A: [25, 70], B: [25, 70] }, { t: -55, L: [128, 120], R: [126, 118], A: [25, 70], B: [25, 70] },
+    { ay: ['hip', 18], ax: 'hip', sc: function (W, W0) { return EQ.pad(vAdd(W0.hip, [-3, 3]), vAdd(W0.sh, [-3, 1])) + EQ.pad(vAdd(W0.hip, [-2, 3.4]), vAdd(W0.hip, [10, 3.4])) + EQ.post(W0.hip[0] + 4, W0.hip[1] + 5); },
+      fx: function (W) { const d = vDown(128 + 90, 9); return fLine(vAdd(W.tL, d), vAdd(W.tL, [-d[0], -d[1]]), 'fg-el fg-thick'); } }),
+  wall_sit: FS({ t: 0, L: { x: 20, y: 19 }, R: { x: 19, y: 19.3 }, A: [8, 8], B: [-6, -6] }, null, { ax: 'hip', sc: function (W) { return EQ.wall(W.hip[0] - 4); } }),
+  db_squat: FS(SQT([2, 2], [-2, -2]), SQB([4, 4], [2, 2], 30), { fx: dbs }),
+  smith_squat: FS(SQT([-40, 168]), SQB([-10, 170], null, 30), { fx: plateOnBack, sc: function (W, W0) { return EQ.rail(W0.back[0] - 1.5, 4) + EQ.rail(W0.back[0] + 1.5, 4); } }),
+  hack_squat: FS({ t: -14, L: { x: 14, y: 36 }, R: { x: 13, y: 36.3 }, A: [20, 160], B: [20, 160] }, { t: -14, L: { x: 14, y: 17 }, R: { x: 13, y: 17.3 }, A: [20, 160], B: [20, 160] },
+    { behind: function (W) { return EQ.pad(vAdd(W.hip, [-3.5, 2]), vAdd(W.sh, [-3.5, -2])); }, sc: function (W, W0) { return fLine([W0.aL[0] - 6, FIGV.G], [W0.aL[0] + 12, FIGV.G - 4], 'fg-s fg-wide'); } }),
+  ball_wall_squat: FS(SQT([10, 10]), SQB([60, 60], null, 18), { ax: 'aL', sc: function (W, W0) { return EQ.wall(W0.hip[0] - 15); }, behind: function (W, W0) { return EQ.ball([W0.hip[0] - 9, W.hip[1] - 10], 7); } }),
+  /* ----- hinge ----- */
+  club_hinge: FS(P_(ST, { A: [-30, 165], B: [-30, 30] }), P_(HNG(rel(64, [-30, 165]), rel(64, [-30, 30]), 64), {}),
+    { fx: function (W) { const d = vUp(W.P.t - 90, 3); return EQ.stick(vAdd(vAdd(W.hip, vDown(W.P.t + 180, 4)), d), vAdd(vAdd(W.head, vUp(W.P.t, 4)), d)); } }),
+  good_morning: FS(P_(ST, { A: AR.head, B: AR.head }), HNG(rel(70, AR.head), rel(70, AR.head), 70)),
+  sl_rdl: FS({ t: 0, L: { x: 1, y: 38.7 }, R: { x: -6, y: 37 }, A: [0, 0], B: [-3, -3] }, { t: 82, L: { x: 5, y: 37.5 }, R: [-98, -98, -60], A: [0, 0], B: [2, 2] }),
+  elev_bridge: FS({ t: -90, L: { x: 26, y: -12 }, R: [175, 175, 175], A: [90, 90], B: [90, 90] }, { t: -112, hd: 22, L: { x: 24, y: -3 }, R: [168, 168, 168], A: [88, 88], B: [88, 88] },
+    { ax: 'aL', low: ['sh', 'head'], sc: function (W, W0) { return EQ.bench(W0.aL[0] - 4, W0.aL[0] + 16, W0.aL[1] + 3); } }),
+  db_rdl: FS(P_(ST, { A: [2, 2], B: [-2, -2] }), HNG([0, 0], [2, 2], 75), { fx: dbs }),
+  pull_through: FS(P_(HNG([-25, -25], [-28, -28], 66), { L: { x: 6, y: 35 }, R: { x: 5, y: 35.2 } }), P_(ST, { A: [8, 8], B: [5, 5] }),
+    { fx: function (W, W0) { return EQ.band(mid(W), [W0.aL[0] - 44, FIGV.G - 5]); } }),
+  hip_thrust: FS({ t: -42, L: { x: 20, y: 9 }, R: { x: 19, y: 9.3 }, A: [-80, -10], B: [-80, -10] }, { t: -95, hd: 15, L: { x: 13, y: 18 }, R: { x: 12, y: 18.3 }, A: [-60, 20], B: [-60, 20] },
+    { ax: 'aL', low: ['aL', 'tL'], sc: function (W, W0) { const W1 = figFrame(FIGS.hip_thrust, 1); return EQ.bench(W1.sh[0] - 20, W1.sh[0] + 3, W1.sh[1] + 3.5); } }),
+  deadlift: FS(P_(HNG([0, 0], [2, 2], 52), { L: { x: 6, y: 28 }, R: { x: 5, y: 28.2 } }), P_(ST, { A: [2, 2], B: [0, 0] }), { fx: function (W) { return EQ.plate(mid(W)); } }),
+  fbar_rdl: FS(P_(ST, { A: [2, 2], B: [0, 0] }), HNG([0, 0], [2, 2], 75), { fx: function (W) { return EQ.plate(mid(W), 4.2); } }),
+  smith_rdl: FS(P_(ST, { A: [2, 2], B: [0, 0] }), HNG([0, 0], [2, 2], 72), { fx: function (W) { return EQ.plate(mid(W), 4.2); }, sc: function (W, W0) { const x = W0.wA[0]; return EQ.rail(x - 1.5, 4) + EQ.rail(x + 1.5, 4); } }),
+  cable_pull: FS(P_(HNG([-25, -25], [-28, -28], 66), { L: { x: 6, y: 35 }, R: { x: 5, y: 35.2 } }), P_(ST, { A: [8, 8], B: [5, 5] }),
+    { fx: function (W, W0) { return EQ.cable(mid(W), [W0.aL[0] - 44, FIGV.G - 5]); } }),
+  ball_ham_curl: FS({ t: -115, hd: 18, L: [97, 97, 175], R: [96, 96, 175], A: [90, 90], B: [90, 90] }, { t: -132, hd: 25, L: { x: 21, y: 5 }, R: { x: 20, y: 5.3 }, A: [90, 90], B: [90, 90] },
+    { ay: ['sh', 3.5], ax: 'sh', behind: function (W) { return EQ.ballAt(vAdd(W.aL, [0, 1.5]), 1); } }),
+  back_ext: FS({ t: 165, L: [-90, -90, -90], R: [-90, -90, -90], A: rel(165, AR.cross), B: rel(165, AR.cross) }, { t: 92, L: [-90, -90, -90], R: [-90, -90, -90], A: rel(92, AR.cross), B: rel(92, AR.cross) },
+    { ay: ['hip', 34], ax: 'hip', sc: function (W, W0) { return EQ.pad(vAdd(W0.hip, [-2, 3.5]), vAdd(W0.hip, [6, 3.5])) + EQ.post(W0.hip[0], W0.hip[1] + 5) + EQ.pad(vAdd(W0.aL, [0, 3]), vAdd(W0.aL, [5, 3])) + EQ.post(W0.aL[0] + 2, W0.aL[1] + 5); } }),
+  /* ----- single leg ----- */
+  sup_split: FS(LTOP([60, 75], [-4, -4]), LBOT([45, 80], [-4, -4]), { sc: function (W, W0) { const x = W0.aL[0] + 12; return EQ.chair(x, x + 14, FIGV.G - 21, 'l'); } }),
+  rev_lunge: FS(ST, LBOT([8, 8], [-8, -8]), { ax: 'aL' }),
+  lat_lunge: FS(FW(8), { v: 'f', t: -8, L: [-62, 4], R: [47, 47], A: [-20, 160], B: [30, -150] }, { ax: 'aR' }),
+  split_squat: FS(LTOP([4, 4], [-4, -4]), LBOT([6, 6], [-6, -6])),
+  step_up: FS({ t: 10, L: { x: 13, y: 22 }, R: { x: -3, y: 38.7 }, A: [6, 6], B: [-6, -6] }, { t: 0, mx: 10, lift: 17, L: { x: 1, y: 38.7 }, R: { x: -2, y: 38.7 }, A: [4, 4], B: [-4, -4] },
+    { ax: 'hip', low: ['aR', 'tR'], sc: function (W, W0) { return EQ.box(W0.aL[0] - 6, W0.aL[0] + 24, FIGV.G - 17); } }),
+  bulgarian: FS({ t: 6, L: { x: 18, y: 34 }, R: { x: -24, y: 17, f: 70 }, A: [4, 4], B: [-4, -4] }, { t: 18, L: { x: 20, y: 19 }, R: { x: -26, y: 0, f: 80 }, A: [6, 6], B: [-6, -6] },
+    { sc: function (W, W0) { return EQ.bench(W0.tR[0] - 18, W0.tR[0] + 2, W0.tR[1] + 1.5); } }),
+  side_leg: FS({ v: 'f', hw: .35, t: -90, L: [90, 90, 180], R: [90, 90, 180], A: [-95, -95, 0, .8, .8], B: [100, 160, 0, .6, .6] },
+    { v: 'f', hw: .35, t: -90, L: [90, 90, 180], R: [135, 135, 225], A: [-95, -95, 0, .8, .8], B: [100, 160, 0, .6, .6] }, { ax: 'hip' }),
+  hip_airplane: FS({ t: 80, L: { x: 4, y: 37.5 }, R: [-98, -98, -60], A: [80, 80], B: [3, 3] }, { t: 80, L: { x: 4, y: 37.5 }, R: [-80, -80, -40], A: [80, 80], B: [3, 3], sp: 1 },
+    { sc: function (W, W0) { return EQ.wall(W0.wA[0] + 2); } }),
+  smith_split: FS(LTOP([-40, 168]), LBOT([-40, 168]), { fx: plateOnBack, sc: function (W, W0) { return EQ.rail(W0.back[0] - 1.5, 4) + EQ.rail(W0.back[0] + 1.5, 4); } }),
+  db_walk_lunge: FS(P_(LTOP([2, 2], [-2, -2]), { mx: -8 }), P_(LBOT([2, 2], [-2, -2]), { mx: 6 }), { ax: 'hip', fx: dbs }),
+  abductor: FS({ v: 'f', t: 0, L: [-90, 0, null, .35, 1], R: [90, 0, null, .35, 1], A: [-20, -5], B: [20, 5] }, { v: 'f', t: 0, L: [-130, -10, null, .45, 1], R: [130, 10, null, .45, 1], A: [-20, -5], B: [20, 5] },
+    { ay: ['hip', 21], ax: 'hip', sc: function (W, W0) { return fRect(W0.hip[0] - 14, W0.hip[1] + 2.5, 28, 3, 'fg-sf') + EQ.post(W0.hip[0], W0.hip[1] + 5.5); },
+      fx: function (W) { return EQ.pad(vAdd(W.kL, [-2.5, 0]), vAdd(W.kL, [-2.5, 6])) + EQ.pad(vAdd(W.kR, [2.5, 0]), vAdd(W.kR, [2.5, 6])); } }),
+  /* ----- push ----- */
+  incline_pu: FS({ t: 52, L: [-52, -52, 30], R: [-52, -52, 30], A: [0, 0], B: [0, 0] }, { t: 66, L: [-66, -66, 24], R: [-66, -66, 24], A: [-60, 70], B: [-60, 70] },
+    { ax: 'tL', low: ['tL', 'tR'], sc: function (W, W0) { const x = W0.wA[0]; return EQ.box(x - 8, x + 10, W0.wA[1] + 1); } }),
+  knee_pu: FS({ t: 60, L: [-60, -60, -100], R: [-60, -60, -100], A: [0, 0], B: [0, 0], lift: 0 }, { t: 80, L: [-80, -80, -100], R: [-80, -80, -100], A: [-68, 70], B: [-68, 70] }, { ax: 'kL', low: ['kL', 'wA'] }),
+  pushup: FS(PUSHT, PUSHB, { ax: 'tL' }),
+  tempo_pu: FS(PUSHT, PUSHB, { ax: 'tL' }),
+  floor_press: FS(P_(SUPK, { A: [180, 180], B: [180, 180] }), P_(SUPK, { A: [70, 180], B: [70, 180] }), { fx: dbs }),
+  hk_press: FS(HKNEEL(AR.shld, [-4, -4]), HKNEEL(AR.up, [-4, -4]), { fx: function (W) { return EQ.db(W.wA, 0); } }),
+  band_press: FS(P_(LTOP([-30, 95], [-4, -4]), { L: { x: 14, y: 37 }, R: { x: -14, y: 36, f: 40 } }), P_(LTOP([88, 88], [-4, -4]), { L: { x: 14, y: 37 }, R: { x: -14, y: 36, f: 40 } }),
+    { fx: function (W, W0) { return EQ.band(W.wA, [W0.sh[0] - 46, W0.sh[1] + 4]); } }),
+  landmine: FS(P_(LTOP([20, 165]), { L: { x: 14, y: 37 }, R: { x: -14, y: 36, f: 40 } }), P_(LTOP([150, 150]), { L: { x: 14, y: 37 }, R: { x: -14, y: 36, f: 40 } }),
+    { fx: function (W, W0) { return EQ.stick(W.wA, [W0.hip[0] + 52, FIGV.G - 2]) + EQ.plate(W.wA, 3); } }),
+  mach_chest: FS(CHAIR([-30, 85], [-30, 85]), CHAIR([88, 88], [88, 88]),
+    { sc: function (W, W0) { return seatUnder(W0, -10, 8) + EQ.pad(vAdd(W0.hip, [-4, 1]), vAdd(W0.sh, [-4, -4])) + EQ.post(W0.hip[0] - 8, 8); }, fx: function (W) { return EQ.pad(vAdd(W.wA, [0, -3]), vAdd(W.wA, [0, 3])); } }),
+  mach_shoulder: FS(CHAIR(AR.shld), CHAIR(AR.up),
+    { sc: function (W, W0) { return seatUnder(W0, -10, 8) + EQ.pad(vAdd(W0.hip, [-4, 1]), vAdd(W0.sh, [-4, -6])) + EQ.post(W0.hip[0] - 8, 4); }, fx: function (W) { return EQ.pad(vAdd(W.wA, [-3, 0]), vAdd(W.wA, [3, 0])); } }),
+  db_incline: FS({ t: -55, L: { x: 22, y: 26 }, R: { x: 21, y: 26.3 }, A: [-115, 175], B: [-115, 175] }, { t: -55, L: { x: 22, y: 26 }, R: { x: 21, y: 26.3 }, A: [-178, -178], B: [-178, -178] },
+    { sc: function (W, W0) { return EQ.pad(vAdd(W0.hip, [-3, 3]), vAdd(W0.sh, [-3, 2])) + EQ.pad(vAdd(W0.hip, [-3, 3.2]), vAdd(W0.hip, [8, 3.2])) + EQ.post(W0.hip[0], W0.hip[1] + 5); }, fx: dbs }),
+  smith_bench: FS(P_(SUP, { L: { x: 18, y: 18 }, R: { x: 17, y: 18.3 }, A: [178, 178], B: [178, 178] }), P_(SUP, { L: { x: 18, y: 18 }, R: { x: 17, y: 18.3 }, A: [70, 178], B: [70, 178] }),
+    { ay: ['hip', 19], ax: 'hip', sc: function (W, W0) { return EQ.bench(W0.sh[0] - 8, W0.hip[0] + 8, W0.hip[1] + 3) + EQ.rail(W0.wA[0] - 1.5, 4) + EQ.rail(W0.wA[0] + 1.5, 4); }, fx: function (W) { return EQ.plate(W.wA, 4.2); } }),
+  cable_press: FS(P_(LTOP([-30, 95], [-4, -4]), { L: { x: 14, y: 37 }, R: { x: -14, y: 36, f: 40 } }), P_(LTOP([88, 88], [-4, -4]), { L: { x: 14, y: 37 }, R: { x: -14, y: 36, f: 40 } }),
+    { fx: function (W, W0) { return EQ.cable(W.wA, [W0.sh[0] - 46, W0.sh[1] + 4]); } }),
+  assisted_dip: FS({ t: 0, L: [0, -95, -95], R: [0, -95, -95], A: [0, 0], B: [0, 0] }, { t: 18, L: [5, -90, -90], R: [5, -90, -90], A: [-70, 0], B: [-70, 0] },
+    { ax: 'wA', ay: ['wA', 50], sc: function (W, W0) { return EQ.bar(W0.wA[1] + 1, W0.wA[0] - 8, W0.wA[0] + 8) + EQ.post(W0.wA[0] + 8, W0.wA[1] + 1); }, fx: function (W) { return EQ.pad(vAdd(W.kL, [-6, 1.5]), vAdd(W.kL, [8, 1.5])); } }),
+  /* ----- pull ----- */
+  prone_ytw: FS(P_(PRONE, { A: [85, 85], B: [85, 85] }), P_(PRONE, { A: [120, 120], B: [120, 120], hd: -8 }), { ax: 'hip' }),
+  rev_angel: FS(P_(PRONE, { A: [110, 110], B: [110, 110] }), P_(PRONE, { A: [-80, -80], B: [-80, -80] }), { ax: 'hip' }),
+  floor_pull: FS(P_(PRONE, { A: [120, 120], B: [120, 120] }), P_(PRONE, { A: [-30, 150], B: [-30, 150] }), { ax: 'hip' }),
+  band_row: FS(P_(ST, { A: AR.fwd, B: AR.fwd }), P_(ST, { A: [-40, 88], B: [-40, 88] }), { fx: function (W, W0) { return EQ.band(W.wA, [W0.sh[0] + 46, W0.sh[1] + 4]); } }),
+  band_pulldown: FS(P_(KNEEL, { A: [168, 168], B: [168, 168] }), P_(KNEEL, { A: [-20, 170], B: [-20, 170] }), { fx: function (W, W0) { return EQ.band(W.wA, [W0.sh[0] + 26, 6]); } }),
+  db_row: FS({ t: 78, L: { x: 4, y: 37 }, R: { x: -6, y: 37 }, A: [0, 0], B: [84, 0] }, { t: 78, L: { x: 4, y: 37 }, R: { x: -6, y: 37 }, A: [-60, 20], B: [84, 0] },
+    { fx: function (W) { return EQ.db(W.wA); }, sc: function (W, W0) { return EQ.bench(W0.wB[0] - 10, W0.wB[0] + 8, W0.wB[1] + 1); } }),
+  pulldown: FS(CHAIR([170, 170], [170, 170]), CHAIR([-20, 165], [-20, 165]),
+    { sc: function (W, W0) { return seatUnder(W0, -8, 10) + EQ.pad(vAdd(W0.kL, [-4, -3]), vAdd(W0.kL, [5, -3])) + EQ.post(W0.hip[0] + 14, 4); }, fx: function (W, W0) { return EQ.cable(W.wA, [W0.hip[0] + 14, 6]) + EQ.pad(vAdd(W.wA, [-5, 0]), vAdd(W.wA, [5, 0])); } }),
+  cable_row: FS(P_(SITF, { t: 12, L: [72, 110, 160], R: [70, 108, 160], A: [80, 80], B: [80, 80] }), P_(SITF, { t: -4, L: [72, 110, 160], R: [70, 108, 160], A: [-40, 80], B: [-40, 80] }),
+    { ax: 'hip', ay: ['hip', 4], fx: function (W, W0) { return EQ.cable(W.wA, [W0.aL[0] + 14, W0.sh[1] + 12]); }, sc: function (W, W0) { return fRect(W0.hip[0] - 10, W0.hip[1] + 2.5, 20, 3, 'fg-sf'); } }),
+  inv_row: FS({ t: 72, L: [-72, -72, 160], R: [-72, -72, 160], A: { x: -9.5, y: -27 }, B: { x: -9.5, y: -27 } }, { t: 50, L: [-50, -50, 140], R: [-50, -50, 140], A: { x: 2, y: -6 }, B: { x: 2, y: -6 } },
+    { ax: 'aL', low: ['aL', 'tL'], sc: function (W, W0) { const W1 = figFrame(FIGS.inv_row, 1), x = W1.sh[0] + 2, y = W1.sh[1] - 6; return EQ.post(x + 6, y - 4) + EQ.bar(y, x - 7, x + 7); } }),
+  pullup: FS(P_(ST, { lift: 4, L: [8, -40, 30], R: [6, -42, 30], A: [175, 175], B: [175, 175] }), P_(ST, { lift: 18, L: [8, -40, 30], R: [6, -42, 30], A: [-10, 175], B: [-10, 175] }),
+    { ax: 'hip', sc: function (W, W0) { const W0h = W0.wA; return EQ.bar(W0h[1] - 1, W0h[0] - 12, W0h[0] + 12); } }),
+  mach_row: FS(CHAIR([88, 88], [88, 88], 8), CHAIR([-45, 88], [-45, 88], -3),
+    { sc: function (W, W0) { return seatUnder(W0, -8, 10) + EQ.pad(vAdd(W0.sh, [7, 1]), vAdd(W0.sh, [7, 12])) + EQ.post(W0.wA[0] + 8, 6); }, fx: function (W) { return EQ.pad(vAdd(W.wA, [0, -3]), vAdd(W.wA, [0, 3])); } }),
+  assisted_pullup: FS(P_(KNEEL, { lift: 26, A: [175, 175], B: [175, 175] }), P_(KNEEL, { lift: 38, A: [-10, 175], B: [-10, 175] }),
+    { ax: 'hip', low: ['kL', 'aL', 'tL'], sc: function (W, W0) { return EQ.post(W0.hip[0] + 10, 4); }, fx: function (W) { return EQ.pad(vAdd(W.kL, [-7, 1.5]), vAdd(W.kL, [8, 1.5])) + EQ.pad(vAdd(W.wA, [-4, 0]), vAdd(W.wA, [4, 0])); } }),
+  cable_1arm_row: FS(P_(LTOP(AR.fwd, [-20, -20]), { L: { x: 14, y: 37 }, R: { x: -14, y: 36, f: 40 }, t: 6 }), P_(LTOP([-50, 85], [20, 20]), { L: { x: 14, y: 37 }, R: { x: -14, y: 36, f: 40 }, t: -2 }),
+    { fx: function (W, W0) { return EQ.cable(W.wA, [W0.sh[0] + 48, W0.sh[1] + 4]); } }),
+  straight_pd: FS(P_(HNG([140, 140], [138, 138], 25), { L: { x: 3, y: 38 }, R: { x: 2, y: 38.2 } }), P_(HNG([0, 0], [2, 2], 25), { L: { x: 3, y: 38 }, R: { x: 2, y: 38.2 } }),
+    { fx: function (W, W0) { return EQ.cable(W.wA, [W0.hip[0] + 40, 8]); } }),
+  fbar_row: FS(HNG([0, 0], [2, 2], 70), HNG([-60, 30], [-58, 32], 70), { fx: function (W) { return EQ.plate(mid(W), 4.2); } }),
+  /* ----- shoulder care ----- */
+  wall_lift: FS(P_(FST, { A: [-100, -175], B: [100, 175] }), P_(FST, { A: [-150, -160], B: [150, 160] })),
+  face_pull: FS(P_(ST, { A: AR.fwd, B: AR.fwd }), P_(ST, { A: [-80, 160], B: [-80, 160] }), { fx: function (W, W0) { return EQ.band(W.wA, [W0.sh[0] + 46, W0.head[1]]); } }),
+  band_er: FS({ v: 'f', t: 0, L: [-4, -4], R: [4, 4], A: [-5, 80, 0, 1, .4], B: [5, 3] }, { v: 'f', t: 0, L: [-4, -4], R: [4, 4], A: [-5, -90, 0, 1, 1], B: [5, 3] },
+    { fx: function (W) { return EQ.band(W.wA, [FIGV.W - 8, W.wA[1]]); } }),
+  rev_fly: FS(HNG([0, 0], [2, 2], 75), HNG([-80, -80], [-78, -78], 75), { fx: dbs }),
+  side_er: FS({ v: 'f', hw: .35, t: -90, L: [75, 105], R: [75, 105], A: [-95, -95, 0, .8, .8], B: [92, 15, 0, .85, .45] },
+    { v: 'f', hw: .35, t: -90, L: [75, 105], R: [75, 105], A: [-95, -95, 0, .8, .8], B: [92, 178, 0, .85, .9] },
+    { ax: 'hip', fx: function (W) { return EQ.db(W.wB, 90); } }),
+  cable_face_pull: FS(P_(ST, { A: AR.fwd, B: AR.fwd }), P_(ST, { A: [-80, 160], B: [-80, 160] }), { fx: function (W, W0) { return EQ.cable(W.wA, [W0.sh[0] + 46, W0.head[1]]); } }),
+  rear_delt_mach: FS(P_({ v: 'f', t: 0, A: [70, 90, 0, .4, .4], B: [-70, -90, 0, .4, .4] }, FSEAT), P_({ v: 'f', t: 0, A: [-90, -90], B: [90, 90] }, FSEAT), { ay: ['hip', 21], ax: 'hip', sc: seatF }),
+  cable_er: FS({ v: 'f', t: 0, L: [-4, -4], R: [4, 4], A: [-5, 80, 0, 1, .4], B: [5, 3] }, { v: 'f', t: 0, L: [-4, -4], R: [4, 4], A: [-5, -90, 0, 1, 1], B: [5, 3] },
+    { fx: function (W) { return EQ.cable(W.wA, [FIGV.W - 8, W.wA[1]]); } }),
+  /* ----- grip and carry ----- */
+  club_wrist: FS(P_(ST, { A: [2, 2], x: 45 }), P_(ST, { A: [2, 2], x: 135 }), { fx: function (W, W0, P) { return EQ.club(W.wA, P.x, 24); } }),
+  towel_wring: FS(P_(ST, { A: [30, 100], B: [30, 100] }), null, { fx: function (W) { return EQ.pad(vAdd(W.wA, [-4, 0]), vAdd(W.wA, [4, 0])); } }),
+  suitcase: FS(P_(ST, { L: { x: 7, y: 38.5 }, R: { x: -7, y: 38.5 }, A: [2, 2] }), P_(ST, { L: { x: -7, y: 38.5 }, R: { x: 7, y: 38.5 }, A: [2, 2] }), { ax: 'hip', fx: function (W) { return EQ.db(W.wA); } }),
+  farmer: FS(P_(ST, { L: { x: 7, y: 38.5 }, R: { x: -7, y: 38.5 }, A: [2, 2], B: [0, 0] }), P_(ST, { L: { x: -7, y: 38.5 }, R: { x: 7, y: 38.5 }, A: [2, 2], B: [0, 0] }), { ax: 'hip', fx: dbs }),
+  dead_hang: FS(P_(ST, { lift: 6, L: [2, 2, 40], R: [0, 0, 40], A: [178, 178], B: [178, 178] }), null, { ax: 'hip', sc: function (W) { return EQ.bar(W.wA[1] - 1, W.wA[0] - 12, W.wA[0] + 12); } }),
+  db_wrist: FS(P_(CHAIR([25, 90], [25, 90], 18), { x: 20 }), P_(CHAIR([25, 90], [25, 90], 18), { x: 150 }),
+    { sc: function (W, W0) { return chairUnder(W0); }, fx: function (W, W0, P) { return EQ.db(vAdd(W.wA, vDown(P.x, 3)), P.x + 90); } }),
+  /* ----- core: anti-rotation ----- */
+  bird_dog: FS(QUAD, P_(QUAD, { A: [170, 170], R: [-100, -100, -100] }), { ax: 'kL', low: ['kL', 'aL', 'wB'] }),
+  dead_bug: FS(P_(SUP, { L: [150, 60], R: [148, 58], A: [-180, -180], B: [180, 180] }), P_(SUP, { L: [100, 95, 180], R: [148, 58], A: [-180, -180], B: [-110, -110] }), { ax: 'hip', low: ['hip', 'sh', 'head'] }),
+  side_plank_k: FS({ v: 'f', hw: .35, t: 60, L: [-62, -10, null, 1, .45], R: [-62, -10, null, 1, .45], A: [178, 178], B: [0, 90, 0, 1, .35] }, null, { ax: 'hip', low: ['eB', 'kR'] }),
+  side_plank: FS({ v: 'f', hw: .35, t: 70, L: [-70, -70, 20], R: [-70, -70, 20], A: [178, 178], B: [0, 90, 0, 1, .35] }, null, { ax: 'hip', low: ['eB', 'aR'] }),
+  pallof: FS(P_(HALF(AR.chest, AR.chest, 10), { L: { x: 4, y: 36 }, R: { x: 2, y: 36.2 } }), P_(HALF(AR.fwd, AR.fwd, 10), { L: { x: 4, y: 36 }, R: { x: 2, y: 36.2 } }),
+    { fx: function (W, W0) { return EQ.band(W.wA, [W0.sh[0] + 40, W0.sh[1] + 9]); } }),
+  shoulder_taps: FS(PUSHT, P_(PUSHT, { A: [150, -60] }), { ax: 'tL', low: ['tL', 'tR', 'wB'] }),
+  bear_hold: FS({ t: 72, lift: 2, L: [5, -85, -30], R: [5, -85, -30], A: [0, 0], B: [0, 0] }, null, { low: ['tL', 'wA'] }),
+  plank_thread: FS({ v: 'f', hw: .35, t: 70, L: [-70, -70, 20], R: [-70, -70, 20], A: [178, 178], B: [0, 90, 0, 1, .35] },
+    { v: 'f', hw: .35, t: 74, sw: .55, L: [-74, -74, 20], R: [-74, -74, 20], A: [35, 30, 0, .85, .85], B: [0, 90, 0, 1, .35] }, { ax: 'hip', low: ['eB', 'aR'] }),
+  cable_pallof: FS(P_(HALF(AR.chest, AR.chest, 10), { L: { x: 4, y: 36 }, R: { x: 2, y: 36.2 } }), P_(HALF(AR.fwd, AR.fwd, 10), { L: { x: 4, y: 36 }, R: { x: 2, y: 36.2 } }),
+    { fx: function (W, W0) { return EQ.cable(W.wA, [W0.sh[0] + 40, W0.sh[1] + 9]); } }),
+  /* ----- core: rotation ----- */
+  pelvic_rot: FS(FGOLF({ hw: .45, mx: -1.5, A: [30, 120], B: [-30, -120], L: [-13, -6, null, .92, 1], R: [12, 8, null, .92, 1] }),
+    FGOLF({ hw: .45, mx: 1.5, A: [30, 120], B: [-30, -120], L: [-12, -8, null, .92, 1], R: [13, 6, null, .92, 1] }),
+    { m: FGOLF({ A: [30, 120], B: [-30, -120] }), ax: 'hip' }),
+  xknee: FS(P_(ST, { A: AR.head, B: AR.head }), P_(ST, { t: 18, sp: 2, L: [95, 0], A: rel(18, [120, -40]), B: rel(18, [120, -40]) }), { ax: 'aR' }),
+  xclimber: FS(PUSHT, P_(PUSHT, { L: [75, -70, 20] }), { ax: 'tR', low: ['tR', 'wA'] }),
+  band_chop: FS(FW(14, { A: [150, 170], B: [168, 176] }), FW(14, { t: -6, ts: .9, A: [-30, -20], B: [-48, -35] }), { fx: function (W) { return EQ.band(mid(W), [FIGV.W - 8, 8]); } }),
+  band_lift: FS(FW(14, { t: 6, ts: .9, A: [40, 30], B: [30, 20] }), FW(14, { A: [-160, -170], B: [-140, -160] }), { fx: function (W) { return EQ.band(mid(W), [FIGV.W - 8, FIGV.G - 5]); } }),
+  wood_chop: FS(FW(14, { t: 6, ts: .9, A: [40, 30], B: [30, 20] }), FW(14, { A: [-160, -170], B: [-140, -160] }), { fx: function (W) { return EQ.db(mid(W), 0); } }),
+  wipers: FS({ v: 'f', t: -90, L: [90, 90, 180, .2, 1], R: [90, 90, 180, .2, 1], A: [0, 0], B: [180, 180] },
+    { v: 'f', t: -90, L: [28, 88, 180, .9, 1], R: [40, 92, 180, .9, 1], A: [0, 0], B: [180, 180] }, { top: true, ay: ['hip', 40], ax: 'hip' }),
+  cable_chop: FS(FW(14, { A: [150, 170], B: [168, 176] }), FW(14, { t: -6, ts: .9, A: [-30, -20], B: [-48, -35] }), { fx: function (W) { return EQ.cable(mid(W), [FIGV.W - 8, 8]); } }),
+  cable_lift: FS(FW(14, { t: 6, ts: .9, A: [40, 30], B: [30, 20] }), FW(14, { A: [-160, -170], B: [-140, -160] }), { fx: function (W) { return EQ.cable(mid(W), [FIGV.W - 8, FIGV.G - 5]); } }),
+  rotary_torso: FS(P_({ v: 'f', t: 0, sw: .7, A: [40, 120], B: [-40, -120] }, FSEAT), P_({ v: 'f', t: 0, sw: .7, A: [60, 110], B: [-20, -130] }, FSEAT),
+    { m: P_({ v: 'f', t: 0, A: [40, 120], B: [-40, -120] }, FSEAT), ay: ['hip', 21], ax: 'hip', sc: seatF }),
+  /* ----- core: anti-extension ----- */
+  plank: FS(PLANK, null, { ax: 'tL' }),
+  leg_lower: FS(P_(SUP, { L: [180, 180, 270], R: [180, 180, 270], A: [90, 90], B: [90, 90] }), P_(SUP, { L: [100, 100, 190], R: [180, 180, 270], A: [90, 90], B: [90, 90] }), { ax: 'hip', low: ['hip', 'sh', 'head', 'wA'] }),
+  plank_reach: FS(PLANK, P_(PLANK, { A: [92, 92] }), { ax: 'tL', low: ['tL', 'eB'] }),
+  hollow: FS({ t: -72, sp: 1.5, hd: 8, L: [100, 100, 190], R: [100, 100, 190], A: [-102, -102], B: [-102, -102] }, null, { ax: 'hip', low: ['hip'] }),
+  rollout: FS({ t: 30, L: [0, -90, -90], R: [0, -90, -90], A: [30, 30], B: [30, 30] }, { t: 70, L: [-45, -90, -90], R: [-45, -90, -90], A: [125, 125], B: [125, 125] },
+    { ax: 'kL', low: ['kL', 'aL'], fx: function (W) { return EQ.ball([W.wA[0] + 2, FIGV.G - 9], 9); } }),
+  captain_raise: FS(P_(ST, { lift: 12, A: [-10, 80], B: [-10, 80] }), P_(ST, { lift: 12, L: [100, 10], R: [98, 8], A: [-10, 80], B: [-10, 80] }),
+    { ax: 'hip', low: ['aR', 'tR'], sc: function (W, W0) { return EQ.pad(vAdd(W0.hip, [-4, 4]), vAdd(W0.sh, [-4, 0])) + EQ.pad(vAdd(W0.eA, [-1, 2.5]), vAdd(W0.wA, [1, 2.5])) + EQ.post(W0.hip[0] - 7, 6); } }),
+  ball_plank: FS(PLANK, null, { ax: 'tL', sc: function (W) { return EQ.ball([W.eA[0] + 4, FIGV.G - 10], 10); }, ay: ['eA', 19] }),
+  ball_stir: FS(PLANK, P_(PLANK, { A: [-12, 80] }), { ax: 'tL', ay: ['eA', 19], sc: function (W, W0) { return EQ.ball([W0.eA[0] + 4, FIGV.G - 10], 10); } }),
+  /* ----- stretches ----- */
+  figure4: FS({ t: -90, L: [-170, 95], R: { x: -2, y: -19, b: -1 }, A: { x: 20, y: -17 }, B: { x: 20, y: -17 } }, null, { ax: 'hip', low: ['hip', 'sh', 'head'] }),
+  pigeon: FS({ t: 15, L: [78, -100, -100, 1, .5], R: [-85, -90, -95], A: [10, 10], B: [12, 12] }, null, { ax: 'hip', low: ['kL', 'aR', 'tR'] }),
+  hipflex: FS(HKNEEL(AR.up, [-4, -4]), null),
+  seated_fig4: FS(CHAIR([40, 60], [40, 60], 30), null, { sc: function (W, W0) { return chairUnder(W0); }, mid: function (W) { return fPoly([W.kR, vAdd(W.kR, [3, -6]), vAdd(W.kL, [-2, -3])], 'fg-f'); } }),
+  ham_supine: FS(P_(SUP, { L: [178, 178, 270], A: [150, 175], B: [150, 175] }), null, { ax: 'hip', low: ['hip', 'sh', 'head'], fx: function (W) { return EQ.band(W.wA, W.tL); } }),
+  butterfly: FS({ v: 'f', t: 0, ts: .85, L: [-72, 72, null, .9, .9], R: [72, -72, null, .9, .9], A: [10, 6], B: [-10, -6] }, null, { ax: 'hip' }),
+  calf_wall: FS({ t: 22, L: { x: 14, y: 36 }, R: { x: -20, y: 34.5 }, A: [100, 90], B: [100, 90] }, null, { ax: 'aL', sc: function (W) { return EQ.wall(W.wA[0] + 2); } }),
+  fwd_fold: FS({ t: 140, hd: -15, L: { x: -1, y: 37.4 }, R: { x: -2, y: 37.5 }, A: { x: 3, y: 17, b: 1 }, B: { x: 2, y: 17, b: 1 } }, null, { low: ['aL', 'tL', 'aR', 'tR'] }),
+  down_dog: FS({ t: 135, L: [-40, -40, 70], R: [-40, -40, 70], A: rel(135, [180, 180]), B: rel(135, [180, 180]) }, null, { ax: 'aL' }),
+  childs_reach: FS({ t: 100, L: [50, -90, -90], R: [50, -90, -90], A: [76, 76], B: [74, 74] }, null, { ax: 'kL', low: ['kL', 'aL', 'tL'] }),
+  pec_door: FS(P_(LTOP([-90, 175], [-4, -4]), { L: { x: 10, y: 38 }, R: { x: -10, y: 37.5, f: 60 } }), null, { sc: function (W) { return EQ.wall(W.eA[0] - 2); } }),
+  cross_body: FS(P_(FST, { A: [100, 100], B: [-40, -150] }), null),
+  lat_lean: FS(FW(10, { t: -18, A: [-155, -155], B: [20, 20] }), null, { sc: function (W) { return EQ.post(W.wA[0] - 2, 4); } }),
+  wrist_stretch: FS(P_(ST, { A: [90, 90], B: [60, 110] }), null),
+  /* ----- abs (custom workouts) ----- */
+  ab_crunch_mach: FS(CHAIR([20, 165], [20, 165], -5), CHAIR(rel(35, [20, 165]), rel(35, [20, 165]), 35),
+    { sc: function (W, W0) { return seatUnder(W0, -9, 9) + EQ.post(W0.hip[0] - 10, 6); }, fx: function (W) { return EQ.pad(vAdd(W.sh, [3, -2]), vAdd(W.sh, [3, 4])); } }),
+  ball_crunch: FS({ t: -80, sp: -2, L: { x: 18, y: 20 }, R: { x: 17, y: 20.3 }, A: [-160, 60], B: [-160, 60] }, { t: -40, sp: 3, L: { x: 18, y: 20 }, R: { x: 17, y: 20.3 }, A: [-120, 100], B: [-120, 100] },
+    { ax: 'aL', behind: function (W, W0) { return EQ.ball([W0.hip[0] - 5, FIGV.G - 12], 12); } }),
+  /* ----- leg machines (custom workouts) ----- */
+  leg_ext: FS(CHAIR([-10, 80], [-10, 80], -8), P_(CHAIR([-10, 80], [-10, 80], -8), { L: [90, 88, 180], R: [89, 87, 180] }),
+    { ay: ['hip', 22], ax: 'hip', sc: function (W, W0) { return seatUnder(W0, -10, 12) + EQ.pad(vAdd(W0.hip, [-4, 1]), vAdd(W0.sh, [-6, -3])) + EQ.post(W0.hip[0] - 9, 8); }, fx: function (W) { return EQ.pad(vAdd(W.aL, [2, -1]), vAdd(W.aL, [2, 4])); } }),
+  seated_curl: FS(P_(CHAIR([-10, 80], [-10, 80], -8), { L: [90, 88, 180], R: [89, 87, 180] }), CHAIR([-10, 80], [-10, 80], -8),
+    { ay: ['hip', 22], ax: 'hip', sc: function (W, W0) { return seatUnder(W0, -10, 12) + EQ.pad(vAdd(W0.hip, [-4, 1]), vAdd(W0.sh, [-6, -3])) + EQ.post(W0.hip[0] - 9, 8); }, fx: function (W) { return EQ.pad(vAdd(W.aL, [-1, 3]), vAdd(W.aL, [4, 3])); } }),
+  lying_curl: FS(P_(PRONE, { A: [40, 90], B: [40, 90] }), P_(PRONE, { L: [-90, 150, 160], R: [-90, 148, 160], A: [40, 90], B: [40, 90] }),
+    { ay: ['hip', 22], ax: 'hip', sc: function (W, W0) { return EQ.bench(W0.aL[0] + 4, W0.sh[0] + 6, W0.hip[1] + 3); }, fx: function (W) { return EQ.pad(vAdd(W.aL, [-1, -3]), vAdd(W.aL, [4, -3])); } }),
+  calf_mach: FS(P_(ST, { A: [-20, 160], B: [-20, 160] }), P_(ST, { L: { x: 0, y: 38.7, f: 50 }, R: { x: -2, y: 38.7, f: 50 }, A: [-20, 160], B: [-20, 160] }),
+    { ax: 'tL', fx: function (W) { return EQ.pad(vAdd(W.sh, [-4, -1.5]), vAdd(W.sh, [5, -1.5])); }, sc: function (W, W0) { return EQ.box(W0.tL[0] - 6, W0.tL[0] + 3, FIGV.G - 3); } }),
+  smith_calf: FS(P_(ST, { A: [-40, 168], B: [-40, 168] }), P_(ST, { L: { x: 0, y: 38.7, f: 50 }, R: { x: -2, y: 38.7, f: 50 }, A: [-40, 168], B: [-40, 168] }),
+    { ax: 'tL', fx: plateOnBack, sc: function (W, W0) { return EQ.rail(W0.back[0] - 1.5, 4) + EQ.rail(W0.back[0] + 1.5, 4) + EQ.box(W0.tL[0] - 6, W0.tL[0] + 3, FIGV.G - 3); } }),
+  adductor: FS({ v: 'f', t: 0, L: [-130, -10, null, .45, 1], R: [130, 10, null, .45, 1], A: [-20, -5], B: [20, 5] }, { v: 'f', t: 0, L: [-95, 0, null, .35, 1], R: [95, 0, null, .35, 1], A: [-20, -5], B: [20, 5] },
+    { ay: ['hip', 21], ax: 'hip', sc: function (W, W0) { return fRect(W0.hip[0] - 14, W0.hip[1] + 2.5, 28, 3, 'fg-sf') + EQ.post(W0.hip[0], W0.hip[1] + 5.5); },
+      fx: function (W) { return EQ.pad(vAdd(W.kL, [2.5, 0]), vAdd(W.kL, [2.5, 6])) + EQ.pad(vAdd(W.kR, [-2.5, 0]), vAdd(W.kR, [-2.5, 6])); } }),
+  glute_kick: FS({ t: 70, L: { x: 4, y: 33 }, R: [10, -80, -60], A: [10, 10], B: [10, 10] }, { t: 70, L: { x: 4, y: 33 }, R: [-95, -100, -60], A: [10, 10], B: [10, 10] },
+    { ax: 'aL', low: ['aL', 'tL'], sc: function (W, W0) { return EQ.pad(vAdd(W0.sh, [6, 4]), vAdd(W0.hip, [8, 4])) + EQ.post(W0.hip[0] + 4, W0.hip[1] + 6); }, fx: function (W) { return EQ.pad(vAdd(W.tR, [-2, -3]), vAdd(W.tR, [-2, 3])); } }),
+  /* ----- arms and shoulders (custom workouts) ----- */
+  pec_fly: FS(P_({ v: 'f', t: 0, A: [-90, -100], B: [90, 100] }, FSEAT), P_({ v: 'f', t: 0, A: [80, 100, 0, .45, .45], B: [-80, -100, 0, .45, .45] }, FSEAT), { ay: ['hip', 21], ax: 'hip', sc: seatF }),
+  cable_cross: FS(FW(10, { A: [-125, -110], B: [125, 110] }), FW(10, { A: [-10, 20], B: [10, -20] }), { fx: function (W) { return EQ.cable(W.wA, [6, 8]) + EQ.cable(W.wB, [FIGV.W - 6, 8]); } }),
+  lat_raise_mach: FS(P_({ v: 'f', t: 0, A: [-8, -8], B: [8, 8] }, FSEAT), P_({ v: 'f', t: 0, A: [-88, -92], B: [88, 92] }, FSEAT),
+    { ay: ['hip', 21], ax: 'hip', sc: seatF, fx: function (W) { return EQ.pad(W.sL, W.eA) + EQ.pad(W.sR, W.eB); } }),
+  db_lat_raise: FS(P_(FST, { A: [-8, -8], B: [8, 8] }), P_(FST, { A: [-88, -92], B: [88, 92] }), { fx: function (W) { return EQ.db(W.wA, 0) + EQ.db(W.wB, 0); } }),
+  mach_curl: FS(CHAIR([60, 60], [60, 60], 10), CHAIR([60, 175], [60, 175], 10),
+    { sc: function (W, W0) { return seatUnder(W0, -9, 9) + EQ.pad(vAdd(W0.sh, [3, 6]), vAdd(W0.eA, [3, 4])) + EQ.post(W0.eA[0] + 6, W0.eA[1] + 4); }, fx: function (W) { return EQ.pad(vAdd(W.wA, [0, -2.5]), vAdd(W.wA, [0, 2.5])); } }),
+  db_curl: FS(P_(ST, { A: [2, 2], B: [-2, -2] }), P_(ST, { A: [4, 150], B: [-2, -2] }), { fx: function (W) { return EQ.db(W.wA) + EQ.db(W.wB); } }),
+  hammer_curl: FS(P_(ST, { A: [2, 2], B: [-2, -2] }), P_(ST, { A: [4, 150], B: [-2, -2] }), { fx: function (W) { return EQ.db(W.wA, 0) + EQ.db(W.wB, 0); } }),
+  cable_curl: FS(P_(ST, { A: [6, 8], B: [6, 8] }), P_(ST, { A: [4, 150], B: [4, 150] }), { fx: function (W, W0) { return EQ.cable(W.wA, [W0.aL[0] + 22, FIGV.G - 4]); } }),
+  fbar_curl: FS(P_(ST, { A: [6, 8], B: [6, 8] }), P_(ST, { A: [4, 150], B: [4, 150] }), { fx: function (W) { return EQ.plate(W.wA, 4.2); } }),
+  mach_tri: FS(CHAIR([60, 175], [60, 175], 10), CHAIR([60, 62], [60, 62], 10),
+    { sc: function (W, W0) { return seatUnder(W0, -9, 9) + EQ.pad(vAdd(W0.sh, [3, 6]), vAdd(W0.eA, [3, 4])) + EQ.post(W0.eA[0] + 6, W0.eA[1] + 4); }, fx: function (W) { return EQ.pad(vAdd(W.wA, [0, -2.5]), vAdd(W.wA, [0, 2.5])); } }),
+  cable_pushdown: FS(P_(ST, { t: 8, A: [-8, 150], B: [-8, 150] }), P_(ST, { t: 8, A: [-8, -2], B: [-8, -2] }), { fx: function (W, W0) { return EQ.cable(W.wA, [W0.sh[0] + 12, 6]); } }),
+  db_oh_tri: FS(P_(ST, { A: [178, 178], B: [176, 176] }), P_(ST, { A: [175, -5], B: [173, -5] }), { fx: function (W) { return EQ.db(mid(W), 0); } }),
+  /* ----- cardio (custom workouts) ----- */
+  treadmill: FS(P_(ST, { t: 6, L: { x: 12, y: 37.5 }, R: { x: -12, y: 37.5 }, A: [-20, 40], B: [25, 75] }), P_(ST, { t: 6, L: { x: -12, y: 37.5 }, R: { x: 12, y: 37.5 }, A: [25, 75], B: [-20, 40] }),
+    { ax: 'hip', low: ['aL', 'aR', 'tL', 'tR'], sc: function (W, W0) { return fRect(W0.hip[0] - 32, FIGV.G - 4, 66, 4, 'fg-sf') + EQ.post(W0.hip[0] + 30, 24) + fLine([W0.hip[0] + 30, 24], [W0.hip[0] + 22, 22], 'fg-s fg-wide'); } }),
+  bike: FS(CHAIR([55, 70], [55, 70], 20), CHAIR([55, 70], [55, 70], 20),
+    { ay: ['hip', 34], ax: 'hip', sc: function (W, W0) { const c = [W0.hip[0] + 8, FIGV.G - 18]; return EQ.post(W0.hip[0] - 1, W0.hip[1] + 3) + fRect(W0.hip[0] - 6, W0.hip[1] + 2.5, 10, 2.5, 'fg-sf') + pedal(c, 7) + EQ.post(W0.wA[0], W0.wA[1] + 2) + fLine(W0.wA, vAdd(W0.wA, [3, 0]), 'fg-s fg-wide'); } }),
+  recumbent: FS({ t: -25, L: { x: 30, y: 6 }, R: { x: 24, y: 14 }, A: [10, 70], B: [10, 70] }, { t: -25, L: { x: 24, y: 14 }, R: { x: 30, y: 6 }, A: [10, 70], B: [10, 70] },
+    { ay: ['hip', 20], ax: 'hip', sc: function (W, W0) { return EQ.pad(vAdd(W0.hip, [-4, 3]), vAdd(W0.sh, [-4, 0])) + EQ.pad(vAdd(W0.hip, [-4, 3.2]), vAdd(W0.hip, [8, 3.2])) + EQ.post(W0.hip[0], W0.hip[1] + 5) + pedal([W0.hip[0] + 28, W0.hip[1] + 10], 5); } }),
+  elliptical: FS(P_(ST, { L: { x: 12, y: 36 }, R: { x: -12, y: 33 }, A: [30, 60], B: [-10, 70] }), P_(ST, { L: { x: -12, y: 33 }, R: { x: 12, y: 36 }, A: [-10, 70], B: [30, 60] }),
+    { ax: 'hip', ay: ['hip', 48], sc: function (W, W0) { return fLine([W0.hip[0] - 22, FIGV.G - 6], [W0.hip[0] + 24, FIGV.G - 9], 'fg-s fg-wide') + EQ.post(W0.hip[0] + 26, 18); } }),
+  arc: FS(P_(ST, { t: 10, L: { x: 12, y: 37 }, R: { x: -10, y: 33 }, A: [40, 70], B: [10, 80] }), P_(ST, { t: 10, L: { x: -10, y: 33 }, R: { x: 12, y: 37 }, A: [10, 80], B: [40, 70] }),
+    { ax: 'hip', ay: ['hip', 46], sc: function (W, W0) { return '<path class="fg-s fg-wide" d="M' + pt([W0.hip[0] - 20, FIGV.G - 10]) + 'Q' + pt([W0.hip[0], FIGV.G]) + ' ' + pt([W0.hip[0] + 22, FIGV.G - 10]) + '"/>' + EQ.post(W0.hip[0] + 26, 18); } }),
+  stairs: FS(P_(ST, { t: 10, L: { x: 9, y: 26 }, R: { x: -4, y: 39 }, A: [40, 80], B: [40, 80] }), P_(ST, { t: 10, L: { x: 4, y: 39 }, R: { x: 9, y: 26 }, A: [40, 80], B: [40, 80] }),
+    { ax: 'hip', ay: ['hip', 44], sc: function (W, W0) { const x = W0.hip[0]; return fPoly([[x - 10, FIGV.G], [x - 10, FIGV.G - 7], [x + 2, FIGV.G - 7], [x + 2, FIGV.G - 14], [x + 14, FIGV.G - 14], [x + 14, FIGV.G - 21], [x + 22, FIGV.G - 21]], 'fg-s fg-wide') + EQ.post(x + 24, 20); } }),
+  rower: FS({ t: 25, L: [150, 15, 95], R: [148, 13, 95], A: [88, 88], B: [88, 88] }, { t: -25, L: [90, 90, 160], R: [90, 90, 160], A: [-40, 85], B: [-40, 85] },
+    { ay: ['hip', 6], ax: 'aL', sc: function (W, W0) { return fLine([W0.hip[0] - 30, FIGV.G - 3], [W0.aL[0] + 14, FIGV.G - 3], 'fg-s fg-wide') + fRect(W.hip[0] - 5, W.hip[1] + 2.5, 10, 2.5, 'fg-sf') + pedal([W0.aL[0] + 12, FIGV.G - 12], 6); },
+      fx: function (W, W0) { return EQ.cable(W.wA, [W0.aL[0] + 12, FIGV.G - 12]); } })
+};
+return { html: figHtml, animate: figAnimate, svg: figSvg, frame: figFrame, specs: FIGS };
+})();
+
+/* ================= your own exercise photos ================= */
+/* Kept on this device only, in the browser's database, one per exercise. Not in the account copy or the backup text. */
+const PH = {
+  db: null, urls: {}, st: {}, del: null, delT: 0,
+  open: function () {
+    if (this.db) return this.db;
+    this.db = new Promise(function (res, rej) {
+      try {
+        if (!window.indexedDB) throw new Error('no indexedDB');
+        const rq = indexedDB.open('fairway-photos', 1);
+        rq.onupgradeneeded = function () { rq.result.createObjectStore('p'); };
+        rq.onsuccess = function () { res(rq.result); };
+        rq.onerror = function () { rej(rq.error); };
+        rq.onblocked = function () { rej(new Error('blocked')); };
+      } catch (e) { rej(e); }
+    });
+    return this.db;
+  },
+  tx: function (mode, fn) {
+    return this.open().then(function (db) {
+      return new Promise(function (res, rej) {
+        const t = db.transaction('p', mode), r = fn(t.objectStore('p'));
+        t.oncomplete = function () { res(r ? r.result : undefined); };
+        t.onerror = t.onabort = function () { rej(t.error || new Error('photo store')); };
+      });
+    });
+  },
+  /* Stored as bytes rather than a Blob: older iPhone Safari versions lose Blobs in this database. */
+  load: function (id) {
+    if (this.st[id]) return;
+    this.st[id] = 'loading';
+    const self = this;
+    this.tx('readonly', function (s) { return s.get(id); }).then(function (v) {
+      if (v && v.b) { self.urls[id] = URL.createObjectURL(new Blob([v.b], { type: v.t || 'image/jpeg' })); self.st[id] = 'ok'; }
+      else self.st[id] = 'none';
+      photoPatch(id);
+    }, function () { self.st[id] = 'off'; photoPatch(id); });
+  },
+  add: function (id, file) {
+    if (!file || !/^image\//.test(file.type || 'image/')) { this.st[id] = 'bad'; photoPatch(id); return; }
+    const self = this;
+    this.st[id] = 'saving'; photoPatch(id);
+    shrinkPhoto(file).then(function (blob) { return blob.arrayBuffer ? blob.arrayBuffer() : new Response(blob).arrayBuffer(); })
+      .then(function (buf) {
+        return self.tx('readwrite', function (s) { return s.put({ t: 'image/jpeg', b: buf, at: Date.now() }, id); }).then(function () { return buf; });
+      })
+      .then(function (buf) {
+        if (self.urls[id]) URL.revokeObjectURL(self.urls[id]);
+        self.urls[id] = URL.createObjectURL(new Blob([buf], { type: 'image/jpeg' }));
+        self.st[id] = 'ok'; photoPatch(id);
+      }, function (e) { self.st[id] = e && e.message === 'decode' ? 'bad' : 'fail'; photoPatch(id); });
+  },
+  remove: function (id) {
+    const self = this;
+    this.tx('readwrite', function (s) { return s.delete(id); }).then(function () {
+      if (self.urls[id]) URL.revokeObjectURL(self.urls[id]);
+      delete self.urls[id]; self.st[id] = 'none'; photoPatch(id);
+    }, function () { self.st[id] = 'fail'; photoPatch(id); });
+  },
+  clear: function () {
+    const self = this;
+    Object.keys(this.urls).forEach(function (k) { URL.revokeObjectURL(self.urls[k]); });
+    this.urls = {}; this.st = {};
+    return this.tx('readwrite', function (s) { return s.clear(); }).catch(function () { /* nothing stored */ });
+  }
+};
+/* Downscale to at most 1000 px on the long side as a JPEG, so a dozen photos stay small. */
+function shrinkPhoto(file) {
+  return new Promise(function (res, rej) {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      try {
+        const k = Math.min(1, 1000 / Math.max(img.naturalWidth, img.naturalHeight));
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.naturalWidth * k)); c.height = Math.max(1, Math.round(img.naturalHeight * k));
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        c.toBlob(function (b) { if (b) res(b); else rej(new Error('decode')); }, 'image/jpeg', 0.82);
+      } catch (e) { URL.revokeObjectURL(url); rej(e); }
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); rej(new Error('decode')); };
+    img.src = url;
+  });
+}
+/* The photo area of the how-to panel: the picture if there is one, then a way to add, replace or remove it. */
+function photoInner(id) {
+  const st = PH.st[id], ex = exOf(id), name = ex ? ex.name : 'this exercise';
+  if (!st) PH.load(id);
+  const pick = function (label) {
+    return '<label class="pill-btn photo-pick">' + label + '<input type="file" accept="image/*" data-photo-in="' + esc(id) + '"></label>';
+  };
+  if (!st || st === 'loading') return '';
+  if (st === 'off') return '<p class="tiny muted">Photos can’t be saved in this browser.</p>';
+  if (st === 'saving') return '<p class="tiny muted">Saving your photo…</p>';
+  if (st === 'ok') {
+    const confirming = PH.del === id;
+    return '<img class="photo-img" src="' + PH.urls[id] + '" alt="' + esc('Your photo for ' + name) + '">' +
+      '<div class="acts">' + pick('Replace photo') +
+      '<button type="button" class="pill-btn' + (confirming ? ' warn' : '') + '" data-act="ph-del" data-id="' + esc(id) + '">' + (confirming ? 'Tap again to remove' : 'Remove photo') + '</button></div>';
+  }
+  const note = st === 'bad' ? '<p class="tiny warn-text">That file isn’t a photo this phone can open. Try another.</p>'
+    : st === 'fail' ? '<p class="tiny warn-text">The photo couldn’t be saved. The phone may be short on space.</p>' : '';
+  return note + '<div class="acts">' + pick(ex && ex.custom ? 'Add a photo' : 'Add your own photo') + '<span class="tiny muted">Stays on this phone only.</span></div>';
+}
+function photoHtml(id) { return '<div class="photo" data-photo="' + esc(id) + '">' + photoInner(id) + '</div>'; }
+function photoPatch(id) {
+  document.querySelectorAll('.photo[data-photo]').forEach(function (el) { if (el.dataset.photo === id) el.innerHTML = photoInner(id); });
+}
+
 /* ================= first launch ================= */
 const Q = [
   { k: 'age', t: 'How old are you?', d: 'Age changes how much impact, rest and balance work your plan includes.' },
@@ -2020,12 +2809,12 @@ function itemHtml(it, i, n) {
       h += setTable(it, i, d, ex.name, ex);
     }
     if (UI.how === i) {
-      h += '<div class="how">' + (ex.how ? '<p><b>How</b>' + esc(ex.how) + '</p>' : '') + (ex.why ? '<p><b>Why it helps your golf</b>' + esc(ex.why) + '</p>' : '') +
-        (ex.custom ? '<p>Your own exercise.</p>' : '<p><b>Effort</b>' + esc(E.effort(ex, S.profile)) + '</p>') + '</div>';
+      h += '<div class="how">' + (ex.custom ? '' : FIG.html(it.id)) + (ex.how ? '<p><b>How</b>' + esc(ex.how) + '</p>' : '') + (ex.why ? '<p><b>Why it helps your golf</b>' + esc(ex.why) + '</p>' : '') +
+        (ex.custom ? '<p>Your own exercise. Add a photo of the setup or the machine to remind yourself.</p>' : '<p><b>Effort</b>' + esc(E.effort(ex, S.profile)) + '</p>') + photoHtml(it.id) + '</div>';
     }
     const swappable = !ex.custom && E.candidates(it.pool, S.profile, {}).length > 1;
     h += '<div class="acts">' +
-      (ex.custom ? '' : '<button type="button" class="pill-btn" data-act="how" data-i="' + i + '" aria-expanded="' + (UI.how === i) + '">' + (UI.how === i ? 'Hide how-to' : 'How to do it') + '</button>') +
+      '<button type="button" class="pill-btn" data-act="how" data-i="' + i + '" aria-expanded="' + (UI.how === i) + '">' + (ex.custom ? (UI.how === i ? 'Hide photo' : 'Photo') : (UI.how === i ? 'Hide how-to' : 'How to do it')) + '</button>' +
       (it.rx.hold ? '<button type="button" class="pill-btn" data-act="hold" data-i="' + i + '">Start ' + E.dur(it.rx.hold).replace('\u00a0', ' ') + ' timer</button>' : '') +
       '<a class="pill-btn" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=' + encodeURIComponent(ex.name + ' exercise how to') + '">Demo video ↗</a>' +
       (swappable ? '<button type="button" class="pill-btn" data-act="swap" data-i="' + i + '">Swap</button>' : '') + '</div></div>';
@@ -2314,6 +3103,194 @@ function vEdit() {
     (ed.isNew ? '' : '<button class="link danger center" data-act="ed-remove">' + (UI.armed === 'wdel' ? 'Tap again to delete this workout' : 'Delete workout') + '</button>') + '</section>';
 }
 
+/* ================= counter tab ================= */
+/* Named counters that have nothing to do with workouts: putts made, range balls, reps of anything. */
+const K_MAX = 999999;
+function cleanCounter(c) {
+  if (!c || typeof c.id !== 'string' || !/^k_[A-Za-z0-9_]{1,30}$/.test(c.id)) return null;
+  const int = function (v, lo, hi, d) { const n = Math.round(+v); return isFinite(n) ? clamp(n, lo, hi) : d; };
+  const down = !!c.down;
+  return {
+    id: c.id, name: String(c.name || '').trim().slice(0, 30) || 'Counter', step: int(c.step, 1, 1000, 1),
+    goal: down ? 0 : int(c.goal, 0, K_MAX, 0), down: down, start: int(c.start, 1, K_MAX, 10),
+    n: int(c.n, -K_MAX, K_MAX, 0), ord: +c.ord || 0, del: !!c.del, at: +c.at || 0
+  };
+}
+const sortCounters = function (a) { return a.sort(function (x, y) { return x.ord - y.ord || (x.id < y.id ? -1 : x.id > y.id ? 1 : 0); }); };
+const liveCounters = function () { return (S.counters || []).filter(function (c) { return !c.del; }); };
+const counterById = function (id) { return (S.counters || []).find(function (c) { return c.id === id && !c.del; }) || null; };
+/* Taps save on the phone at once and reach the account a moment later, so fast tapping does not send a write per tap. */
+let kPushT = 0;
+function commitSoon() { saveLocal(); clearTimeout(kPushT); kPushT = setTimeout(function () { Cloud.push(); }, 1500); }
+const kDone = function (c) { return c.down ? c.n <= 0 : c.goal > 0 && c.n >= c.goal; };
+const kFmt = function (n) { return NF.format(n); };
+function kSub(c) {
+  if (c.down) return c.n <= 0 ? 'Done · counted down from ' + kFmt(c.start) : 'left of ' + kFmt(c.start);
+  if (c.goal) return kDone(c) ? 'Goal of ' + kFmt(c.goal) + ' reached' : 'of ' + kFmt(c.goal);
+  return '';
+}
+function kBar(c) {
+  const f = c.down ? (c.start - c.n) / c.start : c.goal ? c.n / c.goal : null;
+  if (f == null) return '';
+  return '<div class="bar k-bar" role="presentation"><i style="width:' + Math.round(clamp(f, 0, 1) * 100) + '%"></i></div>';
+}
+const kStepLabel = function (c) { return (c.down ? '−' : '+') + kFmt(c.step); };
+const kBackLabel = function (c) { return (c.down ? '+' : '−') + kFmt(c.step); };
+function kAria(c) {
+  return c.name + ': ' + kFmt(c.n) + (c.down ? ' left' : '') + (c.goal ? ' of ' + kFmt(c.goal) : '') + '. Tap to ' + (c.down ? 'take off ' : 'add ') + kFmt(c.step) + '.';
+}
+function vCounter() {
+  const cs = liveCounters();
+  let h = '<header class="stack tight"><h1 class="title">Counter</h1><p class="small muted">Count anything: putts holed, range balls, reps. Separate from your workouts.</p></header>';
+  if (!cs.length) {
+    return h + '<section class="stack k-empty"><p class="prose">Make a counter, give it a name, and tap to count. You can count up toward a goal or down from a number, in steps of any size.</p>' +
+      '<button class="btn primary" data-act="k-new">Add a counter</button></section>';
+  }
+  h += '<ul class="k-list">' + cs.map(function (c) {
+    const armed = UI.kArm === c.id, undo = (UI.kUndo[c.id] || []).length;
+    return '<li class="k-card' + (kDone(c) ? ' done' : '') + '">' +
+      '<div class="k-top"><h2 class="k-name">' + esc(c.name) + '</h2><button type="button" class="link muted" data-act="k-edit" data-id="' + c.id + '" aria-label="' + esc('Edit ' + c.name) + '">Edit</button></div>' +
+      '<div class="k-main"><button type="button" class="k-num" data-act="k-tap" data-id="' + c.id + '" aria-label="' + esc(kAria(c)) + '"><span class="v num">' + kFmt(c.n) + '</span>' +
+      (kSub(c) ? '<small>' + esc(kSub(c)) + '</small>' : '') + '</button>' +
+      '<button type="button" class="k-plus" data-act="k-tap" data-id="' + c.id + '" aria-hidden="true" tabindex="-1">' + kStepLabel(c) + '</button></div>' + kBar(c) +
+      '<div class="acts k-acts">' +
+      '<button type="button" class="pill-btn" data-act="k-back" data-id="' + c.id + '" aria-label="' + esc((c.down ? 'Add back ' : 'Take off ') + c.step) + '">' + kBackLabel(c) + '</button>' +
+      '<button type="button" class="pill-btn" data-act="k-undo" data-id="' + c.id + '"' + (undo ? '' : ' disabled') + '>Undo</button>' +
+      '<button type="button" class="pill-btn' + (armed ? ' warn' : '') + '" data-act="k-reset" data-id="' + c.id + '">' + (armed ? 'Tap again to reset' : 'Reset') + '</button>' +
+      '<button type="button" class="pill-btn" data-act="k-focus" data-id="' + c.id + '">Full screen</button></div></li>';
+  }).join('') + '</ul>';
+  return h + '<button class="btn secondary" data-act="k-new">Add a counter</button>';
+}
+/* One counter filling the screen: the big area counts, for tapping without looking. */
+function vCounterFocus() {
+  const c = counterById(UI.kFocus), armed = UI.kArm === c.id, undo = (UI.kUndo[c.id] || []).length;
+  return '<div class="k-focus' + (kDone(c) ? ' done' : '') + '">' +
+    '<div class="k-ftop"><button type="button" class="link" data-act="k-close">‹ Counters</button><span class="k-fname">' + esc(c.name) + '</span><button type="button" class="link muted" data-act="k-edit" data-id="' + c.id + '">Edit</button></div>' +
+    '<button type="button" class="k-pad" data-act="k-tap" data-id="' + c.id + '" aria-label="' + esc(kAria(c)) + '">' +
+    '<span class="v num" aria-live="polite">' + kFmt(c.n) + '</span>' + (kSub(c) ? '<small>' + esc(kSub(c)) + '</small>' : '') +
+    '<span class="k-hint">Tap anywhere here · ' + kStepLabel(c) + '</span></button>' + kBar(c) +
+    '<div class="k-frow">' +
+    '<button type="button" class="btn secondary" data-act="k-back" data-id="' + c.id + '">' + kBackLabel(c) + '</button>' +
+    '<button type="button" class="btn secondary" data-act="k-undo" data-id="' + c.id + '"' + (undo ? '' : ' disabled') + '>Undo</button>' +
+    '<button type="button" class="btn ' + (armed ? 'danger' : 'secondary') + '" data-act="k-reset" data-id="' + c.id + '">' + (armed ? 'Tap again' : 'Reset') + '</button></div></div>';
+}
+function kSheet(sh) {
+  const f = sh.form, editing = !!sh.id;
+  const num = function (id, label, val, ph, note) {
+    return '<div class="stack tight"><label class="label" for="' + id + '">' + label + '</label><input class="text-in" id="' + id + '" type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" maxlength="6" placeholder="' + ph + '" value="' + esc(val) + '">' + (note ? '<p class="tiny muted">' + note + '</p>' : '') + '</div>';
+  };
+  return '<h2>' + (editing ? 'Edit counter' : 'New counter') + '</h2>' +
+    '<div class="stack tight"><label class="label" for="kn-name">Name</label><input class="text-in" id="kn-name" type="text" maxlength="30" autocomplete="off" enterkeyhint="done" placeholder="Putts holed" value="' + esc(f.name) + '"></div>' +
+    '<div class="stack tight"><span class="label" id="kn-dir-l">Count</span><div class="seg" role="group" aria-labelledby="kn-dir-l">' +
+    '<button type="button" data-act="kn-dir" data-v="up" aria-pressed="' + !f.down + '">Up</button><button type="button" data-act="kn-dir" data-v="down" aria-pressed="' + f.down + '">Down to zero</button></div></div>' +
+    '<div class="stack tight">' + num('kn-step', 'Each tap counts', f.step, '1') +
+    '<div class="chips fillc" role="group" aria-label="Common step sizes">' + [1, 2, 5, 10, 25].map(function (n) {
+      return '<button type="button" class="chip" data-act="kn-step" data-v="' + n + '" aria-pressed="' + (String(n) === String(f.step)) + '">' + n + '</button>';
+    }).join('') + '</div></div>' +
+    (f.down ? num('kn-start', 'Start from', f.start, '50', 'Counts down to zero.')
+      : num('kn-goal', 'Goal (optional)', f.goal, 'No goal', 'Shows how close you are. Leave blank for no goal.')) +
+    (sh.err ? '<p class="err" role="alert">' + esc(sh.err) + '</p>' : '') +
+    (editing ? '<p class="tiny muted" id="kn-note"' + (sh.resets ? '' : ' hidden') + '>Saving starts this count over.</p>' : '') +
+    '<button class="btn primary" data-act="kn-save">' + (editing ? 'Save' : 'Add counter') + '</button>' +
+    (editing ? '<button class="btn danger" data-act="kn-del">' + (sh.armDel ? 'Tap again to delete' : 'Delete counter') + '</button>' : '') +
+    '<button class="link muted center" data-act="close">Cancel</button>';
+}
+/* Would saving this form start the count over? Only when the direction or the starting number changes. */
+function kResets(sh) {
+  const c = sh.id && counterById(sh.id), f = sh.form;
+  if (!c) return false;
+  return c.down !== !!f.down || (f.down && String(c.start) !== String(f.start).trim());
+}
+function kChange(id, delta) {
+  const c = counterById(id);
+  if (!c) return;
+  const before = c.n, wasDone = kDone(c);
+  let n = clamp(c.n + delta, -K_MAX, K_MAX);
+  if (c.down) n = clamp(n, 0, c.start);
+  if (n === before) return;
+  const u = UI.kUndo[id] = UI.kUndo[id] || [];
+  u.push(before); if (u.length > 50) u.shift();
+  c.n = n; c.at = Date.now(); UI.kArm = null;
+  if (!wasDone && kDone(c)) beep();
+  commitSoon();
+}
+/* Counter actions. Returns true when it handled the click. */
+function counterAct(a, el) {
+  const id = el.dataset.id, c = id ? counterById(id) : null;
+  switch (a) {
+    case 'k-new': UI.sheet = { kind: 'kedit', id: null, form: { name: '', step: '1', goal: '', start: '10', down: false } }; return true;
+    case 'k-edit':
+      if (!c) return true;
+      UI.sheet = { kind: 'kedit', id: c.id, form: { name: c.name, step: String(c.step), goal: c.goal ? String(c.goal) : '', start: String(c.start), down: c.down } };
+      return true;
+    case 'k-tap': armAudio(); if (c) kChange(id, c.down ? -c.step : c.step); return true;
+    case 'k-back': if (c) kChange(id, c.down ? c.step : -c.step); return true;
+    case 'k-undo': {
+      const u = UI.kUndo[id] || [];
+      if (c && u.length) { c.n = u.pop(); c.at = Date.now(); UI.kArm = null; commitSoon(); }
+      return true;
+    }
+    case 'k-reset':
+      if (!c) return true;
+      if (UI.kArm !== id) {
+        UI.kArm = id; clearTimeout(UI.kArmT);
+        UI.kArmT = setTimeout(function () { if (UI.kArm === id) { UI.kArm = null; render(); } }, 3500);
+        return true;
+      }
+      UI.kArm = null;
+      (UI.kUndo[id] = UI.kUndo[id] || []).push(c.n);
+      c.n = c.down ? c.start : 0; c.at = Date.now(); commitSoon();
+      return true;
+    case 'k-focus': if (c) { UI.kFocus = id; UI.kArm = null; } return true;
+    case 'k-close': UI.kFocus = null; UI.kArm = null; return true;
+    case 'kn-dir': UI.sheet.form.down = el.dataset.v === 'down'; UI.sheet.err = ''; UI.sheet.resets = kResets(UI.sheet); return true;
+    case 'kn-step': UI.sheet.form.step = el.dataset.v; return true;
+    case 'kn-del': {
+      const sh = UI.sheet;
+      if (!sh.armDel) { sh.armDel = true; return true; }
+      S.counters = S.counters.map(function (x) { return x.id === sh.id ? Object.assign({}, x, { del: true, at: Date.now() }) : x; });
+      if (UI.kFocus === sh.id) UI.kFocus = null;
+      delete UI.kUndo[sh.id];
+      closeSheet(); commit();
+      return true;
+    }
+    case 'kn-save': {
+      const sh = UI.sheet, f = sh.form;
+      const step = Math.round(+String(f.step).trim()), goal = String(f.goal).trim() === '' ? 0 : Math.round(+String(f.goal).trim()), start = Math.round(+String(f.start).trim());
+      if (!(step >= 1 && step <= 1000)) { sh.err = 'Each tap needs to count between 1 and 1,000.'; return true; }
+      if (f.down && !(start >= 1 && start <= K_MAX)) { sh.err = 'Pick a number to count down from, 1 or more.'; return true; }
+      if (!f.down && !(goal >= 0 && goal <= K_MAX)) { sh.err = 'The goal needs to be a whole number, or blank for none.'; return true; }
+      const now = Date.now(), live = liveCounters();
+      const name = String(f.name).trim().slice(0, 30) || 'Counter ' + (live.length + (sh.id ? 0 : 1));
+      if (sh.id) {
+        const old = counterById(sh.id); if (!old) { closeSheet(); return true; }
+        const resets = kResets(sh);
+        const nu = cleanCounter(Object.assign({}, old, { name: name, step: step, goal: f.down ? 0 : goal, down: !!f.down, start: f.down ? start : old.start, at: now }));
+        if (resets) { (UI.kUndo[old.id] = UI.kUndo[old.id] || []).push(old.n); nu.n = nu.down ? nu.start : 0; }
+        S.counters = S.counters.map(function (x) { return x.id === old.id ? nu : x; });
+      } else {
+        const ord = (S.counters || []).reduce(function (m, x) { return Math.max(m, x.ord); }, 0) + 1;
+        S.counters = (S.counters || []).concat([cleanCounter({ id: uid('k_'), name: name, step: step, goal: f.down ? 0 : goal, down: !!f.down, start: f.down ? start : 10, n: f.down ? start : 0, ord: ord, at: now })]);
+      }
+      sortCounters(S.counters); closeSheet(); commit();
+      return true;
+    }
+  }
+  return false;
+}
+function counterInput(t) {
+  const sh = UI.sheet;
+  if (!sh || sh.kind !== 'kedit') return false;
+  const map = { 'kn-name': 'name', 'kn-step': 'step', 'kn-goal': 'goal', 'kn-start': 'start' };
+  const k = map[t.id];
+  if (!k) return false;
+  if (k !== 'name') { const c = t.value.replace(/[^0-9]/g, ''); if (c !== t.value) t.value = c; }
+  sh.form[k] = t.value; sh.err = '';
+  if (k === 'step') document.querySelectorAll('#sheet [data-act="kn-step"]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === t.value)); });
+  if (k === 'start') { sh.resets = kResets(sh); const n = $('#kn-note'); if (n) n.hidden = !sh.resets; }
+  return true;
+}
+
 /* ================= sheets ================= */
 function pickCat(ex) {
   if (ex.custom) return 'mine';
@@ -2339,7 +3316,7 @@ function pickList() {
     return '<li><button type="button" data-act="pk-add" data-id="' + ex.id + '"><span><b>' + esc(ex.name) + '</b><small>' + esc(sub + (inW.has(ex.id) ? ' \u00b7 In this workout' : '')) + '</small></span><span class="plus" aria-hidden="true">+</span></button></li>';
   }).join('');
 }
-const SHEET_NAME = { bw: 'Log weight', finish: 'Finish workout', pick: 'Pick a workout', reset: 'Erase everything', discard: 'Discard workout', level: 'Change level', backup: 'Backup', expick: 'Add exercise', exnew: 'New exercise' };
+const SHEET_NAME = { bw: 'Log weight', finish: 'Finish workout', pick: 'Pick a workout', reset: 'Erase everything', discard: 'Discard workout', level: 'Change level', backup: 'Backup', expick: 'Add exercise', exnew: 'New exercise', kedit: 'Counter' };
 function renderSheet() {
   const el = $('#sheet'), sh = UI.sheet;
   if (!sh) { el.classList.remove('on'); el.innerHTML = ''; el.dataset.kind = ''; return; }
@@ -2353,6 +3330,8 @@ function renderSheet() {
       (same ? '<p class="tiny muted">Replaces the ' + esc(fmtVal(same.w, u)) + ' already logged for ' + esc(fmt(d)) + '.</p>' : '') +
       (sh.err ? '<p class="err" role="alert">' + esc(sh.err) + '</p>' : '') +
       '<button class="btn primary" data-act="bw-save">Save</button><button class="link muted center" data-act="close">Cancel</button>';
+  } else if (sh.kind === 'kedit') {
+    h = kSheet(sh);
   } else if (sh.kind === 'finish') {
     const st = sesStats(S.session), today = D.today();
     h = '<h2>Finish workout</h2><p class="muted">' + (st.done ? st.done + ' of ' + st.total + ' sets logged.' : 'No sets logged, so the whole workout will be saved as done, without numbers.') + '</p>' +
@@ -2389,7 +3368,7 @@ function renderSheet() {
   } else if (sh.kind === 'backup') {
     const has = !!(S.profile || S.log.length);
     h = '<h2>Backup</h2>' +
-      (has ? '<p class="muted">Your backup is a block of text with your plan, your workouts and every logged set. Keep a copy somewhere safe, such as Notes or an email to yourself.</p>' +
+      (has ? '<p class="muted">Your backup is a block of text with your plan, your workouts, every logged set, your weigh-ins and your counters. Keep a copy somewhere safe, such as Notes or an email to yourself. Exercise photos stay on this phone and aren’t included.</p>' +
         '<button class="btn primary" data-act="backup-copy">Copy my backup</button>' +
         (sh.out ? '<textarea class="text-in" id="bk-out" readonly rows="3" aria-label="Backup text">' + esc(sh.out) + '</textarea>' : '') : '') +
       (sh.msg ? '<p class="small" role="status"><strong>' + esc(sh.msg) + '</strong></p>' : '') +
@@ -2425,7 +3404,7 @@ function renderSheet() {
   if (fresh) { try { const f = sh.kind === 'bw' ? $('#bw-w') : el.firstChild; f.focus({ preventScroll: true }); } catch (e) { /* ignore */ } } else el.firstChild.scrollTop = keep;
 }
 function closeSheet() { UI.sheet = null; UI.armed = null; }
-function backupText() { return JSON.stringify({ app: 'fairway-strength', v: 1, savedAt: Date.now(), profile: S.profile, log: S.log, workouts: S.workouts, exercises: S.exercises, body: S.body }); }
+function backupText() { return JSON.stringify({ app: 'fairway-strength', v: 1, savedAt: Date.now(), profile: S.profile, log: S.log, workouts: S.workouts, exercises: S.exercises, body: S.body, counters: S.counters }); }
 /* Add a backup to what is here. Returns counts, or null if the text is not a backup. */
 function restoreBackup(text) {
   let o;
@@ -2449,10 +3428,13 @@ function restoreBackup(text) {
     S.body = S.body.filter(function (y) { return y.d !== x.d; }).concat([Object.assign({}, x, { at: now })]); bw++;
   });
   S.body.sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
+  let kc = 0;
+  R.counters.forEach(function (c) { if (!c.del && !S.counters.some(function (y) { return y.id === c.id; })) { c.at = now; S.counters.push(c); kc++; } });
+  sortCounters(S.counters);
   sortWorkouts(S.workouts); sortById(S.exercises); rebuildCus();
   if (R.profile && !S.profile) { S.profile = R.profile; S.profile.at = now; }
   commit();
-  return { log: added, workouts: wk, body: bw };
+  return { log: added, workouts: wk, body: bw, counters: kc };
 }
 
 /* ================= workout actions ================= */
@@ -2524,13 +3506,14 @@ function render(reset) {
   else if (S.session && UI.inSession) { key = 'session'; html = vSession(); }
   else {
     UI.inSession = false; key = UI.tab;
-    html = UI.tab === 'record' ? vRecord() : UI.tab === 'plan' ? vPlan() : UI.tab === 'progress' ? vProgress() : vToday();
+    if (UI.tab === 'counter' && UI.kFocus && counterById(UI.kFocus)) { key = 'kfocus'; html = vCounterFocus(); }
+    else { UI.kFocus = null; html = UI.tab === 'record' ? vRecord() : UI.tab === 'plan' ? vPlan() : UI.tab === 'progress' ? vProgress() : UI.tab === 'counter' ? vCounter() : vToday(); }
   }
   const same = key === UI.lastView && !reset, keep = same ? view.scrollTop : 0;
   let fk = null;
   try { fk = same ? focusKey(document.activeElement) : null; } catch (e) { fk = null; }
   view.innerHTML = html; view.scrollTop = keep; UI.lastView = key;
-  const showTabs = key === 'today' || key === 'record' || key === 'plan' || key === 'progress';
+  const showTabs = key === 'today' || key === 'record' || key === 'plan' || key === 'progress' || key === 'counter';
   tabs.hidden = !showTabs;
   $('#app').dataset.chrome = showTabs ? 'tabs' : 'none';
   tabs.querySelectorAll('button').forEach(function (b) { if (b.dataset.tab === UI.tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
@@ -2539,6 +3522,7 @@ function render(reset) {
   if (key === 'session') { if (!clockTick) clockTick = setInterval(paintClock, 1000); }
   else if (clockTick) { clearInterval(clockTick); clockTick = null; }
   paintTimer();
+  FIG.animate();
 }
 
 /* ================= events ================= */
@@ -2552,6 +3536,7 @@ function onClick(ev) {
   if (!el) { if (ev.target.id === 'sheet' && UI.sheet) { closeSheet(); render(); } return; }
   if (el.dataset.tab) { UI.tab = el.dataset.tab; UI.armed = null; UI.daySel = null; UI.entryOpen = null; render(true); return; }
   const a = el.dataset.act, v = el.dataset.v, P = S.profile, ob = UI.ob, ses = S.session;
+  if (/^kn?-/.test(a) && counterAct(a, el)) { render(); return; }
   let reset = false;
   switch (a) {
     /* ----- first launch ----- */
@@ -2691,9 +3676,15 @@ function onClick(ev) {
     case 'ask-reset': UI.sheet = { kind: 'reset' }; break;
     case 'reset': {
       const at = Date.now(), view0 = S.view;
-      S = blank(); S.resetAt = at; S.view = view0; rebuildCus();
+      S = blank(); S.resetAt = at; S.view = view0; rebuildCus(); PH.clear(); UI.kUndo = {}; UI.kFocus = null;
       UI.ob = null; UI.tab = 'today'; UI.month = null; UI.daySel = null; UI.sum = null; UI.edit = null; closeSheet(); stopTimer();
       commit(); reset = true; break;
+    }
+    case 'ph-del': {
+      const id = el.dataset.id;
+      if (PH.del === id) { PH.del = null; clearTimeout(PH.delT); PH.remove(id); }
+      else { PH.del = id; photoPatch(id); clearTimeout(PH.delT); PH.delT = setTimeout(function () { if (PH.del === id) { PH.del = null; photoPatch(id); } }, 3500); }
+      return;
     }
     case 'backup': UI.sheet = { kind: 'backup' }; break;
     case 'backup-copy': {
@@ -2715,6 +3706,7 @@ function onClick(ev) {
       if (n.log) parts.push(n.log + (n.log === 1 ? ' workout' : ' workouts'));
       if (n.workouts) parts.push(n.workouts + (n.workouts === 1 ? ' custom workout' : ' custom workouts'));
       if (n.body) parts.push(n.body + (n.body === 1 ? ' weigh-in' : ' weigh-ins'));
+      if (n.counters) parts.push(n.counters + (n.counters === 1 ? ' counter' : ' counters'));
       if (!hadProfile && S.profile) parts.push('your plan');
       sh.msg = parts.length ? 'Restored ' + listText(parts) + '.' : 'Everything in that backup is already here.';
       if (S.profile && UI.ob && !UI.ob.retake) { UI.ob = null; UI.tab = 'today'; reset = true; }
@@ -2791,6 +3783,7 @@ function onClick(ev) {
 }
 function onInput(ev) {
   const t = ev.target;
+  if (counterInput(t)) return;
   if (t.id === 'ob-age' && UI.ob) {
     const n = Math.round(+t.value) || 0;
     UI.ob.a.age = n;
@@ -2812,6 +3805,7 @@ function onInput(ev) {
 }
 function onChange(ev) {
   const t = ev.target;
+  if (t.dataset && t.dataset.photoIn) { const f = t.files && t.files[0]; if (f) PH.add(t.dataset.photoIn, f); t.value = ''; return; }
   if (t.id === 'set-age') { setAge('set-age', +t.value); setTimeout(render, 350); }
   else if (t.id === 'bw-d' && UI.sheet && UI.sheet.kind === 'bw') { UI.sheet.d = t.value; renderSheet(); }
   else if ((t.id === 'pk-cat' || t.id === 'pk-eq') && UI.sheet) {
@@ -2822,6 +3816,7 @@ function onChange(ev) {
 function onKey(ev) {
   const t = ev.target;
   if (ev.key === 'Escape' && UI.sheet) { closeSheet(); render(); return; }
+  if (ev.key === 'Enter' && /^kn-/.test(t.id || '')) { ev.preventDefault(); const b = document.querySelector('[data-act="kn-save"]'); if (b) b.click(); return; }
   if (ev.key === 'Enter' && t.id === 'bw-w') { ev.preventDefault(); const b = document.querySelector('[data-act="bw-save"]'); if (b) b.click(); return; }
   if (ev.key === 'Enter' && t.classList && t.classList.contains('num-in')) {
     ev.preventDefault();
@@ -2841,7 +3836,7 @@ function onKey(ev) {
 function start(data) {
   loadLocal();
   data = data || {};
-  if (['record', 'plan', 'progress'].indexOf(data.tab) >= 0) UI.tab = data.tab;
+  if (['record', 'plan', 'progress', 'counter'].indexOf(data.tab) >= 0) UI.tab = data.tab;
   if (data.month) UI.month = data.month;
   if (data.ob && !S.profile) UI.ob = data.ob;
   UI.inSession = !!(S.session && data.inSession);
